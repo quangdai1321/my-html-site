@@ -1,0 +1,2747 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI HR Platform — Architecture Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #07080d;
+  --bg2:     #0d0f17;
+  --bg3:     #12141f;
+  --bg4:     #181b28;
+  --border:  #1e2235;
+  --border2: #252840;
+  --text:    #dde1f0;
+  --muted:   #5a5f7a;
+  --muted2:  #373c54;
+
+  --blue:    #4f8fff;
+  --cyan:    #1fd4c8;
+  --purple:  #9d7eff;
+  --amber:   #f5a623;
+  --rose:    #ff5f7e;
+  --green:   #2dd98f;
+  --pink:    #e879f9;
+
+  --blue-g:  linear-gradient(135deg, #1a3a6e, #0d1f40);
+  --cyan-g:  linear-gradient(135deg, #0a2e2c, #051918);
+  --purple-g:linear-gradient(135deg, #1f1040, #110828);
+  --amber-g: linear-gradient(135deg, #2e1d06, #1a0f03);
+  --rose-g:  linear-gradient(135deg, #2e0d18, #18060e);
+  --green-g: linear-gradient(135deg, #072e1c, #031710);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'JetBrains Mono',monospace;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* ── NOISE OVERLAY ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:0.4;
+}
+
+/* ── LAYOUT ── */
+.shell{display:flex;min-height:100vh;position:relative;z-index:1;}
+
+/* ── NAV ── */
+nav{
+  width:220px;flex-shrink:0;position:sticky;top:0;height:100vh;
+  border-right:1px solid var(--border);
+  background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);
+  display:flex;flex-direction:column;padding:0;overflow:hidden;
+}
+.nav-logo{
+  padding:24px 20px 20px;
+  border-bottom:1px solid var(--border);
+}
+.nav-logo-tag{
+  font-family:'Syne',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:6px;
+}
+.nav-logo-title{
+  font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:800;color:#fff;line-height:1.3;
+}
+.nav-logo-sub{font-size:9px;color:var(--muted);margin-top:4px;}
+
+.nav-items{flex:1;overflow-y:auto;padding:12px 0;}
+.nav-section-label{
+  font-size:8px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--muted2);padding:12px 20px 6px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 20px;cursor:pointer;transition:all .15s;
+  font-size:11px;color:var(--muted);
+  border-left:2px solid transparent;
+  text-decoration:none;
+}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.03);}
+.nav-item.active{color:#fff;border-left-color:var(--blue);background:rgba(79,143,255,.07);}
+.nav-num{
+  width:18px;height:18px;border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;flex-shrink:0;
+}
+
+/* ── MAIN ── */
+main{flex:1;min-width:0;padding:0 0 80px;}
+
+/* ── HERO ── */
+.hero{
+  padding:56px 56px 40px;
+  background:linear-gradient(135deg,rgba(79,143,255,.06) 0%,transparent 50%),
+             linear-gradient(225deg,rgba(31,212,200,.04) 0%,transparent 50%);
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;right:-80px;top:-80px;
+  width:360px;height:360px;border-radius:50%;
+  background:radial-gradient(circle,rgba(79,143,255,.08),transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  display:flex;align-items:center;gap:8px;margin-bottom:16px;
+}
+.hero-chip{
+  font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;border:1px solid;
+}
+.hero-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,4vw,48px);font-weight:800;
+  line-height:1.05;letter-spacing:-1.5px;color:#fff;
+  margin-bottom:12px;
+}
+.hero-title span{
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{font-size:12px;color:var(--muted);max-width:560px;line-height:1.8;}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
+.badge{
+  font-size:10px;font-weight:500;padding:4px 12px;
+  border-radius:6px;border:1px solid;
+}
+
+/* ── SECTION ── */
+.section{padding:48px 56px;border-bottom:1px solid var(--border);scroll-margin-top:0;}
+.section-eyebrow{
+  display:flex;align-items:center;gap:12px;margin-bottom:8px;
+}
+.section-num{
+  width:28px;height:28px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;
+  flex-shrink:0;
+}
+.section-tag{
+  font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:4px;
+}
+.section-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(22px,3vw,32px);font-weight:800;
+  line-height:1.1;letter-spacing:-0.8px;color:#fff;
+  margin-bottom:6px;
+}
+.section-desc{font-size:11px;color:var(--muted);line-height:1.8;max-width:640px;margin-bottom:28px;}
+
+/* ── DIAGRAM CANVAS ── */
+.diagram-wrap{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;margin-bottom:20px;
+}
+.diagram-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;border-bottom:1px solid var(--border);
+  background:var(--bg3);
+}
+.diagram-title{font-size:10px;font-weight:600;color:var(--muted);}
+.diagram-body{padding:28px;overflow-x:auto;}
+svg.arch{font-family:'JetBrains Mono',monospace;}
+
+/* ── LAYER DIAGRAM ── */
+.layers{display:flex;flex-direction:column;gap:2px;}
+.layer-row{
+  display:flex;align-items:stretch;gap:2px;
+  animation:fadeUp .4s ease both;
+}
+.layer-label{
+  width:88px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;
+  padding-right:14px;font-size:9px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--muted);
+}
+.layer-cells{display:flex;gap:2px;flex:1;flex-wrap:wrap;}
+.cell{
+  flex:1;min-width:100px;padding:10px 14px;border-radius:8px;
+  border:1px solid;cursor:pointer;transition:all .2s;
+  position:relative;overflow:hidden;
+}
+.cell::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .2s;
+  background:rgba(255,255,255,.04);
+}
+.cell:hover::before{opacity:1;}
+.cell:hover{transform:translateY(-1px);}
+.cell-name{font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;}
+.cell-sub{font-size:9px;color:rgba(255,255,255,.45);line-height:1.5;}
+
+/* ── FLOW DIAGRAM ── */
+.flow-wrap{position:relative;}
+.flow-steps{display:flex;flex-direction:column;gap:0;}
+.flow-step{
+  display:flex;align-items:flex-start;gap:20px;
+  padding:16px 0;
+  animation:fadeUp .4s ease both;
+}
+.flow-step:not(:last-child){border-bottom:1px solid var(--border);}
+.flow-left{display:flex;flex-direction:column;align-items:center;gap:0;flex-shrink:0;width:40px;}
+.flow-circle{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  flex-shrink:0;border:1px solid;
+}
+.flow-line{width:1px;flex:1;min-height:16px;background:var(--border2);}
+.flow-content{flex:1;padding-top:4px;}
+.flow-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;}
+.flow-nodes{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.flow-node{
+  font-size:10px;font-weight:500;padding:4px 10px;
+  border-radius:6px;border:1px solid;
+}
+.flow-arrow{
+  display:flex;align-items:center;gap:6px;
+  font-size:9px;color:var(--muted);margin-top:6px;
+}
+.flow-arrow::before{content:'↓';color:var(--muted2);}
+.flow-desc{font-size:10px;color:var(--muted);line-height:1.7;}
+
+/* ── CODE TREE ── */
+.code-block{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;margin-bottom:16px;
+}
+.code-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 16px;border-bottom:1px solid var(--border);
+  background:var(--bg3);
+}
+.code-fname{font-size:10px;color:var(--muted);font-weight:500;}
+.code-lang{font-size:9px;padding:2px 7px;border-radius:4px;background:var(--border);color:var(--muted);}
+.code-body{padding:18px 20px;font-size:11px;line-height:1.9;overflow-x:auto;}
+pre{margin:0;}
+
+.t-dir{color:var(--blue);font-weight:600;}
+.t-go{color:var(--cyan);}
+.t-yaml{color:var(--amber);}
+.t-proto{color:var(--purple);}
+.t-cmt{color:var(--muted);font-style:italic;}
+.t-pipe{color:var(--muted2);}
+.t-layer{color:var(--rose);}
+.t-pkg{color:var(--pink);}
+.t-ts{color:#5ea3ff;}
+.t-key{color:var(--green);}
+
+/* ── CARDS GRID ── */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:20px;}
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:16px;transition:border-color .2s;
+}
+.card:hover{border-color:var(--border2);}
+.card-tag{
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:10px;
+}
+.card-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;}
+.card-body{font-size:10px;color:var(--muted);line-height:1.7;}
+
+/* ── TECH TABLE ── */
+.tech-table{width:100%;border-collapse:collapse;font-size:11px;}
+.tech-table th{
+  text-align:left;padding:9px 14px;
+  background:var(--bg3);color:var(--muted);
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+}
+.tech-table td{
+  padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;
+}
+.tech-table tr:last-child td{border-bottom:none;}
+.tech-table tr:hover td{background:rgba(255,255,255,.015);}
+.pill{
+  display:inline-block;font-size:9px;font-weight:600;
+  padding:2px 8px;border-radius:4px;margin:1px;border:1px solid;
+}
+
+/* ── DIVIDERS ── */
+.hdivider{height:1px;background:var(--border);margin:24px 0;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.fade-in{animation:fadeUp .5s ease both;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{display:none;}
+  .section,.hero{padding:32px 24px;}
+  .layer-label{display:none;}
+}
+
+/* ── PRINT ── */
+@media print{
+  nav{display:none;}
+  .section,.hero{padding:24px;}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-tag">Blueprint</div>
+    <div class="nav-logo-title">AI HR Platform</div>
+    <div class="nav-logo-sub">Architecture Documentation</div>
+  </div>
+  <div class="nav-items">
+    <div class="nav-section-label">Overview</div>
+    <a class="nav-item active" href="#hld">
+      <span class="nav-num" style="background:rgba(79,143,255,.15);color:var(--blue)">1</span>High Level Design
+    </a>
+    <div class="nav-section-label">Detail</div>
+    <a class="nav-item" href="#system">
+      <span class="nav-num" style="background:rgba(157,126,255,.15);color:var(--purple)">2</span>System Design
+    </a>
+    <a class="nav-item" href="#dataflow">
+      <span class="nav-num" style="background:rgba(31,212,200,.15);color:var(--cyan)">3</span>Data Flow
+    </a>
+    <a class="nav-item" href="#erd">
+      <span class="nav-num" style="background:rgba(45,217,143,.15);color:var(--green)">5</span>ERD Database 3D
+    </a>
+    <a class="nav-item" href="#glossary">
+      <span class="nav-num" style="background:rgba(232,121,249,.15);color:var(--pink)">6</span>Glossary — 20 Bảng
+    </a>
+    <a class="nav-item" href="#source">
+      <span class="nav-num" style="background:rgba(245,166,35,.15);color:var(--amber)">4</span>Source Structure
+    </a>
+  </div>
+</nav>
+
+<!-- ════════════════ MAIN ════════════════ -->
+<main>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">
+    <span class="hero-chip" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">Modular Monolith</span>
+    <span class="hero-chip" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.06)">Microservice-Ready</span>
+  </div>
+  <h1 class="hero-title">AI HR Platform<br><span>Architecture Blueprint</span></h1>
+  <p class="hero-sub">Tài liệu thiết kế kỹ thuật toàn diện — từ tổng thể đến chi tiết source code. Golang backend + ReactJS frontend, Cloud-native trên AWS/GCP, scale >5000 users.</p>
+  <div class="hero-badges">
+    <span class="badge" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Golang 1.22+</span>
+    <span class="badge" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">ReactJS + TypeScript</span>
+    <span class="badge" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.08)">PostgreSQL + MongoDB + Redis</span>
+    <span class="badge" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">Kafka + K8s</span>
+    <span class="badge" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.08)">AWS EKS</span>
+  </div>
+</div>
+
+<!-- ═══════ SECTION 1 — HIGH LEVEL DESIGN ═══════ -->
+<section class="section" id="hld">
+  <div class="section-eyebrow">
+    <span class="section-num" style="background:rgba(79,143,255,.15);color:var(--blue)">1</span>
+    <span class="section-tag" style="color:var(--blue);background:rgba(79,143,255,.1)">High Level Design</span>
+  </div>
+  <h2 class="section-title">Kiến trúc tổng thể</h2>
+  <p class="section-desc">Hệ thống chia 4 layer rõ ràng: Client → Gateway → Services → Data. Mỗi layer độc lập, giao tiếp qua interface chuẩn hóa.</p>
+
+  <!-- 4-layer diagram -->
+  <div class="diagram-wrap">
+    <div class="diagram-header">
+      <span class="diagram-title">4-Layer Architecture — AI HR Platform</span>
+      <span style="font-size:9px;color:var(--muted)">Golang + ReactJS · AWS Cloud</span>
+    </div>
+    <div class="diagram-body">
+      <div class="layers">
+
+        <!-- CLIENT LAYER -->
+        <div class="layer-row" style="animation-delay:.05s">
+          <div class="layer-label">CLIENT</div>
+          <div class="layer-cells">
+            <div class="cell" style="background:var(--blue-g);border-color:rgba(79,143,255,.3)">
+              <div class="cell-name">React Web App</div>
+              <div class="cell-sub">Dashboard · Forms · Reports</div>
+            </div>
+            <div class="cell" style="background:var(--blue-g);border-color:rgba(79,143,255,.3)">
+              <div class="cell-name">Mobile / PWA</div>
+              <div class="cell-sub">React Native · Responsive</div>
+            </div>
+            <div class="cell" style="background:var(--blue-g);border-color:rgba(79,143,255,.3)">
+              <div class="cell-name">Admin Portal</div>
+              <div class="cell-sub">BGĐ · HR Manager · Config</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONNECTOR -->
+        <div style="display:flex;align-items:center;padding:3px 0 3px 88px;gap:0">
+          <div style="width:2px;height:18px;background:linear-gradient(180deg,rgba(79,143,255,.5),rgba(79,143,255,.1));margin-left:2px;border-radius:1px;"></div>
+          <div style="font-size:9px;color:var(--muted);margin-left:12px;letter-spacing:1px;">HTTPS / WSS</div>
+        </div>
+
+        <!-- GATEWAY LAYER -->
+        <div class="layer-row" style="animation-delay:.1s">
+          <div class="layer-label">GATEWAY</div>
+          <div class="layer-cells">
+            <div class="cell" style="background:var(--cyan-g);border-color:rgba(31,212,200,.3);flex:2">
+              <div class="cell-name">API Gateway</div>
+              <div class="cell-sub">Auth · Rate Limit · Route · CORS · Request ID</div>
+            </div>
+            <div class="cell" style="background:var(--cyan-g);border-color:rgba(31,212,200,.3)">
+              <div class="cell-name">CDN / WAF</div>
+              <div class="cell-sub">CloudFront · Shield · Static</div>
+            </div>
+            <div class="cell" style="background:var(--cyan-g);border-color:rgba(31,212,200,.3)">
+              <div class="cell-name">WS Gateway</div>
+              <div class="cell-sub">Real-time · Notification</div>
+            </div>
+            <div class="cell" style="background:var(--cyan-g);border-color:rgba(31,212,200,.3)">
+              <div class="cell-name">Kafka Bus</div>
+              <div class="cell-sub">Async Events · Decoupling</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONNECTOR -->
+        <div style="display:flex;align-items:center;padding:3px 0 3px 88px;gap:0">
+          <div style="width:2px;height:18px;background:linear-gradient(180deg,rgba(31,212,200,.5),rgba(157,126,255,.2));margin-left:2px;border-radius:1px;"></div>
+          <div style="font-size:9px;color:var(--muted);margin-left:12px;letter-spacing:1px;">gRPC (internal) · REST (external)</div>
+        </div>
+
+        <!-- SERVICES LAYER -->
+        <div class="layer-row" style="animation-delay:.15s">
+          <div class="layer-label">SERVICES</div>
+          <div class="layer-cells">
+            <div class="cell" style="background:var(--purple-g);border-color:rgba(157,126,255,.3)">
+              <div class="cell-name">IDM Service</div>
+              <div class="cell-sub">Auth · RBAC · Users</div>
+            </div>
+            <div class="cell" style="background:var(--purple-g);border-color:rgba(157,126,255,.3)">
+              <div class="cell-name">CBI Service</div>
+              <div class="cell-sub">AI Interview · STAR</div>
+            </div>
+            <div class="cell" style="background:var(--purple-g);border-color:rgba(157,126,255,.3)">
+              <div class="cell-name">E360 Service</div>
+              <div class="cell-sub">Assessment 360°</div>
+            </div>
+            <div class="cell" style="background:var(--purple-g);border-color:rgba(157,126,255,.3)">
+              <div class="cell-name">IDP Service</div>
+              <div class="cell-sub">Dev Plan · Courses</div>
+            </div>
+            <div class="cell" style="background:var(--purple-g);border-color:rgba(157,126,255,.3)">
+              <div class="cell-name">Talent Service</div>
+              <div class="cell-sub">Pool · Succession</div>
+            </div>
+            <div class="cell" style="background:var(--purple-g);border-color:rgba(157,126,255,.3)">
+              <div class="cell-name">Analytics</div>
+              <div class="cell-sub">Dashboard · KPI · Report</div>
+            </div>
+            <div class="cell" style="background:rgba(232,121,249,.08);border-color:rgba(232,121,249,.3)">
+              <div class="cell-name" style="color:var(--pink)">AI Orchestrator</div>
+              <div class="cell-sub">LLM · Prompt · Score</div>
+            </div>
+            <div class="cell" style="background:var(--purple-g);border-color:rgba(157,126,255,.3)">
+              <div class="cell-name">Notification</div>
+              <div class="cell-sub">Email · Push · In-app</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONNECTOR -->
+        <div style="display:flex;align-items:center;padding:3px 0 3px 88px;gap:0">
+          <div style="width:2px;height:18px;background:linear-gradient(180deg,rgba(157,126,255,.4),rgba(245,166,35,.3));margin-left:2px;border-radius:1px;"></div>
+          <div style="font-size:9px;color:var(--muted);margin-left:12px;letter-spacing:1px;">sqlc · go-redis · mongo-go-driver</div>
+        </div>
+
+        <!-- DATA LAYER -->
+        <div class="layer-row" style="animation-delay:.2s">
+          <div class="layer-label">DATA</div>
+          <div class="layer-cells">
+            <div class="cell" style="background:var(--amber-g);border-color:rgba(245,166,35,.3);flex:2">
+              <div class="cell-name">PostgreSQL</div>
+              <div class="cell-sub">Core relational data · 20 tables · ACID</div>
+            </div>
+            <div class="cell" style="background:var(--amber-g);border-color:rgba(245,166,35,.3)">
+              <div class="cell-name">MongoDB</div>
+              <div class="cell-sub">AI logs · Q&A · Flex schema</div>
+            </div>
+            <div class="cell" style="background:var(--amber-g);border-color:rgba(245,166,35,.3)">
+              <div class="cell-name">Redis</div>
+              <div class="cell-sub">Cache · Session · JWT</div>
+            </div>
+            <div class="cell" style="background:var(--amber-g);border-color:rgba(245,166,35,.3)">
+              <div class="cell-name">S3 Storage</div>
+              <div class="cell-sub">Files · Reports · CV</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech stack summary -->
+  <div class="cards-grid">
+    <div class="card">
+      <span class="card-tag" style="background:rgba(79,143,255,.1);color:var(--blue)">Infrastructure</span>
+      <div class="card-title">AWS EKS + K8s</div>
+      <div class="card-body">Auto-scale horizontal. HPA theo CPU/memory. >5000 concurrent users. Multi-AZ deployment.</div>
+    </div>
+    <div class="card">
+      <span class="card-tag" style="background:rgba(31,212,200,.1);color:var(--cyan)">Observability</span>
+      <div class="card-title">OpenTelemetry Stack</div>
+      <div class="card-body">Tracing: Jaeger. Metrics: Prometheus + Grafana. Logging: Zap → CloudWatch. Alerts: PagerDuty.</div>
+    </div>
+    <div class="card">
+      <span class="card-tag" style="background:rgba(157,126,255,.1);color:var(--purple)">Security</span>
+      <div class="card-title">Zero-trust Network</div>
+      <div class="card-body">JWT access 15min + refresh 7d. RBAC theo scope. Secrets qua AWS Secrets Manager. mTLS inter-service.</div>
+    </div>
+    <div class="card">
+      <span class="card-tag" style="background:rgba(45,217,143,.1);color:var(--green)">CI/CD</span>
+      <div class="card-title">GitHub Actions → ArgoCD</div>
+      <div class="card-body">lint → test → build → push ECR → deploy Helm. Rollback tự động khi health check fail.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION 2 — SYSTEM DESIGN ═══════ -->
+<section class="section" id="system">
+  <div class="section-eyebrow">
+    <span class="section-num" style="background:rgba(157,126,255,.15);color:var(--purple)">2</span>
+    <span class="section-tag" style="color:var(--purple);background:rgba(157,126,255,.1)">System Design</span>
+  </div>
+  <h2 class="section-title">Microservices trong Monolith</h2>
+  <p class="section-desc">Mỗi module là một bounded context độc lập với 4-layer chuẩn. Giao tiếp internal qua interface injection, event qua Kafka. Sẵn sàng tách service khi cần.</p>
+
+  <!-- Service map -->
+  <div class="diagram-wrap">
+    <div class="diagram-header">
+      <span class="diagram-title">Module Communication Map</span>
+      <span style="font-size:9px;color:var(--muted)">REST · gRPC · Kafka Events</span>
+    </div>
+    <div class="diagram-body">
+      <svg class="arch" viewBox="0 0 760 380" width="100%" style="min-width:600px;">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#3a3f5c" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+          <marker id="arr-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#4f8fff" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+          <marker id="arr-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#1fd4c8" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+        </defs>
+
+        <!-- Client -->
+        <rect x="10" y="10" width="110" height="40" rx="7" fill="rgba(79,143,255,.1)" stroke="rgba(79,143,255,.4)" stroke-width="1"/>
+        <text x="65" y="26" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">React Client</text>
+        <text x="65" y="40" text-anchor="middle" font-size="9" fill="#5a5f7a">Web · Mobile · Admin</text>
+
+        <!-- Gateway -->
+        <rect x="10" y="80" width="110" height="40" rx="7" fill="rgba(31,212,200,.08)" stroke="rgba(31,212,200,.35)" stroke-width="1"/>
+        <text x="65" y="96" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">API Gateway</text>
+        <text x="65" y="110" text-anchor="middle" font-size="9" fill="#5a5f7a">JWT · Rate · Route</text>
+
+        <!-- Arrows client→gateway -->
+        <line x1="65" y1="50" x2="65" y2="78" stroke="#4f8fff" stroke-width="1" marker-end="url(#arr-blue)"/>
+
+        <!-- Services row 1 -->
+        <rect x="140" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="190" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">IDM</text>
+        <text x="190" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">Auth · RBAC</text>
+
+        <rect x="256" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="306" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">CBI</text>
+        <text x="306" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">AI Interview</text>
+
+        <rect x="372" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="422" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">E360</text>
+        <text x="422" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">Assessment</text>
+
+        <rect x="488" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="538" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">IDP</text>
+        <text x="538" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">Dev Plan</text>
+
+        <rect x="604" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="654" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Talent</text>
+        <text x="654" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">Pool · Succession</text>
+
+        <!-- Services row 2 -->
+        <rect x="140" y="118" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="190" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Profile</text>
+        <text x="190" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">Skills · History</text>
+
+        <rect x="256" y="118" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="306" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Catalog</text>
+        <text x="306" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">Framework · Course</text>
+
+        <rect x="372" y="118" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="422" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Analytics</text>
+        <text x="422" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">Dashboard · KPI</text>
+
+        <rect x="488" y="118" width="100" height="38" rx="7" fill="rgba(232,121,249,.08)" stroke="rgba(232,121,249,.4)" stroke-width="1"/>
+        <text x="538" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#e879f9">AI Orchestrator</text>
+        <text x="538" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">LLM · Prompt · gRPC</text>
+
+        <rect x="604" y="118" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="654" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Notification</text>
+        <text x="654" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">Email · Push</text>
+
+        <!-- Gateway → services arrows -->
+        <line x1="120" y1="100" x2="138" y2="89" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
+        <line x1="120" y1="100" x2="254" y2="84" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
+        <line x1="120" y1="100" x2="370" y2="79" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
+        <line x1="120" y1="100" x2="486" y2="79" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
+        <line x1="120" y1="100" x2="602" y2="79" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
+
+        <!-- Kafka event bus -->
+        <rect x="140" y="192" width="564" height="34" rx="7" fill="rgba(245,166,35,.06)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="422" y="205" text-anchor="middle" font-size="10" font-weight="600" fill="#f5a623">Kafka Event Bus</text>
+        <text x="422" y="220" text-anchor="middle" font-size="9" fill="#5a5f7a">interview.completed · assessment.done · idp.updated · report.refresh · notification.send</text>
+
+        <!-- Services → Kafka -->
+        <line x1="190" y1="156" x2="190" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="306" y1="156" x2="306" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="422" y1="156" x2="422" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="538" y1="156" x2="538" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="654" y1="156" x2="654" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+
+        <!-- DB layer -->
+        <rect x="140" y="260" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="205" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">PostgreSQL</text>
+        <text x="205" y="290" text-anchor="middle" font-size="9" fill="#5a5f7a">20 tables · Core</text>
+
+        <rect x="286" y="260" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="351" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">MongoDB</text>
+        <text x="351" y="290" text-anchor="middle" font-size="9" fill="#5a5f7a">AI logs · Q&A</text>
+
+        <rect x="432" y="260" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="497" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Redis</text>
+        <text x="497" y="290" text-anchor="middle" font-size="9" fill="#5a5f7a">Cache · Session</text>
+
+        <rect x="578" y="260" width="126" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="641" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">S3 Storage</text>
+        <text x="641" y="290" text-anchor="middle" font-size="9" fill="#5a5f7a">Files · Reports</text>
+
+        <!-- Kafka → DB arrows -->
+        <line x1="300" y1="226" x2="250" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="422" y1="226" x2="422" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="500" y1="226" x2="500" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="600" y1="226" x2="620" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+
+        <!-- Legend -->
+        <line x1="140" y1="340" x2="170" y2="340" stroke="#4f8fff" stroke-width="1.5" stroke-dasharray="4 2"/>
+        <text x="175" y="344" font-size="9" fill="#5a5f7a">REST/HTTP</text>
+        <line x1="240" y1="340" x2="270" y2="340" stroke="#1fd4c8" stroke-width="1.5"/>
+        <text x="275" y="344" font-size="9" fill="#5a5f7a">gRPC</text>
+        <line x1="320" y1="340" x2="350" y2="340" stroke="#3a3f5c" stroke-width="1.5"/>
+        <text x="355" y="344" font-size="9" fill="#5a5f7a">Internal / Event</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 4-layer internal -->
+  <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">Layer nội bộ mỗi module</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-fname">internal/e360/ — áp dụng đồng nhất cho tất cả modules</span><span class="code-lang">layer-based</span></div>
+    <div class="code-body"><pre><span class="t-dir">internal/e360/</span>
+<span class="t-pipe">├── </span><span class="t-layer">domain/</span>          <span class="t-cmt"># Layer 1 — zero dependency · structs, interfaces, errors</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">entity.go</span>    <span class="t-cmt"># Assessment360, Evaluation struct</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">repository.go</span><span class="t-cmt"># interface Repository (port)</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">service.go</span>   <span class="t-cmt"># interface Service (port)</span>
+<span class="t-pipe">│   └── </span><span class="t-go">errors.go</span>    <span class="t-cmt"># ErrNotFound, ErrAlreadySubmitted</span>
+<span class="t-pipe">│</span>
+<span class="t-pipe">├── </span><span class="t-layer">repository/</span>      <span class="t-cmt"># Layer 2 — chỉ biết DB + domain</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">postgres.go</span>  <span class="t-cmt"># implement domain.Repository via sqlc</span>
+<span class="t-pipe">│   └── queries/     </span><span class="t-cmt"># sqlc generated SQL queries</span>
+<span class="t-pipe">│</span>
+<span class="t-pipe">├── </span><span class="t-layer">service/</span>         <span class="t-cmt"># Layer 3 — chỉ biết domain interfaces</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">svc.go</span>       <span class="t-cmt"># implement domain.Service</span>
+<span class="t-pipe">│   └── </span><span class="t-go">aggregator.go</span><span class="t-cmt"># tổng hợp điểm x%+y%+z%</span>
+<span class="t-pipe">│</span>
+<span class="t-pipe">├── </span><span class="t-layer">handler/</span>         <span class="t-cmt"># Layer 4 — chỉ biết service interface</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">http.go</span>      <span class="t-cmt"># Gin handlers · bind req → service call</span>
+<span class="t-pipe">│   └── </span><span class="t-go">dto.go</span>       <span class="t-cmt"># Request/Response DTO · không expose entity</span>
+<span class="t-pipe">│</span>
+<span class="t-pipe">└── </span><span class="t-go">module.go</span>        <span class="t-cmt"># Wire: New(db, cache) → inject repo → svc → handler</span></pre></div>
+  </div>
+
+  <!-- Tech table -->
+  <table class="tech-table" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+    <thead>
+      <tr><th>Component</th><th>Technology</th><th>Lý do chọn</th></tr>
+    </thead>
+    <tbody>
+      <tr><td style="color:#fff;font-weight:600;">HTTP Framework</td><td><span class="pill" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">Gin</span></td><td style="color:var(--muted)">Nhanh nhất Go ecosystem, middleware chain rõ ràng</td></tr>
+      <tr><td style="color:#fff;font-weight:600;">DB Query</td><td><span class="pill" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.06)">sqlc</span></td><td style="color:var(--muted)">Gen type-safe Go code từ SQL, zero reflection</td></tr>
+      <tr><td style="color:#fff;font-weight:600;">Migration</td><td><span class="pill" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.06)">golang-migrate</span></td><td style="color:var(--muted)">Plain SQL, version-controlled, CI-friendly</td></tr>
+      <tr><td style="color:#fff;font-weight:600;">Config</td><td><span class="pill" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.06)">Viper</span></td><td style="color:var(--muted)">yaml + ENV override, struct binding tự động</td></tr>
+      <tr><td style="color:#fff;font-weight:600;">Logging</td><td><span class="pill" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.06)">zap</span></td><td style="color:var(--muted)">Structured JSON, không reflect, production-grade</td></tr>
+      <tr><td style="color:#fff;font-weight:600;">Tracing</td><td><span class="pill" style="color:var(--pink);border-color:rgba(232,121,249,.25);background:rgba(232,121,249,.06)">OpenTelemetry</span></td><td style="color:var(--muted)">Vendor-neutral, tích hợp Jaeger/Tempo</td></tr>
+      <tr><td style="color:#fff;font-weight:600;">Frontend State</td><td><span class="pill" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">TanStack Query</span> <span class="pill" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.06)">Zustand</span></td><td style="color:var(--muted)">Server state tách riêng client state</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════ SECTION 3 — DATA FLOW ═══════ -->
+<section class="section" id="dataflow">
+  <div class="section-eyebrow">
+    <span class="section-num" style="background:rgba(31,212,200,.15);color:var(--cyan)">3</span>
+    <span class="section-tag" style="color:var(--cyan);background:rgba(31,212,200,.1)">Data Flow</span>
+  </div>
+  <h2 class="section-title">Luồng dữ liệu AI Interview</h2>
+  <p class="section-desc">Pipeline 6 bước từ lúc HR tạo phỏng vấn đến khi nhân viên nhận IDP và BGĐ xem dashboard. Mỗi bước publish event lên Kafka để các service downstream consume bất đồng bộ.</p>
+
+  <div class="diagram-wrap">
+    <div class="diagram-header">
+      <span class="diagram-title">End-to-end Pipeline — KR1 + KR2 + KR3 + KR4</span>
+      <span style="font-size:9px;color:var(--muted)">Kafka async · Redis cache · AI scoring</span>
+    </div>
+    <div class="diagram-body">
+      <div class="flow-steps">
+
+        <div class="flow-step" style="animation-delay:.05s">
+          <div class="flow-left">
+            <div class="flow-circle" style="background:rgba(79,143,255,.15);color:var(--blue);border-color:rgba(79,143,255,.3)">①</div>
+            <div class="flow-line"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-title">HR tạo phỏng vấn</div>
+            <div class="flow-nodes">
+              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">React Admin Portal</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">POST /api/cbi/sessions</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--pink);border-color:rgba(232,121,249,.25);background:rgba(232,121,249,.06)">AI Orchestrator gRPC</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">MongoDB: question_bank</span>
+            </div>
+            <div class="flow-desc">HR chọn role + competency framework. AI Orchestrator nhận prompt, gọi LLM sinh câu hỏi STAR + follow-up. Lưu vào MongoDB question_bank. CBI service trả về session_id.</div>
+          </div>
+        </div>
+
+        <div class="flow-step" style="animation-delay:.1s">
+          <div class="flow-left">
+            <div class="flow-circle" style="background:rgba(31,212,200,.15);color:var(--cyan);border-color:rgba(31,212,200,.3)">②</div>
+            <div class="flow-line"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-title">Nhân viên thực hiện phỏng vấn</div>
+            <div class="flow-nodes">
+              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">React UI (chat-style)</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">WebSocket / REST</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">Redis: interview_session</span>
+            </div>
+            <div class="flow-desc">NV trả lời từng câu qua giao diện chat. Redis lưu session state (timeout 2h). AI theo dõi real-time, tự động đặt câu hỏi đào sâu nếu câu trả lời chưa đủ S-T-A-R.</div>
+          </div>
+        </div>
+
+        <div class="flow-step" style="animation-delay:.15s">
+          <div class="flow-left">
+            <div class="flow-circle" style="background:rgba(157,126,255,.15);color:var(--purple);border-color:rgba(157,126,255,.3)">③</div>
+            <div class="flow-line"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-title">AI Scoring & lưu kết quả</div>
+            <div class="flow-nodes">
+              <span class="flow-node" style="color:var(--pink);border-color:rgba(232,121,249,.25);background:rgba(232,121,249,.06)">AI Orchestrator</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.08)">CBI Service</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">PostgreSQL: interview_sessions</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.06)">Kafka: interview.completed</span>
+            </div>
+            <div class="flow-desc">AI chấm điểm từng câu theo rubric STAR (0-100). CBI service tổng hợp ai_score + score_breakdown. Lưu PostgreSQL. Publish event <code style="color:var(--green)">interview.completed</code> lên Kafka.</div>
+          </div>
+        </div>
+
+        <div class="flow-step" style="animation-delay:.2s">
+          <div class="flow-left">
+            <div class="flow-circle" style="background:rgba(255,95,126,.15);color:var(--rose);border-color:rgba(255,95,126,.3)">④</div>
+            <div class="flow-line"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-title">Assessment 360° tổng hợp</div>
+            <div class="flow-nodes">
+              <span class="flow-node" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.06)">Consumer: interview.completed</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--rose);border-color:rgba(255,95,126,.25);background:rgba(255,95,126,.06)">E360 Service</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">PostgreSQL: assessment_360</span>
+            </div>
+            <div class="flow-desc">E360 service consume event. Thu thập đủ 4 nguồn: AI(x%) + Manager(y%) + Peer(z%) + Test. Khi đủ → tính final_score = weighted sum. Lưu assessment_360. Publish <code style="color:var(--green)">assessment.done</code>.</div>
+          </div>
+        </div>
+
+        <div class="flow-step" style="animation-delay:.25s">
+          <div class="flow-left">
+            <div class="flow-circle" style="background:rgba(245,166,35,.15);color:var(--amber);border-color:rgba(245,166,35,.3)">⑤</div>
+            <div class="flow-line"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-title">IDP Generation</div>
+            <div class="flow-nodes">
+              <span class="flow-node" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.06)">Consumer: assessment.done</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--pink);border-color:rgba(232,121,249,.25);background:rgba(232,121,249,.06)">AI Orchestrator</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">PostgreSQL: idp_plans</span>
+            </div>
+            <div class="flow-desc">IDP service nhận assessment. AI phân tích điểm mạnh/yếu theo từng competency. Match với course catalog (cosine similarity). Sinh recommended_courses có match_score. HR duyệt → active.</div>
+          </div>
+        </div>
+
+        <div class="flow-step" style="animation-delay:.3s">
+          <div class="flow-left">
+            <div class="flow-circle" style="background:rgba(45,217,143,.15);color:var(--green);border-color:rgba(45,217,143,.3)">⑥</div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-title">Dashboard & Report</div>
+            <div class="flow-nodes">
+              <span class="flow-node" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.06)">Consumer: idp.updated</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.08)">Analytics Service</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">Redis: pre-built reports</span>
+              <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
+              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">React Dashboard (RBAC)</span>
+            </div>
+            <div class="flow-desc">Analytics aggregate theo scope (company/block/branch). Cache vào Redis với TTL 1h. BGĐ xem toàn công ty, Khối xem đơn vị mình, Chi nhánh chỉ xem nhân viên trực thuộc. Talent pool tự động cập nhật.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Event table -->
+  <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin:24px 0 14px;">Kafka Event Schema</h3>
+  <table class="tech-table" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+    <thead><tr><th>Event Topic</th><th>Publisher</th><th>Consumer(s)</th><th>Payload key</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill" style="color:var(--green);border-color:rgba(45,217,143,.2);background:rgba(45,217,143,.06)">interview.completed</span></td><td style="color:var(--muted)">CBI Service</td><td style="color:var(--muted)">E360, Analytics, Notification</td><td style="color:var(--muted);font-family:monospace;font-size:10px">session_id, employee_id, ai_score, period</td></tr>
+      <tr><td><span class="pill" style="color:var(--green);border-color:rgba(45,217,143,.2);background:rgba(45,217,143,.06)">assessment.done</span></td><td style="color:var(--muted)">E360 Service</td><td style="color:var(--muted)">IDP, Analytics, Notification</td><td style="color:var(--muted);font-family:monospace;font-size:10px">assessment_id, employee_id, final_score</td></tr>
+      <tr><td><span class="pill" style="color:var(--green);border-color:rgba(45,217,143,.2);background:rgba(45,217,143,.06)">idp.updated</span></td><td style="color:var(--muted)">IDP Service</td><td style="color:var(--muted)">Analytics, Notification</td><td style="color:var(--muted);font-family:monospace;font-size:10px">idp_id, employee_id, status</td></tr>
+      <tr><td><span class="pill" style="color:var(--green);border-color:rgba(45,217,243,.2);background:rgba(45,217,143,.06)">report.refresh</span></td><td style="color:var(--muted)">Analytics</td><td style="color:var(--muted)">Analytics (self-consume)</td><td style="color:var(--muted);font-family:monospace;font-size:10px">scope_type, scope_id, period</td></tr>
+      <tr><td><span class="pill" style="color:var(--green);border-color:rgba(45,217,243,.2);background:rgba(45,217,143,.06)">notification.send</span></td><td style="color:var(--muted)">Any service</td><td style="color:var(--muted)">Notification Service</td><td style="color:var(--muted);font-family:monospace;font-size:10px">recipient_id, type, title, body, channel</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════ SECTION 4 — SOURCE STRUCTURE ═══════ -->
+<section class="section" id="source">
+  <div class="section-eyebrow">
+    <span class="section-num" style="background:rgba(245,166,35,.15);color:var(--amber)">4</span>
+    <span class="section-tag" style="color:var(--amber);background:rgba(245,166,35,.1)">Source Structure</span>
+  </div>
+  <h2 class="section-title">Cấu trúc source code</h2>
+  <p class="section-desc">Backend Golang Modular Monolith + Frontend ReactJS Feature-based. Mỗi internal module chứa đủ 4 layers. pkg/ chỉ chứa shared infra — zero business logic.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+    <!-- BACKEND -->
+    <div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--cyan);margin-bottom:12px;display:flex;align-items:center;gap-8px;">
+        <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(31,212,200,.1);border:1px solid rgba(31,212,200,.2);margin-right:8px;">Backend</span>Golang Monolith
+      </h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-fname">cms-platform/</span><span class="code-lang">golang</span></div>
+        <div class="code-body"><pre><span class="t-dir">cms-platform/</span>
+<span class="t-pipe">├── cmd/</span>                       <span class="t-cmt"># Entry points</span>
+<span class="t-pipe">│   ├── api/</span><span class="t-go">main.go</span>           <span class="t-cmt"># HTTP monolith</span>
+<span class="t-pipe">│   ├── worker/</span><span class="t-go">main.go</span>        <span class="t-cmt"># Background jobs</span>
+<span class="t-pipe">│   ├── ws/</span><span class="t-go">main.go</span>            <span class="t-cmt"># WebSocket gateway</span>
+<span class="t-pipe">│   └── ai-orchestrator/</span><span class="t-go">main.go</span>
+<span class="t-pipe">│</span>
+<span class="t-pipe">├── </span><span class="t-dir">internal/</span>                  <span class="t-cmt"># Bounded contexts</span>
+<span class="t-pipe">│   ├── platform/</span>              <span class="t-cmt"># Infra clients</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-go">database/</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-go">cache/</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-go">messaging/</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-go">auth/</span>
+<span class="t-pipe">│   │   └── </span><span class="t-go">observability/</span>
+<span class="t-pipe">│   │</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">idm/</span>                   <span class="t-cmt"># Identity + RBAC</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-layer">handler/</span>           <span class="t-cmt"># HTTP · Gin</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-layer">service/</span>           <span class="t-cmt"># Business logic</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-layer">repository/</span>        <span class="t-cmt"># sqlc queries</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-layer">domain/</span>            <span class="t-cmt"># Structs + interfaces</span>
+<span class="t-pipe">│   │   └── </span><span class="t-go">module.go</span>          <span class="t-cmt"># Wire DI</span>
+<span class="t-pipe">│   │</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">catalog/</span>               <span class="t-cmt"># Framework + Course</span>
+<span class="t-pipe">│   │   └── handler/service/repository/domain/module.go</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">cbi/</span>                   <span class="t-cmt"># AI Interview</span>
+<span class="t-pipe">│   │   └── handler/service/repository/domain/module.go</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">e360/</span>                  <span class="t-cmt"># Assessment 360</span>
+<span class="t-pipe">│   │   └── handler/service/repository/domain/module.go</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">profile/</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">talent/</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">idp/</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">analytics/</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">aiqa/</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">notification/</span>
+<span class="t-pipe">│   └── </span><span class="t-dir">ftc/</span>                   <span class="t-cmt"># FPTel-specific</span>
+<span class="t-pipe">│</span>
+<span class="t-pipe">├── </span><span class="t-pkg">pkg/</span>                       <span class="t-cmt"># Shared infra only</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">config/</span>                <span class="t-cmt"># Viper loader</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">apierror/</span>              <span class="t-cmt"># JSON error std</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">errcode/</span>               <span class="t-cmt"># Sentinel errors</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">middleware/</span>            <span class="t-cmt"># RequestID, Recovery</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">pagination/</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">validator/</span>
+<span class="t-pipe">│   ├── </span><span class="t-go">timehelper/</span>
+<span class="t-pipe">│   └── </span><span class="t-go">httpclient/</span>
+<span class="t-pipe">│</span>
+<span class="t-pipe">├── api/</span>
+<span class="t-pipe">│   ├── </span><span class="t-yaml">openapi.yaml</span>
+<span class="t-pipe">│   └── proto/</span><span class="t-proto">ai_orchestrator.proto</span>
+<span class="t-pipe">│</span>
+<span class="t-pipe">├── deploy/</span>
+<span class="t-pipe">│   ├── configs/</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-yaml">config.base.yaml</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-yaml">config.dev.yaml</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-yaml">config.stg.yaml</span>
+<span class="t-pipe">│   │   └── </span><span class="t-yaml">config.prod.yaml</span>
+<span class="t-pipe">│   ├── helm/</span>
+<span class="t-pipe">│   └── docker/</span>
+<span class="t-pipe">├── migrations/</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.golangci.yml</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.example</span>
+<span class="t-pipe">├── Makefile</span>
+<span class="t-pipe">├── go.mod</span>
+<span class="t-pipe">└── go.sum</span></pre></div>
+      </div>
+    </div>
+
+    <!-- FRONTEND -->
+    <div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap-8px;">
+        <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(79,143,255,.1);border:1px solid rgba(79,143,255,.2);margin-right:8px;">Frontend</span>ReactJS Feature-based
+      </h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-fname">frontend/</span><span class="code-lang">typescript</span></div>
+        <div class="code-body"><pre><span class="t-dir">frontend/</span>
+<span class="t-pipe">├── src/</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">app/</span>                   <span class="t-cmt"># App-level setup</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-ts">router.tsx</span>         <span class="t-cmt"># React Router v6 lazy</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-ts">providers.tsx</span>      <span class="t-cmt"># QueryClient, AuthProvider</span>
+<span class="t-pipe">│   │   └── layout/</span>
+<span class="t-pipe">│   │       ├── </span><span class="t-ts">MainLayout.tsx</span>
+<span class="t-pipe">│   │       └── </span><span class="t-ts">AuthLayout.tsx</span>
+<span class="t-pipe">│   │</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">features/</span>              <span class="t-cmt"># 1 folder = 1 bounded ctx</span>
+<span class="t-pipe">│   │   ├── dashboard/</span>
+<span class="t-pipe">│   │   │   ├── api/           </span><span class="t-cmt"># TanStack Query hooks</span>
+<span class="t-pipe">│   │   │   ├── components/    </span><span class="t-cmt"># Feature-local UI</span>
+<span class="t-pipe">│   │   │   ├── pages/         </span><span class="t-cmt"># Route pages</span>
+<span class="t-pipe">│   │   │   └── </span><span class="t-ts">types.ts</span>
+<span class="t-pipe">│   │   ├── cbi/               </span><span class="t-cmt"># AI Interview UI</span>
+<span class="t-pipe">│   │   │   ├── api/components/pages/types.ts</span>
+<span class="t-pipe">│   │   ├── e360/              </span><span class="t-cmt"># 360 Assessment forms</span>
+<span class="t-pipe">│   │   ├── profile/</span>
+<span class="t-pipe">│   │   ├── talent/</span>
+<span class="t-pipe">│   │   ├── master-data/</span>
+<span class="t-pipe">│   │   ├── ai-qa/</span>
+<span class="t-pipe">│   │   └── analytics/</span>
+<span class="t-pipe">│   │</span>
+<span class="t-pipe">│   └── </span><span class="t-dir">shared/</span>                <span class="t-cmt"># Cross-feature</span>
+<span class="t-pipe">│       ├── components/</span>
+<span class="t-pipe">│       │   ├── ui/            </span><span class="t-cmt"># Button, Modal, Table</span>
+<span class="t-pipe">│       │   ├── </span><span class="t-ts">ErrorBoundary.tsx</span>
+<span class="t-pipe">│       │   ├── </span><span class="t-ts">QueryError.tsx</span>
+<span class="t-pipe">│       │   └── </span><span class="t-ts">PermissionGate.tsx</span>
+<span class="t-pipe">│       ├── hooks/</span>
+<span class="t-pipe">│       │   ├── </span><span class="t-ts">useAuth.ts</span>
+<span class="t-pipe">│       │   ├── </span><span class="t-ts">usePermission.ts</span>
+<span class="t-pipe">│       │   └── </span><span class="t-ts">useWebSocket.ts</span>
+<span class="t-pipe">│       ├── lib/</span>
+<span class="t-pipe">│       │   ├── </span><span class="t-ts">api-client.ts</span>      <span class="t-cmt"># axios + interceptors</span>
+<span class="t-pipe">│       │   ├── </span><span class="t-ts">error-handler.ts</span>   <span class="t-cmt"># error code → msg VN</span>
+<span class="t-pipe">│       │   └── </span><span class="t-ts">ws-client.ts</span>
+<span class="t-pipe">│       └── types/</span>
+<span class="t-pipe">│           ├── </span><span class="t-ts">api.ts</span>
+<span class="t-pipe">│           └── </span><span class="t-ts">auth.ts</span>
+<span class="t-pipe">│</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.development</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.staging</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.production</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.example</span>             <span class="t-cmt"># Commit vào repo</span>
+<span class="t-pipe">├── </span><span class="t-yaml">eslint.config.ts</span>
+<span class="t-pipe">├── vite.config.ts</span>
+<span class="t-pipe">└── package.json</span></pre></div>
+      </div>
+
+      <!-- Microservice split path -->
+      <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--amber);margin:16px 0 12px;">Migration → Microservice</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-fname">Thứ tự tách — khi nào tách</span><span class="code-lang">strategy</span></div>
+        <div class="code-body"><pre><span class="t-cmt"># Bước 1 — Tách sớm nhất (AI cost cao)</span>
+<span class="t-key">ai-orchestrator</span>  <span class="t-cmt">→ đã có proto sẵn, chỉ deploy riêng</span>
+
+<span class="t-cmt"># Bước 2 — Ít dependency nhất</span>
+<span class="t-key">idm</span>              <span class="t-cmt">→ auth service độc lập</span>
+<span class="t-key">notification</span>     <span class="t-cmt">→ pure consumer, không có upstream</span>
+
+<span class="t-cmt"># Bước 3 — Khi analytics query nặng</span>
+<span class="t-key">analytics</span>        <span class="t-cmt">→ CQRS: read service riêng</span>
+
+<span class="t-cmt"># Quy trình tách 1 module:</span>
+1. Viết proto file  <span class="t-go">api/proto/&lt;module&gt;.proto</span>
+2. Thêm gRPC server song song HTTP
+3. Tạo  <span class="t-go">cmd/&lt;module&gt;/main.go</span>  binary mới
+4. Caller swap: in-process call → gRPC client
+   <span class="t-cmt"># interface giữ nguyên → zero change caller</span>
+5. Remove khỏi  <span class="t-go">cmd/api/main.go</span></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checklist -->
+  <div class="hdivider"></div>
+  <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:16px;">Checklist trước khi dev team onboard</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;">
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;">
+      <span style="color:var(--green);font-size:13px;flex-shrink:0;margin-top:1px;">✓</span>
+      <div><div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;">golangci-lint setup</div><div style="font-size:10px;color:var(--muted);">Commit .golangci.yml · CI block merge nếu fail</div></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;">
+      <span style="color:var(--green);font-size:13px;flex-shrink:0;margin-top:1px;">✓</span>
+      <div><div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;">sqlc generate</div><div style="font-size:10px;color:var(--muted);">sqlc.yaml committed · make generate trong CI</div></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;">
+      <span style="color:var(--green);font-size:13px;flex-shrink:0;margin-top:1px;">✓</span>
+      <div><div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;">.env.example committed</div><div style="font-size:10px;color:var(--muted);">Template đủ keys · .env thật trong .gitignore</div></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;">
+      <span style="color:var(--green);font-size:13px;flex-shrink:0;margin-top:1px;">✓</span>
+      <div><div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;">OpenTelemetry từ ngày 1</div><div style="font-size:10px;color:var(--muted);">Logger + tracer trong platform/observability</div></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;">
+      <span style="color:var(--green);font-size:13px;flex-shrink:0;margin-top:1px;">✓</span>
+      <div><div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;">module.go template</div><div style="font-size:10px;color:var(--muted);">Dev copy-paste, không sáng tác lại pattern</div></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;">
+      <span style="color:var(--green);font-size:13px;flex-shrink:0;margin-top:1px;">✓</span>
+      <div><div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;">GitHub Actions CI</div><div style="font-size:10px;color:var(--muted);">lint → test -race → build → push ECR trên mỗi PR</div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════ SECTION 5 — ERD 3D DATABASE ═══════ -->
+<section class="section" id="erd" style="padding-bottom:0;">
+  <div class="section-eyebrow">
+    <span class="section-num" style="background:rgba(45,217,143,.15);color:var(--green)">5</span>
+    <span class="section-tag" style="color:var(--green);background:rgba(45,217,143,.1)">ERD Database</span>
+  </div>
+  <h2 class="section-title">Sơ đồ ERD 3D — Full Schema</h2>
+  <p class="section-desc" style="margin-bottom:16px;">20 bảng PostgreSQL phủ toàn bộ modules. Click vào bảng để xem columns, DDL SQL và mock data. Hỗ trợ zoom, xoay 3D, lọc theo module.</p>
+  <div style="width:100%;height:82vh;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--bg2);">
+    <iframe 
+      id="erd-frame"
+      style="width:100%;height:100%;border:none;display:block;"
+      srcdoc="<!DOCTYPE html>
+<html lang=&quot;vi&quot;>
+<head>
+  <meta charset=&quot;UTF-8&quot;>
+  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+  <title>AI HR Platform — 3D ERD Full Schema</title>
+  <script src=&quot;https://cdn.tailwindcss.com&quot;></script>
+  <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js&quot;></script>
+  <script src=&quot;https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js&quot;></script>
+  <link href=&quot;https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+    ::-webkit-scrollbar-thumb { background: rgba(156,163,175,0.4); border-radius: 4px; }
+  </style>
+</head>
+<body class=&quot;bg-slate-950 text-slate-100&quot;>
+<div class=&quot;h-screen w-screen flex flex-col relative z-10&quot;>
+
+  <!-- HEADER -->
+  <header class=&quot;h-14 border-b border-slate-800 bg-slate-900/90 backdrop-blur flex items-center justify-between px-5 shrink-0 z-20&quot;>
+    <div class=&quot;flex items-center gap-3&quot;>
+      <div class=&quot;p-1.5 bg-blue-600/20 text-blue-400 rounded-lg&quot;>
+        <svg class=&quot;w-5 h-5&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;><path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4&quot;/></svg>
+      </div>
+      <div>
+        <h1 class=&quot;text-sm font-extrabold tracking-tight flex items-center gap-2&quot;>
+          AI HR Platform
+          <span class=&quot;text-[10px] px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 font-medium&quot;>ERD 3D — Full Schema</span>
+          <span id=&quot;table-count-badge&quot; class=&quot;text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 font-medium&quot;>20 Tables</span>
+        </h1>
+        <p class=&quot;text-[10px] text-slate-400&quot;>PostgreSQL · Modular Monolith · Microservice-Ready · Golang + ReactJS</p>
+      </div>
+    </div>
+    <div class=&quot;flex items-center gap-3&quot;>
+      <div class=&quot;relative hidden md:block&quot;>
+        <input type=&quot;text&quot; id=&quot;search-input&quot; placeholder=&quot;Tìm bảng hoặc cột...&quot; class=&quot;w-52 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-blue-500 text-slate-200 pl-8&quot;>
+        <svg class=&quot;w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;><path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z&quot;/></svg>
+      </div>
+      <div class=&quot;flex items-center bg-slate-950 border border-slate-800 rounded-lg p-0.5&quot;>
+        <button onclick=&quot;setTheme('cyberpunk')&quot; id=&quot;btn-theme-cyberpunk&quot; class=&quot;px-2.5 py-1 text-xs rounded font-medium bg-blue-600/20 text-blue-400&quot;>Cyberpunk</button>
+        <button onclick=&quot;setTheme('blueprint')&quot; id=&quot;btn-theme-blueprint&quot; class=&quot;px-2.5 py-1 text-xs rounded font-medium text-slate-400 hover:text-white&quot;>Blueprint</button>
+        <button onclick=&quot;setTheme('enterprise')&quot; id=&quot;btn-theme-enterprise&quot; class=&quot;px-2.5 py-1 text-xs rounded font-medium text-slate-400 hover:text-white&quot;>Enterprise</button>
+      </div>
+    </div>
+  </header>
+
+  <div class=&quot;flex-1 flex min-h-0 relative&quot;>
+
+    <!-- LEFT SIDEBAR -->
+    <aside id=&quot;left-sidebar&quot; class=&quot;w-64 bg-slate-900/95 border-r border-slate-800 flex flex-col shrink-0 z-10&quot;>
+      <!-- Layout -->
+      <div class=&quot;p-3 border-b border-slate-800&quot;>
+        <p class=&quot;text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2&quot;>Layout 3D</p>
+        <div class=&quot;grid grid-cols-2 gap-1.5&quot;>
+          <button onclick=&quot;changeLayout('ring')&quot; id=&quot;btn-layout-ring&quot; class=&quot;py-1.5 px-2 rounded text-xs font-semibold bg-blue-600 text-white&quot;>Vòng tròn</button>
+          <button onclick=&quot;changeLayout('grid')&quot; id=&quot;btn-layout-grid&quot; class=&quot;py-1.5 px-2 rounded text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300&quot;>Lưới</button>
+          <button onclick=&quot;changeLayout('tiered')&quot; id=&quot;btn-layout-tiered&quot; class=&quot;py-1.5 px-2 rounded text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300&quot;>Phân tầng</button>
+          <button onclick=&quot;changeLayout('sphere')&quot; id=&quot;btn-layout-sphere&quot; class=&quot;py-1.5 px-2 rounded text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300&quot;>Quả cầu</button>
+        </div>
+      </div>
+
+      <!-- Module Filter -->
+      <div class=&quot;p-3 border-b border-slate-800&quot;>
+        <p class=&quot;text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2&quot;>Lọc theo Module</p>
+        <div class=&quot;space-y-1 text-xs&quot; id=&quot;module-filter-list&quot;></div>
+        <button onclick=&quot;highlightCategory(null)&quot; class=&quot;w-full mt-2 text-center text-[10px] text-slate-400 hover:text-blue-400 underline&quot;>Hiện tất cả</button>
+      </div>
+
+      <!-- Table list -->
+      <div class=&quot;flex-1 overflow-y-auto p-3&quot;>
+        <p class=&quot;text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2&quot;>Danh sách bảng</p>
+        <div id=&quot;sidebar-tables-list&quot; class=&quot;space-y-1&quot;></div>
+      </div>
+    </aside>
+
+    <!-- CANVAS -->
+    <main class=&quot;flex-1 relative bg-slate-950&quot;>
+      <div class=&quot;absolute bottom-4 left-4 bg-slate-900/90 border border-slate-800 rounded-lg p-2 flex items-center gap-2 z-10 backdrop-blur&quot;>
+        <button onclick=&quot;resetCamera()&quot; class=&quot;px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs text-slate-300&quot;>Reset</button>
+        <button onclick=&quot;rotateCamera(45)&quot; class=&quot;px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs text-slate-300&quot;>Xoay 45°</button>
+        <button onclick=&quot;toggleFlowAnimation()&quot; id=&quot;btn-toggle-flow&quot; class=&quot;px-2 py-1 bg-emerald-600/20 text-emerald-400 rounded text-xs font-medium&quot;>⚡ Xung: Bật</button>
+      </div>
+      <div class=&quot;absolute top-3 left-4 bg-slate-900/80 border border-slate-800 rounded px-3 py-1.5 text-[10px] text-slate-400 z-10 pointer-events-none&quot;>
+        💡 <strong class=&quot;text-slate-200&quot;>Trái:</strong> Xoay · <strong class=&quot;text-slate-200&quot;>Phải:</strong> Di chuyển · <strong class=&quot;text-slate-200&quot;>Cuộn:</strong> Zoom · <strong class=&quot;text-slate-200&quot;>Click:</strong> Xem chi tiết
+      </div>
+      <div id=&quot;canvas-container&quot; class=&quot;w-full h-full&quot;></div>
+    </main>
+
+    <!-- RIGHT INSPECTOR -->
+    <aside id=&quot;right-sidebar&quot; class=&quot;w-80 bg-slate-900/95 border-l border-slate-800 flex flex-col shrink-0 z-10&quot;>
+      <div id=&quot;inspector-placeholder&quot; class=&quot;flex-1 flex flex-col items-center justify-center p-6 text-center&quot;>
+        <div class=&quot;w-12 h-12 bg-slate-800/50 rounded-xl flex items-center justify-center text-slate-500 mb-3 animate-pulse&quot;>
+          <svg class=&quot;w-6 h-6&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;><path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7&quot;/></svg>
+        </div>
+        <h3 class=&quot;text-xs font-bold text-slate-300&quot;>Chưa chọn bảng</h3>
+        <p class=&quot;text-[11px] text-slate-500 mt-1.5&quot;>Click vào bảng trên 3D hoặc từ danh sách bên trái</p>
+      </div>
+      <div id=&quot;inspector-detail&quot; class=&quot;hidden flex-1 flex flex-col min-h-0&quot;>
+        <div class=&quot;p-3 border-b border-slate-800&quot; id=&quot;inspector-header&quot;>
+          <div class=&quot;flex items-center justify-between&quot;>
+            <span id=&quot;entity-module-tag&quot; class=&quot;text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-blue-600/20 text-blue-400&quot;></span>
+            <button onclick=&quot;clearSelection()&quot; class=&quot;p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white&quot;>
+              <svg class=&quot;w-3.5 h-3.5&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;><path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M6 18L18 6M6 6l12 12&quot;/></svg>
+            </button>
+          </div>
+          <h2 id=&quot;entity-title&quot; class=&quot;text-base font-bold text-white mt-1 font-mono&quot;></h2>
+          <p id=&quot;entity-desc&quot; class=&quot;text-[11px] text-slate-400 mt-0.5 leading-relaxed&quot;></p>
+          <div class=&quot;flex items-center gap-2 mt-2&quot;>
+            <span id=&quot;entity-cols-count&quot; class=&quot;text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-medium&quot;></span>
+            <span id=&quot;entity-relations-count&quot; class=&quot;text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-medium&quot;></span>
+          </div>
+        </div>
+        <div class=&quot;flex border-b border-slate-800 text-[11px] text-slate-400 font-medium shrink-0&quot;>
+          <button onclick=&quot;switchTab('columns')&quot; id=&quot;tab-btn-columns&quot; class=&quot;flex-1 py-2 border-b-2 border-blue-500 text-white font-bold&quot;>Columns</button>
+          <button onclick=&quot;switchTab('sql')&quot; id=&quot;tab-btn-sql&quot; class=&quot;flex-1 py-2 border-b-2 border-transparent hover:text-white&quot;>DDL SQL</button>
+          <button onclick=&quot;switchTab('mock')&quot; id=&quot;tab-btn-mock&quot; class=&quot;flex-1 py-2 border-b-2 border-transparent hover:text-white&quot;>Mock JSON</button>
+          <button onclick=&quot;switchTab('relations')&quot; id=&quot;tab-btn-relations&quot; class=&quot;flex-1 py-2 border-b-2 border-transparent hover:text-white&quot;>Relations</button>
+        </div>
+        <div id=&quot;tab-content-columns&quot; class=&quot;flex-1 overflow-y-auto p-3 space-y-1.5&quot;></div>
+        <div id=&quot;tab-content-sql&quot; class=&quot;hidden flex-1 overflow-y-auto p-3 flex flex-col&quot;>
+          <div class=&quot;flex justify-between items-center mb-2&quot;>
+            <span class=&quot;text-[10px] text-slate-500 font-bold uppercase&quot;>PostgreSQL DDL</span>
+            <button onclick=&quot;copyContent('sql')&quot; class=&quot;text-[11px] text-blue-400 hover:text-blue-300 font-semibold&quot;>Copy</button>
+          </div>
+          <pre class=&quot;flex-1 bg-slate-950 p-2.5 rounded border border-slate-800 overflow-auto text-[11px] text-blue-300 font-mono&quot; id=&quot;sql-code-block&quot;></pre>
+        </div>
+        <div id=&quot;tab-content-mock&quot; class=&quot;hidden flex-1 overflow-y-auto p-3 flex flex-col&quot;>
+          <div class=&quot;flex justify-between items-center mb-2&quot;>
+            <span class=&quot;text-[10px] text-slate-500 font-bold uppercase&quot;>Mock Data JSON</span>
+            <button onclick=&quot;copyContent('mock')&quot; class=&quot;text-[11px] text-blue-400 hover:text-blue-300 font-semibold&quot;>Copy</button>
+          </div>
+          <pre class=&quot;flex-1 bg-slate-950 p-2.5 rounded border border-slate-800 overflow-auto text-[11px] text-emerald-400 font-mono&quot; id=&quot;mock-json-block&quot;></pre>
+        </div>
+        <div id=&quot;tab-content-relations&quot; class=&quot;hidden flex-1 overflow-y-auto p-3 space-y-2&quot;></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div id=&quot;copy-modal&quot; class=&quot;fixed bottom-5 right-5 z-50 bg-emerald-600 text-white text-xs py-2 px-4 rounded-lg shadow-2xl flex items-center gap-2 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none&quot;>
+  <svg class=&quot;w-3.5 h-3.5&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;><path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M5 13l4 4L19 7&quot;/></svg>
+  <span id=&quot;copy-modal-text&quot;>Đã sao chép!</span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// FULL DB SCHEMA — 20 Tables covering all modules
+// idm, catalog, assessment, cbi, e360, profile, talent,
+// analytics, assesshub, aiqa, notification, ftc
+// ═══════════════════════════════════════════════════════════════
+const DB_SCHEMA = {
+
+  // ── IDM MODULE ──────────────────────────────────────────────
+  employees: {
+    name: &quot;employees&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
+    desc: &quot;Nhân viên, cây quản lý self-ref, level, branch.&quot;,
+    color: &quot;#3B82F6&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;employee_code&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
+      { name:&quot;full_name&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;email&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
+      { name:&quot;phone&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;department&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;position&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;level&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;junior/mid/senior/lead&quot; },
+      { name:&quot;manager_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK self-ref employees&quot; },
+      { name:&quot;branch_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK branches&quot; },
+      { name:&quot;hire_date&quot;, type:&quot;date&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;status&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;active/inactive/resigned&quot; },
+      { name:&quot;avatar_url&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:&quot;updated_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;e1a4b67c-d31e-419b-a012-3456789abcde&quot;, employee_code:&quot;EMP-001&quot;, full_name:&quot;Phạm Minh Hoàng&quot;, email:&quot;hoang.pm@ftel.vn&quot;, level:&quot;senior&quot;, status:&quot;active&quot; }]
+  },
+
+  branches: {
+    name: &quot;branches&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
+    desc: &quot;Chi nhánh / đơn vị kinh doanh. Dùng cho RBAC phân quyền báo cáo.&quot;,
+    color: &quot;#3B82F6&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;code&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
+      { name:&quot;name&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;block_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK blocks&quot; },
+      { name:&quot;region&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;manager_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
+      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;b1c2d3e4-0000-0000-0000-000000000001&quot;, code:&quot;HCM-01&quot;, name:&quot;Chi nhánh TP.HCM&quot;, region:&quot;South&quot; }]
+  },
+
+  blocks: {
+    name: &quot;blocks&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
+    desc: &quot;Khối / vùng kinh doanh cấp cao hơn chi nhánh.&quot;,
+    color: &quot;#3B82F6&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;code&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
+      { name:&quot;name&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;director_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
+      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;blk-0001&quot;, code:&quot;BLOCK-SOUTH&quot;, name:&quot;Khối Miền Nam&quot; }]
+  },
+
+  roles: {
+    name: &quot;roles&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
+    desc: &quot;RBAC roles: BGĐ, Khối, Chi nhánh, Phòng, Nhân viên.&quot;,
+    color: &quot;#3B82F6&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;code&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
+      { name:&quot;name&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;permissions&quot;, type:&quot;jsonb&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;scope_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;global/block/branch/dept&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;role-001&quot;, code:&quot;BGD&quot;, name:&quot;Ban Giám Đốc&quot;, scope_type:&quot;global&quot; }]
+  },
+
+  employee_roles: {
+    name: &quot;employee_roles&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
+    desc: &quot;Junction table: gán Role cho Employee theo scope cụ thể.&quot;,
+    color: &quot;#3B82F6&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
+      { name:&quot;role_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK roles NOT NULL&quot; },
+      { name:&quot;scope_id&quot;, type:&quot;uuid&quot;, constraint:&quot;ID của scope (branch/block)&quot; },
+      { name:&quot;granted_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
+      { name:&quot;granted_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:&quot;expires_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
+    ],
+    mock: [{ employee_id:&quot;e1a4b67c&quot;, role_id:&quot;role-001&quot;, scope_id:&quot;blk-0001&quot; }]
+  },
+
+  // ── CATALOG MODULE ───────────────────────────────────────────
+  competency_frameworks: {
+    name: &quot;competency_frameworks&quot;, module: &quot;catalog&quot;, category: &quot;config&quot;,
+    desc: &quot;Khung năng lực theo role/level. Source of truth cho AI gen câu hỏi.&quot;,
+    color: &quot;#6366F1&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;name&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;role_type&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;level&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;competency_list&quot;, type:&quot;jsonb&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;scoring_weights&quot;, type:&quot;jsonb&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
+      { name:&quot;version&quot;, type:&quot;integer&quot;, constraint:&quot;DEFAULT 1&quot; },
+      { name:&quot;created_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;9cf3a58e&quot;, name:&quot;Tech Lead Framework&quot;, role_type:&quot;Engineering&quot;, level:&quot;lead&quot;, is_active:true }]
+  },
+
+  courses: {
+    name: &quot;courses&quot;, module: &quot;catalog&quot;, category: &quot;config&quot;,
+    desc: &quot;Danh mục khóa học nội bộ và online. Dùng cho IDP recommendation.&quot;,
+    color: &quot;#6366F1&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;code&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
+      { name:&quot;title&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;description&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;category&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;provider&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;internal/udemy/coursera/...&quot; },
+      { name:&quot;duration_hours&quot;, type:&quot;integer&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;url&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;competency_tags&quot;, type:&quot;jsonb&quot;, constraint:&quot;mảng competency liên quan&quot; },
+      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;crs-001&quot;, code:&quot;GO-ADV-01&quot;, title:&quot;Advanced Go Patterns&quot;, provider:&quot;internal&quot;, category:&quot;Engineering&quot; }]
+  },
+
+  questions: {
+    name: &quot;questions&quot;, module: &quot;catalog&quot;, category: &quot;config&quot;,
+    desc: &quot;Ngân hàng câu hỏi STAR — AI sinh từ framework, HR duyệt.&quot;,
+    color: &quot;#6366F1&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;framework_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK competency_frameworks&quot; },
+      { name:&quot;competency&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;question_text&quot;, type:&quot;text&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;question_type&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;main/follow_up/clarification&quot; },
+      { name:&quot;difficulty&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;easy/medium/hard&quot; },
+      { name:&quot;star_component&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;S/T/A/R&quot; },
+      { name:&quot;order_num&quot;, type:&quot;integer&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;q-001&quot;, competency:&quot;Team Mentoring&quot;, difficulty:&quot;medium&quot;, star_component:&quot;S&quot; }]
+  },
+
+  // ── ASSESSMENT / CBI MODULE ──────────────────────────────────
+  assessment_cycles: {
+    name: &quot;assessment_cycles&quot;, module: &quot;assessment&quot;, category: &quot;evaluation&quot;,
+    desc: &quot;Kỳ đánh giá (Q1/Q2/năm). Quản lý timeline, trạng thái vòng đánh giá.&quot;,
+    color: &quot;#F43F5E&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;name&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
+      { name:&quot;cycle_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;quarterly/annual/probation&quot; },
+      { name:&quot;start_date&quot;, type:&quot;date&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;end_date&quot;, type:&quot;date&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;status&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;draft/active/closed/archived&quot; },
+      { name:&quot;config&quot;, type:&quot;jsonb&quot;, constraint:&quot;score weights, deadlines&quot; },
+      { name:&quot;created_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;cyc-001&quot;, name:&quot;Q2 2024 Assessment&quot;, period:&quot;2024-Q2&quot;, status:&quot;active&quot; }]
+  },
+
+  interview_sessions: {
+    name: &quot;interview_sessions&quot;, module: &quot;cbi&quot;, category: &quot;evaluation&quot;,
+    desc: &quot;Phiên phỏng vấn AI — lưu toàn bộ Q&amp;A, điểm AI, feedback.&quot;,
+    color: &quot;#F43F5E&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
+      { name:&quot;framework_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK competency_frameworks&quot; },
+      { name:&quot;cycle_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK assessment_cycles&quot; },
+      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
+      { name:&quot;status&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;pending/in_progress/completed&quot; },
+      { name:&quot;answers&quot;, type:&quot;jsonb&quot;, constraint:&quot;Q&amp;A array&quot; },
+      { name:&quot;ai_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;0-100&quot; },
+      { name:&quot;ai_feedback&quot;, type:&quot;text&quot;, constraint:&quot;nhận xét AI&quot; },
+      { name:&quot;score_breakdown&quot;, type:&quot;jsonb&quot;, constraint:&quot;điểm từng competency&quot; },
+      { name:&quot;started_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;completed_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;int-001&quot;, period:&quot;2024-Q2&quot;, status:&quot;completed&quot;, ai_score:85.5 }]
+  },
+
+  // ── E360 MODULE ──────────────────────────────────────────────
+  assessment_360: {
+    name: &quot;assessment_360&quot;, module: &quot;e360&quot;, category: &quot;evaluation&quot;,
+    desc: &quot;Vòng đánh giá 360: tổng hợp AI + manager + peer + test → final score.&quot;,
+    color: &quot;#F43F5E&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
+      { name:&quot;cycle_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK assessment_cycles&quot; },
+      { name:&quot;interview_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK interview_sessions&quot; },
+      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
+      { name:&quot;ai_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;trọng số x%&quot; },
+      { name:&quot;manager_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;trọng số y%&quot; },
+      { name:&quot;peer_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;trọng số z%&quot; },
+      { name:&quot;test_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;bài test chuyên môn&quot; },
+      { name:&quot;final_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;tổng hợp có trọng số&quot; },
+      { name:&quot;score_weights&quot;, type:&quot;jsonb&quot;, constraint:&quot;{ai:x, mgr:y, peer:z}&quot; },
+      { name:&quot;competency_scores&quot;, type:&quot;jsonb&quot;, constraint:&quot;điểm từng competency&quot; },
+      { name:&quot;status&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;in_progress/completed/approved&quot; },
+      { name:&quot;completed_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;a360-001&quot;, period:&quot;2024-Q2&quot;, final_score:82.4, status:&quot;completed&quot; }]
+  },
+
+  evaluations: {
+    name: &quot;evaluations&quot;, module: &quot;e360&quot;, category: &quot;evaluation&quot;,
+    desc: &quot;Chi tiết đánh giá từng người trong vòng 360 (manager/peer/sub/self).&quot;,
+    color: &quot;#F43F5E&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;assessment_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK assessment_360 NOT NULL&quot; },
+      { name:&quot;evaluator_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
+      { name:&quot;evaluator_role&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;manager/peer/subordinate/self&quot; },
+      { name:&quot;scores&quot;, type:&quot;jsonb&quot;, constraint:&quot;điểm từng competency&quot; },
+      { name:&quot;overall_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;strengths&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;improvements&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;is_anonymous&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
+      { name:&quot;submitted_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;eval-001&quot;, evaluator_role:&quot;peer&quot;, overall_score:88, is_anonymous:true }]
+  },
+
+  // ── PROFILE MODULE ───────────────────────────────────────────
+  employee_profiles: {
+    name: &quot;employee_profiles&quot;, module: &quot;profile&quot;, category: &quot;profile&quot;,
+    desc: &quot;Hồ sơ mở rộng của nhân viên: kỹ năng, kinh nghiệm, chứng chỉ.&quot;,
+    color: &quot;#06B6D4&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees UNIQUE NOT NULL&quot; },
+      { name:&quot;bio&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;skills&quot;, type:&quot;jsonb&quot;, constraint:&quot;mảng kỹ năng + level&quot; },
+      { name:&quot;certifications&quot;, type:&quot;jsonb&quot;, constraint:&quot;chứng chỉ đã có&quot; },
+      { name:&quot;work_history&quot;, type:&quot;jsonb&quot;, constraint:&quot;lịch sử công tác&quot; },
+      { name:&quot;education&quot;, type:&quot;jsonb&quot;, constraint:&quot;học vấn&quot; },
+      { name:&quot;languages&quot;, type:&quot;jsonb&quot;, constraint:&quot;ngôn ngữ&quot; },
+      { name:&quot;linkedin_url&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;updated_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;prof-001&quot;, skills:[{name:&quot;Golang&quot;,level:&quot;advanced&quot;},{name:&quot;PostgreSQL&quot;,level:&quot;intermediate&quot;}] }]
+  },
+
+  // ── TALENT MODULE ────────────────────────────────────────────
+  talent_pools: {
+    name: &quot;talent_pools&quot;, module: &quot;talent&quot;, category: &quot;talent&quot;,
+    desc: &quot;Danh sách nhân tài theo nhóm: high-potential, succession, critical.&quot;,
+    color: &quot;#10B981&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;name&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;pool_type&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;high_potential/succession/critical&quot; },
+      { name:&quot;scope_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;company/block/branch&quot; },
+      { name:&quot;scope_id&quot;, type:&quot;uuid&quot;, constraint:&quot;ID đơn vị tương ứng&quot; },
+      { name:&quot;criteria&quot;, type:&quot;jsonb&quot;, constraint:&quot;tiêu chí xếp vào pool&quot; },
+      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
+      { name:&quot;created_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;pool-001&quot;, name:&quot;High Potential 2024&quot;, pool_type:&quot;high_potential&quot; }]
+  },
+
+  talent_pool_members: {
+    name: &quot;talent_pool_members&quot;, module: &quot;talent&quot;, category: &quot;talent&quot;,
+    desc: &quot;Junction: nhân viên thuộc talent pool nào, lý do, ngày vào.&quot;,
+    color: &quot;#10B981&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;pool_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK talent_pools NOT NULL&quot; },
+      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
+      { name:&quot;added_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
+      { name:&quot;reason&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;score_at_entry&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;điểm khi được thêm&quot; },
+      { name:&quot;added_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ pool_id:&quot;pool-001&quot;, employee_id:&quot;e1a4b67c&quot;, score_at_entry:88.5 }]
+  },
+
+  // ── IDP MODULE ───────────────────────────────────────────────
+  idp_plans: {
+    name: &quot;idp_plans&quot;, module: &quot;idp&quot;, category: &quot;development&quot;,
+    desc: &quot;Kế hoạch phát triển cá nhân — AI sinh từ assessment_360.&quot;,
+    color: &quot;#F59E0B&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
+      { name:&quot;assessment_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK assessment_360 NOT NULL&quot; },
+      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
+      { name:&quot;strengths&quot;, type:&quot;jsonb&quot;, constraint:&quot;AI phân tích điểm mạnh&quot; },
+      { name:&quot;improvements&quot;, type:&quot;jsonb&quot;, constraint:&quot;AI phân tích điểm yếu&quot; },
+      { name:&quot;recommended_courses&quot;, type:&quot;jsonb&quot;, constraint:&quot;khoá học + match score&quot; },
+      { name:&quot;goals&quot;, type:&quot;jsonb&quot;, constraint:&quot;OKR mục tiêu hành động&quot; },
+      { name:&quot;ai_summary&quot;, type:&quot;text&quot;, constraint:&quot;lời khuyên lộ trình AI&quot; },
+      { name:&quot;hr_notes&quot;, type:&quot;text&quot;, constraint:&quot;ghi chú HR&quot; },
+      { name:&quot;status&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;draft/active/completed&quot; },
+      { name:&quot;approved_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
+      { name:&quot;approved_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;idp-001&quot;, status:&quot;active&quot;, recommended_courses:[{id:&quot;crs-001&quot;,match_score:0.92}] }]
+  },
+
+  idp_progress: {
+    name: &quot;idp_progress&quot;, module: &quot;idp&quot;, category: &quot;development&quot;,
+    desc: &quot;Theo dõi tiến độ thực hiện IDP — check-in định kỳ.&quot;,
+    color: &quot;#F59E0B&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;idp_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK idp_plans NOT NULL&quot; },
+      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
+      { name:&quot;check_in_date&quot;, type:&quot;date&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;goal_id&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;ID mục tiêu trong goals JSON&quot; },
+      { name:&quot;progress_pct&quot;, type:&quot;integer&quot;, constraint:&quot;0-100&quot; },
+      { name:&quot;note&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ idp_id:&quot;idp-001&quot;, progress_pct:45, check_in_date:&quot;2024-06-15&quot; }]
+  },
+
+  // ── ANALYTICS / REPORT MODULE ────────────────────────────────
+  reports: {
+    name: &quot;reports&quot;, module: &quot;analytics&quot;, category: &quot;reporting&quot;,
+    desc: &quot;Snapshot báo cáo năng lực. Phân quyền theo scope BGĐ/Khối/Chi nhánh.&quot;,
+    color: &quot;#64748B&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;report_type&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;talent_pool/competency/period&quot; },
+      { name:&quot;scope_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;company/block/branch/dept&quot; },
+      { name:&quot;scope_id&quot;, type:&quot;uuid&quot;, constraint:&quot;ID đơn vị tương ứng&quot; },
+      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
+      { name:&quot;generated_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
+      { name:&quot;data_snapshot&quot;, type:&quot;jsonb&quot;, constraint:&quot;toàn bộ dữ liệu tại thời điểm&quot; },
+      { name:&quot;summary_stats&quot;, type:&quot;jsonb&quot;, constraint:&quot;avg/min/max/distribution&quot; },
+      { name:&quot;cache_key&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;UNIQUE NULL — Redis key&quot; },
+      { name:&quot;expires_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;hết hạn cache&quot; },
+      { name:&quot;is_public&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT FALSE&quot; },
+      { name:&quot;generated_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;rpt-001&quot;, report_type:&quot;competency&quot;, scope_type:&quot;branch&quot;, period:&quot;2024-Q2&quot; }]
+  },
+
+  // ── AIQA MODULE ──────────────────────────────────────────────
+  ai_conversations: {
+    name: &quot;ai_conversations&quot;, module: &quot;aiqa&quot;, category: &quot;ai&quot;,
+    desc: &quot;Lịch sử hội thoại AI Q&amp;A với nhân viên — dùng MongoDB nhưng PG cho metadata.&quot;,
+    color: &quot;#A855F7&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
+      { name:&quot;session_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;interview/faq/coaching&quot; },
+      { name:&quot;mongo_doc_id&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;ID tài liệu MongoDB&quot; },
+      { name:&quot;message_count&quot;, type:&quot;integer&quot;, constraint:&quot;DEFAULT 0&quot; },
+      { name:&quot;token_used&quot;, type:&quot;integer&quot;, constraint:&quot;tổng token tiêu thụ&quot; },
+      { name:&quot;status&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;active/completed/archived&quot; },
+      { name:&quot;started_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:&quot;ended_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
+    ],
+    mock: [{ id:&quot;aiq-001&quot;, session_type:&quot;interview&quot;, message_count:24, token_used:3200 }]
+  },
+
+  // ── NOTIFICATION MODULE ──────────────────────────────────────
+  notifications: {
+    name: &quot;notifications&quot;, module: &quot;notification&quot;, category: &quot;system&quot;,
+    desc: &quot;Thông báo in-app, email, push. Phân loại theo event type và trạng thái.&quot;,
+    color: &quot;#EC4899&quot;,
+    columns: [
+      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
+      { name:&quot;recipient_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
+      { name:&quot;sender_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NULL (system=null)&quot; },
+      { name:&quot;type&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;assessment/idp/reminder/system&quot; },
+      { name:&quot;title&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;body&quot;, type:&quot;text&quot;, constraint:&quot;NOT NULL&quot; },
+      { name:&quot;data&quot;, type:&quot;jsonb&quot;, constraint:&quot;payload đi kèm (link, entity_id)&quot; },
+      { name:&quot;channel&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;in_app/email/push&quot; },
+      { name:&quot;is_read&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT FALSE&quot; },
+      { name:&quot;read_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
+      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+    ],
+    mock: [{ id:&quot;notif-001&quot;, type:&quot;assessment&quot;, title:&quot;Vòng đánh giá Q2 đã bắt đầu&quot;, is_read:false }]
+  },
+
+};
+
+// ── RELATIONSHIPS ────────────────────────────────────────────
+const RELATIONSHIPS = [
+  // IDM
+  { from:&quot;employees&quot;, to:&quot;branches&quot;, label:&quot;thuộc chi nhánh&quot; },
+  { from:&quot;branches&quot;, to:&quot;blocks&quot;, label:&quot;thuộc khối&quot; },
+  { from:&quot;employee_roles&quot;, to:&quot;employees&quot;, label:&quot;gán role&quot; },
+  { from:&quot;employee_roles&quot;, to:&quot;roles&quot;, label:&quot;dùng role&quot; },
+  // Catalog
+  { from:&quot;competency_frameworks&quot;, to:&quot;questions&quot;, label:&quot;chứa câu hỏi (1:N)&quot; },
+  // Assessment
+  { from:&quot;assessment_cycles&quot;, to:&quot;interview_sessions&quot;, label:&quot;thuộc kỳ (1:N)&quot; },
+  { from:&quot;employees&quot;, to:&quot;interview_sessions&quot;, label:&quot;tham gia (1:N)&quot; },
+  { from:&quot;competency_frameworks&quot;, to:&quot;interview_sessions&quot;, label:&quot;áp dụng (1:N)&quot; },
+  // E360
+  { from:&quot;interview_sessions&quot;, to:&quot;assessment_360&quot;, label:&quot;tạo ra (1:1)&quot; },
+  { from:&quot;assessment_cycles&quot;, to:&quot;assessment_360&quot;, label:&quot;thuộc kỳ (1:N)&quot; },
+  { from:&quot;employees&quot;, to:&quot;assessment_360&quot;, label:&quot;được đánh giá (1:N)&quot; },
+  { from:&quot;assessment_360&quot;, to:&quot;evaluations&quot;, label:&quot;gồm nhiều (1:N)&quot; },
+  { from:&quot;employees&quot;, to:&quot;evaluations&quot;, label:&quot;đánh giá (1:N)&quot; },
+  // Profile
+  { from:&quot;employees&quot;, to:&quot;employee_profiles&quot;, label:&quot;có hồ sơ (1:1)&quot; },
+  // Talent
+  { from:&quot;talent_pool_members&quot;, to:&quot;talent_pools&quot;, label:&quot;thuộc pool&quot; },
+  { from:&quot;talent_pool_members&quot;, to:&quot;employees&quot;, label:&quot;là nhân viên&quot; },
+  // IDP
+  { from:&quot;assessment_360&quot;, to:&quot;idp_plans&quot;, label:&quot;sinh ra (1:1)&quot; },
+  { from:&quot;employees&quot;, to:&quot;idp_plans&quot;, label:&quot;có kế hoạch (1:N)&quot; },
+  { from:&quot;idp_plans&quot;, to:&quot;idp_progress&quot;, label:&quot;theo dõi (1:N)&quot; },
+  { from:&quot;courses&quot;, to:&quot;idp_plans&quot;, label:&quot;được gợi ý&quot; },
+  // Analytics
+  { from:&quot;employees&quot;, to:&quot;reports&quot;, label:&quot;tạo báo cáo&quot; },
+  // AIQA
+  { from:&quot;employees&quot;, to:&quot;ai_conversations&quot;, label:&quot;hội thoại AI (1:N)&quot; },
+  // Notification
+  { from:&quot;employees&quot;, to:&quot;notifications&quot;, label:&quot;nhận thông báo (1:N)&quot; },
+];
+
+// MODULE META
+const MODULE_META = {
+  idm:        { label:&quot;IDM — Identity&quot;, color:&quot;#3B82F6&quot;, dim:&quot;#1e3a5f&quot; },
+  catalog:    { label:&quot;Catalog&quot;, color:&quot;#6366F1&quot;, dim:&quot;#1e1b4b&quot; },
+  assessment: { label:&quot;Assessment&quot;, color:&quot;#F43F5E&quot;, dim:&quot;#4c0519&quot; },
+  cbi:        { label:&quot;CBI — Interview&quot;, color:&quot;#F43F5E&quot;, dim:&quot;#4c0519&quot; },
+  e360:       { label:&quot;E360 — Đánh giá&quot;, color:&quot;#F43F5E&quot;, dim:&quot;#4c0519&quot; },
+  profile:    { label:&quot;Profile&quot;, color:&quot;#06B6D4&quot;, dim:&quot;#0c3444&quot; },
+  talent:     { label:&quot;Talent Pool&quot;, color:&quot;#10B981&quot;, dim:&quot;#052e16&quot; },
+  idp:        { label:&quot;IDP — Phát triển&quot;, color:&quot;#F59E0B&quot;, dim:&quot;#431407&quot; },
+  analytics:  { label:&quot;Analytics&quot;, color:&quot;#64748B&quot;, dim:&quot;#1e293b&quot; },
+  aiqa:       { label:&quot;AI Q&amp;A&quot;, color:&quot;#A855F7&quot;, dim:&quot;#2e1065&quot; },
+  notification:{ label:&quot;Notification&quot;, color:&quot;#EC4899&quot;, dim:&quot;#500724&quot; },
+  system:     { label:&quot;System&quot;, color:&quot;#EC4899&quot;, dim:&quot;#500724&quot; },
+  ai:         { label:&quot;AI Engine&quot;, color:&quot;#A855F7&quot;, dim:&quot;#2e1065&quot; },
+};
+
+// ── THREE.JS VARS ─────────────────────────────────────────────
+let scene, camera, renderer, controls;
+let nodeMeshes={}, connectionLines=[], dataPulses=[];
+let selectedEntity=null, currentLayout=&quot;ring&quot;, currentTheme=&quot;cyberpunk&quot;, animatedFlow=true;
+const raycaster=new THREE.Raycaster(), mouse=new THREE.Vector2();
+
+const THEMES = {
+  cyberpunk:  { bg:0x020617, grid:0x1e293b, amb:0x475569, dir:0xffffff, lineOn:0x60a5fa, lineOff:0x334155 },
+  blueprint:  { bg:0x022c22, grid:0x0f766e, amb:0x115e59, dir:0x2dd4bf, lineOn:0x2dd4bf, lineOff:0x115e59 },
+  enterprise: { bg:0xf1f5f9, grid:0xcbd5e1, amb:0x94a3b8, dir:0x3b82f6, lineOn:0x2563eb, lineOff:0xe2e8f0 },
+};
+
+// ── INIT ──────────────────────────────────────────────────────
+window.onload = function() {
+  renderSidebar();
+  renderModuleFilters();
+  initThree();
+  generate3D();
+  animate();
+  window.addEventListener('resize', onResize);
+  document.getElementById('canvas-container').addEventListener('mousedown', onMouseDown);
+  document.getElementById('search-input').addEventListener('input', onSearch);
+  document.getElementById('table-count-badge').textContent = Object.keys(DB_SCHEMA).length + &quot; Tables&quot;;
+};
+
+function renderSidebar() {
+  const c = document.getElementById('sidebar-tables-list');
+  c.innerHTML = &quot;&quot;;
+  Object.keys(DB_SCHEMA).forEach(key => {
+    const t = DB_SCHEMA[key];
+    const meta = MODULE_META[t.module] || MODULE_META.system;
+    const el = document.createElement('div');
+    el.id = `si-${key}`;
+    el.className = &quot;flex items-center justify-between p-2 rounded cursor-pointer bg-slate-800/40 hover:bg-slate-800 border border-slate-700/40 hover:border-blue-500/50 transition-all text-[11px] group&quot;;
+    el.onclick = () => selectEntity(key);
+    el.innerHTML = `
+      <div class=&quot;flex items-center gap-1.5&quot;>
+        <span class=&quot;w-2 h-2 rounded-sm flex-shrink-0&quot; style=&quot;background:${meta.color}&quot;></span>
+        <span class=&quot;font-semibold text-slate-200 font-mono&quot;>${t.name}</span>
+      </div>
+      <span class=&quot;text-slate-600 text-[10px]&quot;>${t.columns.length}c</span>`;
+    c.appendChild(el);
+  });
+}
+
+function renderModuleFilters() {
+  const seen = new Set();
+  const modules = Object.values(DB_SCHEMA).map(t=>t.module).filter(m => { if(seen.has(m)) return false; seen.add(m); return true; });
+  const c = document.getElementById('module-filter-list');
+  c.innerHTML = &quot;&quot;;
+  modules.forEach(m => {
+    const meta = MODULE_META[m] || MODULE_META.system;
+    const tables = Object.values(DB_SCHEMA).filter(t=>t.module===m);
+    const el = document.createElement('div');
+    el.className = &quot;flex items-center justify-between p-1.5 hover:bg-slate-800/50 rounded cursor-pointer&quot;;
+    el.onclick = () => highlightModule(m);
+    el.innerHTML = `
+      <div class=&quot;flex items-center gap-1.5&quot;>
+        <span class=&quot;w-2.5 h-2.5 rounded-sm&quot; style=&quot;background:${meta.color}&quot;></span>
+        <span class=&quot;text-[11px]&quot;>${meta.label}</span>
+      </div>
+      <span class=&quot;text-[10px] px-1.5 rounded font-bold&quot; style=&quot;background:${meta.dim};color:${meta.color}&quot;>${tables.length}</span>`;
+    c.appendChild(el);
+  });
+}
+
+// ── THREE.JS INIT ─────────────────────────────────────────────
+function initThree() {
+  const cont = document.getElementById('canvas-container');
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(THEMES[currentTheme].bg);
+  scene.fog = new THREE.FogExp2(THEMES[currentTheme].bg, 0.008);
+  camera = new THREE.PerspectiveCamera(45, cont.clientWidth/cont.clientHeight, 0.1, 2000);
+  resetCamera();
+  renderer = new THREE.WebGLRenderer({ antialias:true });
+  renderer.setSize(cont.clientWidth, cont.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  cont.appendChild(renderer.domElement);
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.05;
+  controls.minDistance = 5; controls.maxDistance = 300;
+  scene.add(new THREE.AmbientLight(THEMES[currentTheme].amb, 1.2));
+  const dl = new THREE.DirectionalLight(THEMES[currentTheme].dir, 0.8);
+  dl.position.set(20,40,20); dl.name=&quot;dl&quot;; scene.add(dl);
+  buildGrid();
+}
+
+function buildGrid() {
+  const old = scene.getObjectByName(&quot;grid&quot;); if(old) scene.remove(old);
+  const g = new THREE.GridHelper(400, 60, THEMES[currentTheme].grid, THEMES[currentTheme].grid);
+  g.name=&quot;grid&quot;; g.position.y=-12; g.material.opacity=0.2; g.material.transparent=true;
+  scene.add(g);
+}
+
+// ── 3D SCENE ──────────────────────────────────────────────────
+function generate3D() {
+  Object.keys(nodeMeshes).forEach(k=>scene.remove(nodeMeshes[k]));
+  nodeMeshes={};
+  clearConnections();
+  const pos = getPositions(currentLayout);
+  Object.keys(DB_SCHEMA).forEach(key => {
+    const t = DB_SCHEMA[key];
+    const p = pos[key];
+    const grp = new THREE.Group();
+    grp.position.set(p.x, p.y, p.z);
+    grp.userData = { tableKey:key };
+    const W=9, H=11, D=0.5;
+    const box = new THREE.Mesh(
+      new THREE.BoxGeometry(W,H,D),
+      new THREE.MeshPhongMaterial({ color: currentTheme==='enterprise'?0xffffff:0x0f172a, transparent:true, opacity:0.92, shininess:80 })
+    );
+    box.castShadow=true; grp.add(box);
+    const edges = new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.BoxGeometry(W,H,D)),
+      new THREE.LineBasicMaterial({ color: t.color })
+    );
+    grp.add(edges);
+    const tex = makeTexture(t);
+    const plane = new THREE.Mesh(
+      new THREE.PlaneGeometry(W-0.1, H-0.1),
+      new THREE.MeshBasicMaterial({ map:tex, transparent:true, side:THREE.DoubleSide })
+    );
+    plane.position.z = D/2+0.01; grp.add(plane);
+    scene.add(grp); nodeMeshes[key]=grp;
+  });
+  buildRelations();
+}
+
+function makeTexture(t) {
+  const cv = document.createElement('canvas');
+  cv.width=512; cv.height=704;
+  const ctx=cv.getContext('2d');
+  const dark = currentTheme!=='enterprise';
+
+  ctx.fillStyle = dark?'#0f172a':'#ffffff';
+  ctx.fillRect(0,0,512,704);
+
+  ctx.fillStyle = t.color;
+  ctx.fillRect(0,0,512,88);
+
+  const meta = MODULE_META[t.module]||MODULE_META.system;
+  ctx.fillStyle='rgba(255,255,255,0.15)';
+  ctx.fillRect(0,0,512,88);
+
+  ctx.fillStyle='#fff';
+  ctx.font='bold 22px &quot;JetBrains Mono&quot;,Courier';
+  ctx.fillText(t.name, 16, 40);
+  ctx.font='bold 13px &quot;Plus Jakarta Sans&quot;,Arial';
+  ctx.fillStyle='rgba(255,255,255,0.7)';
+  ctx.fillText(meta.label.toUpperCase(), 16, 65);
+  ctx.fillStyle='rgba(255,255,255,0.5)';
+  ctx.font='11px &quot;Plus Jakarta Sans&quot;,Arial';
+  ctx.fillText(t.columns.length+' columns', 16, 82);
+
+  let y=120;
+  t.columns.slice(0,14).forEach(col => {
+    const isPK = col.constraint.includes('PK');
+    const isFK = col.constraint.includes('FK');
+    ctx.fillStyle = isPK ? '#F59E0B' : isFK ? '#34D399' : (dark?'#94a3b8':'#475569');
+    ctx.font = isPK||isFK ? 'bold 17px &quot;JetBrains Mono&quot;,Courier' : '16px &quot;JetBrains Mono&quot;,Courier';
+    const icon = isPK ? '🔑 ' : isFK ? '🔗 ' : '   ';
+    ctx.fillText(icon+col.name, 14, y);
+    ctx.fillStyle='#64748b';
+    ctx.font='italic 14px &quot;JetBrains Mono&quot;,Courier';
+    ctx.textAlign='right';
+    ctx.fillText(col.type, 498, y);
+    ctx.textAlign='left';
+    ctx.strokeStyle = dark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)';
+    ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(14,y+10); ctx.lineTo(498,y+10); ctx.stroke();
+    y+=36;
+  });
+  if(t.columns.length>14) {
+    ctx.fillStyle='#64748b'; ctx.font='13px &quot;Plus Jakarta Sans&quot;,Arial';
+    ctx.fillText(`... +${t.columns.length-14} cột khác`, 20, y+8);
+  }
+  const tex = new THREE.CanvasTexture(cv);
+  tex.minFilter = THREE.LinearFilter;
+  return tex;
+}
+
+function buildRelations() {
+  clearConnections();
+  const theme = THEMES[currentTheme];
+  RELATIONSHIPS.forEach(rel => {
+    const a=nodeMeshes[rel.from], b=nodeMeshes[rel.to];
+    if(!a||!b) return;
+    const s=a.position.clone(), e=b.position.clone();
+    const mid=new THREE.Vector3().addVectors(s,e).multiplyScalar(0.5);
+    mid.y += s.distanceTo(e)*0.2+4;
+    const curve=new THREE.QuadraticBezierCurve3(s,mid,e);
+    const line=new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(curve.getPoints(50)),
+      new THREE.LineBasicMaterial({ color:theme.lineOff, transparent:true, opacity:0.4 })
+    );
+    line.userData={from:rel.from, to:rel.to, label:rel.label};
+    scene.add(line); connectionLines.push(line);
+    if(animatedFlow) {
+      const pm=new THREE.Mesh(new THREE.SphereGeometry(0.18,8,8), new THREE.MeshBasicMaterial({color:0x60a5fa}));
+      scene.add(pm); dataPulses.push({mesh:pm, curve, progress:Math.random()});
+    }
+  });
+}
+
+function clearConnections() {
+  connectionLines.forEach(l=>scene.remove(l)); connectionLines=[];
+  dataPulses.forEach(p=>scene.remove(p.mesh)); dataPulses=[];
+}
+
+// ── LAYOUT POSITIONS ──────────────────────────────────────────
+function getPositions(layout) {
+  const keys=Object.keys(DB_SCHEMA), n=keys.length, pos={};
+  if(layout==='grid') {
+    const cols=Math.ceil(Math.sqrt(n));
+    keys.forEach((k,i) => pos[k]=new THREE.Vector3((i%cols - cols/2)*18, 0, (Math.floor(i/cols) - cols/2)*16));
+  } else if(layout==='tiered') {
+    // Group by module
+    const modules={};
+    keys.forEach(k=>{ const m=DB_SCHEMA[k].module; if(!modules[m]) modules[m]=[]; modules[m].push(k); });
+    const mkeys=Object.keys(modules);
+    mkeys.forEach((m,mi) => {
+      const list=modules[m];
+      list.forEach((k,i) => pos[k]=new THREE.Vector3((i-(list.length-1)/2)*16, 15-mi*9, 0));
+    });
+  } else if(layout==='sphere') {
+    keys.forEach((k,i) => {
+      const phi=Math.acos(-1+(2*i)/n), theta=Math.sqrt(n*Math.PI)*phi, r=28;
+      pos[k]=new THREE.Vector3(r*Math.sin(phi)*Math.cos(theta), r*Math.sin(phi)*Math.sin(theta), r*Math.cos(phi));
+    });
+  } else { // ring — multi-ring for many tables
+    const inner=Math.min(8, n), outer=n-inner;
+    keys.forEach((k,i) => {
+      if(i<inner) {
+        const a=(i/inner)*Math.PI*2;
+        pos[k]=new THREE.Vector3(Math.cos(a)*20, 0, Math.sin(a)*20);
+      } else {
+        const j=i-inner, a=(j/outer)*Math.PI*2;
+        pos[k]=new THREE.Vector3(Math.cos(a)*38, 0, Math.sin(a)*38);
+      }
+    });
+  }
+  return pos;
+}
+
+// ── ANIMATE ───────────────────────────────────────────────────
+let frame=0;
+function animate() {
+  requestAnimationFrame(animate); frame++;
+  controls.update();
+  Object.keys(nodeMeshes).forEach((k,i) => {
+    if(selectedEntity!==k) nodeMeshes[k].position.y += Math.sin(frame*0.008+i)*0.004;
+  });
+  if(animatedFlow) dataPulses.forEach(p => {
+    p.progress+=0.004; if(p.progress>1) p.progress=0;
+    p.mesh.position.copy(p.curve.getPointAt(p.progress));
+  });
+  renderer.render(scene, camera);
+}
+
+// ── INTERACTION ───────────────────────────────────────────────
+function onMouseDown(e) {
+  const r=renderer.domElement.getBoundingClientRect();
+  mouse.x=((e.clientX-r.left)/r.width)*2-1;
+  mouse.y=-((e.clientY-r.top)/r.height)*2+1;
+  raycaster.setFromCamera(mouse, camera);
+  const meshes=[];
+  Object.keys(nodeMeshes).forEach(k=>nodeMeshes[k].traverse(c=>{if(c.isMesh) meshes.push(c);}));
+  const hits=raycaster.intersectObjects(meshes);
+  if(hits.length>0) {
+    let o=hits[0].object;
+    while(o &amp;&amp; !o.userData.tableKey) o=o.parent;
+    if(o?.userData?.tableKey) selectEntity(o.userData.tableKey);
+  }
+}
+
+function selectEntity(key) {
+  selectedEntity=key;
+  // Sidebar highlight
+  Object.keys(DB_SCHEMA).forEach(k => {
+    const el=document.getElementById(`si-${k}`);
+    if(el) el.className = k===key
+      ? &quot;flex items-center justify-between p-2 rounded cursor-pointer bg-blue-600/20 border border-blue-500 text-[11px]&quot;
+      : &quot;flex items-center justify-between p-2 rounded cursor-pointer bg-slate-800/40 hover:bg-slate-800 border border-slate-700/40 hover:border-blue-500/50 transition-all text-[11px]&quot;;
+  });
+  Object.keys(nodeMeshes).forEach(k => nodeMeshes[k].scale.set(k===key?1.08:1, k===key?1.08:1, k===key?1.08:1));
+  const theme=THEMES[currentTheme];
+  connectionLines.forEach(l => {
+    const active=l.userData.from===key||l.userData.to===key;
+    l.material.color.setHex(active?theme.lineOn:theme.lineOff);
+    l.material.opacity=active?1.0:0.1;
+  });
+  controls.target.copy(nodeMeshes[key].position);
+  showInspector(key);
+}
+
+function clearSelection() {
+  selectedEntity=null;
+  Object.keys(DB_SCHEMA).forEach(k => {
+    const el=document.getElementById(`si-${k}`);
+    if(el) el.className=&quot;flex items-center justify-between p-2 rounded cursor-pointer bg-slate-800/40 hover:bg-slate-800 border border-slate-700/40 hover:border-blue-500/50 transition-all text-[11px]&quot;;
+    nodeMeshes[k]?.scale.set(1,1,1);
+  });
+  const t=THEMES[currentTheme];
+  connectionLines.forEach(l=>{ l.material.color.setHex(t.lineOff); l.material.opacity=0.4; });
+  controls.target.set(0,0,0);
+  document.getElementById('inspector-placeholder').classList.remove('hidden');
+  document.getElementById('inspector-detail').classList.add('hidden');
+}
+
+// ── INSPECTOR ─────────────────────────────────────────────────
+function showInspector(key) {
+  document.getElementById('inspector-placeholder').classList.add('hidden');
+  document.getElementById('inspector-detail').classList.remove('hidden');
+  const t=DB_SCHEMA[key];
+  const meta=MODULE_META[t.module]||MODULE_META.system;
+
+  document.getElementById('entity-module-tag').textContent=meta.label;
+  document.getElementById('entity-module-tag').style.background=meta.dim;
+  document.getElementById('entity-module-tag').style.color=meta.color;
+  document.getElementById('entity-title').textContent=t.name;
+  document.getElementById('entity-desc').textContent=t.desc;
+
+  const rels=RELATIONSHIPS.filter(r=>r.from===key||r.to===key);
+  document.getElementById('entity-cols-count').textContent=t.columns.length+' columns';
+  document.getElementById('entity-relations-count').textContent=rels.length+' relations';
+
+  // Columns tab
+  const fc=document.getElementById('tab-content-columns');
+  fc.innerHTML='<div class=&quot;flex justify-between text-[10px] text-slate-500 font-bold uppercase border-b border-slate-800 pb-1.5 mb-2&quot;><span>Column</span><span>Type / Constraint</span></div>';
+  t.columns.forEach(col => {
+    const isPK=col.constraint.includes('PK'), isFK=col.constraint.includes('FK');
+    const d=document.createElement('div');
+    d.className=&quot;flex items-start justify-between p-1.5 rounded bg-slate-950/40 hover:bg-slate-950 border border-slate-800/50 text-[11px]&quot;;
+    d.innerHTML=`<div class=&quot;flex items-center gap-1 font-mono&quot;><span>${isPK?'🔑':isFK?'🔗':'·'}</span><span class=&quot;${isPK?'text-amber-400':isFK?'text-emerald-400':'text-slate-200'} font-semibold&quot;>${col.name}</span></div><div class=&quot;text-right&quot;><div class=&quot;text-slate-500 font-mono&quot;>${col.type}</div><div class=&quot;text-[9px] bg-slate-800 text-slate-400 px-1 rounded mt-0.5&quot;>${col.constraint}</div></div>`;
+    fc.appendChild(d);
+  });
+
+  // SQL tab
+  document.getElementById('sql-code-block').textContent=genDDL(t);
+
+  // Mock tab
+  document.getElementById('mock-json-block').textContent=JSON.stringify(t.mock,null,2);
+
+  // Relations tab
+  const rt=document.getElementById('tab-content-relations');
+  rt.innerHTML='';
+  rels.forEach(r => {
+    const isFrom=r.from===key;
+    const other=isFrom?r.to:r.from;
+    const d=document.createElement('div');
+    d.className=&quot;flex items-start gap-2 p-2 rounded bg-slate-950/40 border border-slate-800/50 cursor-pointer hover:border-blue-500/50 text-[11px]&quot;;
+    d.onclick=()=>selectEntity(other);
+    const meta2=MODULE_META[DB_SCHEMA[other]?.module]||MODULE_META.system;
+    d.innerHTML=`<span class=&quot;w-2 h-2 rounded-sm mt-0.5 flex-shrink-0&quot; style=&quot;background:${meta2.color}&quot;></span><div><div class=&quot;font-semibold text-slate-200 font-mono&quot;>${other}</div><div class=&quot;text-slate-500 mt-0.5&quot;>${r.label}</div></div><span class=&quot;ml-auto text-[10px] px-1.5 py-0.5 rounded font-bold&quot; style=&quot;background:${meta2.dim};color:${meta2.color}&quot;>${isFrom?'→':'←'}</span>`;
+    rt.appendChild(d);
+  });
+
+  switchTab('columns');
+}
+
+function genDDL(t) {
+  let s=`-- Module: ${t.module}\nCREATE TABLE ${t.name} (\n`;
+  s+=t.columns.map(c => {
+    let tp=c.type.toUpperCase();
+    if(tp==='UUID') tp='UUID';
+    let cn='';
+    if(c.constraint.includes('PK')) cn='PRIMARY KEY';
+    else if(c.constraint.includes('UNIQUE NOT NULL')) cn='UNIQUE NOT NULL';
+    else if(c.constraint.includes('NOT NULL')) cn='NOT NULL';
+    else if(c.constraint.includes('DEFAULT NOW()')) cn='DEFAULT NOW()';
+    else if(c.constraint.includes('DEFAULT TRUE')) cn='DEFAULT TRUE';
+    else if(c.constraint.includes('DEFAULT FALSE')) cn='DEFAULT FALSE';
+    else if(c.constraint.includes('DEFAULT 0')) cn='DEFAULT 0';
+    return `  ${c.name.padEnd(22)} ${tp.padEnd(16)} ${cn}`.trimEnd();
+  }).join(',\n');
+  const fks=t.columns.filter(c=>c.constraint.includes('FK'));
+  if(fks.length) {
+    s+=',\n  -- Foreign Keys\n';
+    s+=fks.map(c=>{
+      const ref=c.constraint.replace(/FK\s*/,'').split(' ')[0];
+      return `  -- FOREIGN KEY (${c.name}) REFERENCES ${ref}(id)`;
+    }).join('\n');
+  }
+  return s+'\n);';
+}
+
+// ── CONTROLS ──────────────────────────────────────────────────
+function switchTab(name) {
+  ['columns','sql','mock','relations'].forEach(t => {
+    document.getElementById(`tab-btn-${t}`).className = t===name
+      ? &quot;flex-1 py-2 border-b-2 border-blue-500 text-white font-bold text-[11px]&quot;
+      : &quot;flex-1 py-2 border-b-2 border-transparent text-slate-400 hover:text-white text-[11px]&quot;;
+    document.getElementById(`tab-content-${t}`).classList.toggle('hidden', t!==name);
+  });
+}
+
+function highlightCategory(cat) {
+  Object.keys(nodeMeshes).forEach(k => {
+    const match=cat===null||DB_SCHEMA[k].category===cat;
+    nodeMeshes[k].scale.set(match?1:0.7, match?1:0.7, match?1:0.7);
+    nodeMeshes[k].traverse(c => { if(c.material) c.material.opacity=match?0.92:0.2; });
+  });
+}
+
+function highlightModule(mod) {
+  Object.keys(nodeMeshes).forEach(k => {
+    const match=DB_SCHEMA[k].module===mod;
+    nodeMeshes[k].scale.set(match?1:0.7, match?1:0.7, match?1:0.7);
+    nodeMeshes[k].traverse(c => { if(c.material) c.material.opacity=match?0.92:0.15; });
+  });
+}
+
+function setTheme(key) {
+  currentTheme=key;
+  ['cyberpunk','blueprint','enterprise'].forEach(t => {
+    document.getElementById(`btn-theme-${t}`).className = t===key
+      ? &quot;px-2.5 py-1 text-xs rounded font-medium bg-blue-600/20 text-blue-400&quot;
+      : &quot;px-2.5 py-1 text-xs rounded font-medium text-slate-400 hover:text-white&quot;;
+  });
+  const th=THEMES[key];
+  scene.background.setHex(th.bg);
+  scene.fog.color.setHex(th.bg);
+  buildGrid();
+  generate3D();
+}
+
+function changeLayout(key) {
+  currentLayout=key;
+  ['ring','grid','tiered','sphere'].forEach(l => {
+    document.getElementById(`btn-layout-${l}`).className = l===key
+      ? &quot;py-1.5 px-2 rounded text-xs font-semibold bg-blue-600 text-white&quot;
+      : &quot;py-1.5 px-2 rounded text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300&quot;;
+  });
+  generate3D();
+}
+
+function onSearch(e) {
+  const q=e.target.value.toLowerCase().trim();
+  Object.keys(nodeMeshes).forEach(k => {
+    const t=DB_SCHEMA[k];
+    const match=q===''||t.name.includes(q)||t.columns.some(c=>c.name.includes(q));
+    nodeMeshes[k].visible=match;
+    connectionLines.forEach(l => { if(l.userData.from===k||l.userData.to===k) l.visible=match; });
+  });
+}
+
+function resetCamera() {
+  camera.position.set(0,40,65);
+  if(controls) { controls.target.set(0,0,0); controls.update(); }
+}
+
+function rotateCamera(deg) {
+  const r=deg*Math.PI/180, x=camera.position.x, z=camera.position.z;
+  camera.position.x=x*Math.cos(r)-z*Math.sin(r);
+  camera.position.z=x*Math.sin(r)+z*Math.cos(r);
+  controls.update();
+}
+
+function toggleFlowAnimation() {
+  animatedFlow=!animatedFlow;
+  const btn=document.getElementById('btn-toggle-flow');
+  btn.textContent=`⚡ Xung: ${animatedFlow?'Bật':'Tắt'}`;
+  btn.className=`px-2 py-1 rounded text-xs font-medium ${animatedFlow?'bg-emerald-600/20 text-emerald-400':'bg-rose-600/20 text-rose-400'}`;
+  buildRelations();
+}
+
+function onResize() {
+  const c=document.getElementById('canvas-container');
+  camera.aspect=c.clientWidth/c.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(c.clientWidth, c.clientHeight);
+}
+
+function copyContent(type) {
+  const text = type==='sql'
+    ? document.getElementById('sql-code-block').textContent
+    : document.getElementById('mock-json-block').textContent;
+  const ta=document.createElement('textarea');
+  ta.value=text; document.body.appendChild(ta); ta.select();
+  document.execCommand('copy'); document.body.removeChild(ta);
+  const m=document.getElementById('copy-modal');
+  document.getElementById('copy-modal-text').textContent=type==='sql'?'Đã copy DDL SQL!':'Đã copy Mock JSON!';
+  m.className=&quot;fixed bottom-5 right-5 z-50 bg-emerald-600 text-white text-xs py-2 px-4 rounded-lg shadow-2xl flex items-center gap-2 transform translate-y-0 opacity-100 transition-all duration-300&quot;;
+  setTimeout(()=>m.className=&quot;fixed bottom-5 right-5 z-50 bg-emerald-600 text-white text-xs py-2 px-4 rounded-lg shadow-2xl flex items-center gap-2 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none&quot;, 2500);
+}
+</script>
+</body>
+</html>
+"
+      title="AI HR Platform ERD 3D"
+    ></iframe>
+  </div>
+</section>
+
+<!-- ═══════ SECTION 6 — TABLE GLOSSARY ═══════ -->
+<section class="section" id="glossary">
+  <div class="section-eyebrow">
+    <span class="section-num" style="background:rgba(232,121,249,.15);color:var(--pink)">6</span>
+    <span class="section-tag" style="color:var(--pink);background:rgba(232,121,249,.1)">Glossary</span>
+  </div>
+  <h2 class="section-title">Diễn giải 20 bảng & Quan hệ</h2>
+  <p class="section-desc">Ý nghĩa nghiệp vụ từng bảng, ai dùng, dữ liệu gì, liên kết với bảng nào. Đọc theo thứ tự module để hiểu toàn bộ luồng dữ liệu.</p>
+
+  <!-- MODULE FILTER TABS -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px;" id="gloss-tabs">
+    <button onclick="filterGloss('all')" class="gtab gtab-active" data-mod="all">Tất cả</button>
+    <button onclick="filterGloss('idm')" class="gtab" data-mod="idm">IDM</button>
+    <button onclick="filterGloss('catalog')" class="gtab" data-mod="catalog">Catalog</button>
+    <button onclick="filterGloss('cbi')" class="gtab" data-mod="cbi">CBI</button>
+    <button onclick="filterGloss('e360')" class="gtab" data-mod="e360">E360</button>
+    <button onclick="filterGloss('profile')" class="gtab" data-mod="profile">Profile</button>
+    <button onclick="filterGloss('talent')" class="gtab" data-mod="talent">Talent</button>
+    <button onclick="filterGloss('idp')" class="gtab" data-mod="idp">IDP</button>
+    <button onclick="filterGloss('analytics')" class="gtab" data-mod="analytics">Analytics</button>
+    <button onclick="filterGloss('aiqa')" class="gtab" data-mod="aiqa">AIQA</button>
+    <button onclick="filterGloss('notification')" class="gtab" data-mod="notification">Notification</button>
+  </div>
+
+  <div id="gloss-grid" style="display:flex;flex-direction:column;gap:10px;"></div>
+</section>
+
+<style>
+.gtab {
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:600;padding:5px 14px;
+  border-radius:6px;border:1px solid var(--border2);
+  background:var(--bg3);color:var(--muted);cursor:pointer;transition:all .15s;
+}
+.gtab:hover { color:var(--text); border-color:var(--border2); background:var(--bg4); }
+.gtab-active { background:rgba(232,121,249,.12); color:var(--pink); border-color:rgba(232,121,249,.35); }
+
+.gcard {
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;transition:border-color .2s;
+}
+.gcard:hover { border-color:var(--border2); }
+.gcard-head {
+  display:flex;align-items:center;gap:12px;padding:14px 18px;
+  border-bottom:1px solid var(--border);cursor:pointer;user-select:none;
+}
+.gcard-head:hover { background:rgba(255,255,255,.02); }
+.gcard-num {
+  width:24px;height:24px;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
+  flex-shrink:0;
+}
+.gcard-badge {
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;flex-shrink:0;
+}
+.gcard-name {
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#fff;flex:1;
+}
+.gcard-mod { font-size:9px;color:var(--muted);margin-left:auto;flex-shrink:0; }
+.gcard-chevron { font-size:10px;color:var(--muted2);transition:transform .2s;flex-shrink:0; }
+.gcard-chevron.open { transform:rotate(90deg); }
+
+.gcard-body { padding:18px;display:none; }
+.gcard-body.open { display:block; }
+
+.gcard-section { margin-bottom:16px; }
+.gcard-section:last-child { margin-bottom:0; }
+.gcard-section-label {
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted2);margin-bottom:8px;
+}
+.gcard-meaning { font-size:11px;color:var(--text);line-height:1.8; }
+.gcard-who {
+  display:flex;gap:6px;flex-wrap:wrap;
+}
+.who-pill {
+  font-size:10px;padding:3px 10px;border-radius:5px;border:1px solid;
+}
+.rel-row {
+  display:flex;align-items:flex-start;gap:8px;padding:8px 0;
+  border-bottom:1px solid var(--border);font-size:11px;
+}
+.rel-row:last-child { border-bottom:none; }
+.rel-arrow { font-size:11px;flex-shrink:0;margin-top:1px; }
+.rel-target { font-family:'JetBrains Mono',monospace;font-weight:600;color:#fff;flex-shrink:0; }
+.rel-type { font-size:9px;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:1px; }
+.rel-desc { color:var(--muted);line-height:1.6;flex:1; }
+.key-cols { display:flex;flex-direction:column;gap:4px; }
+.key-col {
+  display:flex;align-items:center;gap:8px;
+  padding:5px 10px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);
+  font-size:10px;
+}
+.key-col-name { font-family:'JetBrains Mono',monospace;font-weight:600; }
+.key-col-type { color:var(--muted);font-family:'JetBrains Mono',monospace; }
+.key-col-note { color:var(--muted);margin-left:auto;font-size:9px; }
+</style>
+
+<script>
+const GLOSSARY = [
+  // ── IDM ──────────────────────────────────────────────────────
+  {
+    id:1, name:"employees", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
+    meaning:"Bảng trung tâm của toàn hệ thống — lưu mọi thông tin nhân sự: họ tên, email, phòng ban, chức vụ, level. Đặc biệt có trường <code>manager_id</code> tự tham chiếu (self-reference) để xây cây quản lý nhiều cấp. Gần như mọi bảng khác đều có FK trỏ về đây.",
+    who:["HR Admin","BGĐ","Manager","Nhân viên"],
+    whoColors:["#3B82F6","#F43F5E","#6366F1","#10B981"],
+    keyColumns:[
+      {name:"id",type:"uuid",note:"Primary Key"},
+      {name:"employee_code",type:"varchar",note:"Mã nhân viên duy nhất"},
+      {name:"manager_id",type:"uuid",note:"FK self-ref → cây quản lý"},
+      {name:"branch_id",type:"uuid",note:"FK → branches"},
+      {name:"level",type:"varchar",note:"junior/mid/senior/lead"},
+    ],
+    relations:[
+      {arrow:"→",target:"branches",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi nhân viên thuộc 1 chi nhánh. Chi nhánh chứa nhiều nhân viên."},
+      {arrow:"→",target:"employees (self)",type:"N:1",typeColor:"#6366F1",desc:"manager_id tự trỏ về bảng này — xây cây tổ chức đa cấp không giới hạn."},
+      {arrow:"←",target:"interview_sessions",type:"1:N",typeColor:"#F43F5E",desc:"Mỗi nhân viên có thể có nhiều phiên phỏng vấn AI qua các kỳ khác nhau."},
+      {arrow:"←",target:"assessment_360",type:"1:N",typeColor:"#F43F5E",desc:"Mỗi nhân viên được đánh giá 360 theo từng kỳ."},
+      {arrow:"←",target:"idp_plans",type:"1:N",typeColor:"#F59E0B",desc:"Mỗi nhân viên có kế hoạch phát triển riêng sau mỗi vòng đánh giá."},
+      {arrow:"←",target:"employee_profiles",type:"1:1",typeColor:"#06B6D4",desc:"Mỗi nhân viên có đúng 1 hồ sơ mở rộng."},
+    ]
+  },
+  {
+    id:2, name:"branches", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
+    meaning:"Đơn vị chi nhánh / văn phòng cụ thể trong cấu trúc tổ chức. Dùng để phân quyền báo cáo theo địa lý — Trưởng chi nhánh chỉ xem được dữ liệu nhân viên thuộc chi nhánh mình. Thuộc về 1 Block (khối) cấp cao hơn.",
+    who:["HR Admin","Trưởng chi nhánh"],
+    whoColors:["#3B82F6","#6366F1"],
+    keyColumns:[
+      {name:"code",type:"varchar",note:"Mã chi nhánh (HCM-01...)"},
+      {name:"block_id",type:"uuid",note:"FK → blocks"},
+      {name:"manager_id",type:"uuid",note:"FK → employees (người quản lý)"},
+    ],
+    relations:[
+      {arrow:"→",target:"blocks",type:"N:1",typeColor:"#3B82F6",desc:"Nhiều chi nhánh thuộc 1 khối kinh doanh."},
+      {arrow:"←",target:"employees",type:"1:N",typeColor:"#3B82F6",desc:"Một chi nhánh có nhiều nhân viên."},
+      {arrow:"←",target:"reports",type:"1:N",typeColor:"#64748B",desc:"Báo cáo có thể được tạo theo scope = branch."},
+    ]
+  },
+  {
+    id:3, name:"blocks", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
+    meaning:"Khối kinh doanh — cấp tổ chức cao nhất bên dưới BGĐ. Mỗi Khối quản lý nhiều chi nhánh theo vùng địa lý hoặc lĩnh vực. BGĐ Khối xem được tổng hợp toàn bộ chi nhánh trực thuộc.",
+    who:["BGĐ Khối","HR Admin"],
+    whoColors:["#F43F5E","#3B82F6"],
+    keyColumns:[
+      {name:"code",type:"varchar",note:"Mã khối (BLOCK-SOUTH...)"},
+      {name:"director_id",type:"uuid",note:"FK → employees (Giám đốc khối)"},
+    ],
+    relations:[
+      {arrow:"←",target:"branches",type:"1:N",typeColor:"#3B82F6",desc:"1 khối quản lý nhiều chi nhánh."},
+      {arrow:"←",target:"reports",type:"1:N",typeColor:"#64748B",desc:"Báo cáo tổng hợp theo scope = block."},
+    ]
+  },
+  {
+    id:4, name:"roles", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
+    meaning:"Định nghĩa các role trong hệ thống RBAC: BGĐ, BGĐ Khối, Trưởng chi nhánh, Trưởng phòng, HR, Nhân viên... Mỗi role có bộ <code>permissions</code> (JSON) và <code>scope_type</code> xác định phạm vi quyền là toàn công ty, khối, hay chi nhánh.",
+    who:["System Admin","HR Admin"],
+    whoColors:["#A855F7","#3B82F6"],
+    keyColumns:[
+      {name:"code",type:"varchar",note:"BGD / BLOCK_DIR / BRANCH_MGR..."},
+      {name:"permissions",type:"jsonb",note:"Bộ quyền chi tiết"},
+      {name:"scope_type",type:"varchar",note:"global/block/branch/dept"},
+    ],
+    relations:[
+      {arrow:"←",target:"employee_roles",type:"1:N",typeColor:"#3B82F6",desc:"1 role được gán cho nhiều nhân viên ở các scope khác nhau."},
+    ]
+  },
+  {
+    id:5, name:"employee_roles", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
+    meaning:"Bảng junction gán role cho nhân viên kèm scope cụ thể. Ví dụ: Nguyễn Văn A có role BRANCH_MGR cho chi nhánh HCM-01. Đây là nơi quyết định ai được xem gì trong dashboard báo cáo.",
+    who:["HR Admin","System Admin"],
+    whoColors:["#3B82F6","#A855F7"],
+    keyColumns:[
+      {name:"employee_id",type:"uuid",note:"FK → employees"},
+      {name:"role_id",type:"uuid",note:"FK → roles"},
+      {name:"scope_id",type:"uuid",note:"ID branch/block cụ thể"},
+      {name:"expires_at",type:"timestamptz",note:"Hết hạn vai trò tạm thời"},
+    ],
+    relations:[
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi assignment thuộc về 1 nhân viên."},
+      {arrow:"→",target:"roles",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi assignment dùng 1 role cụ thể."},
+    ]
+  },
+
+  // ── CATALOG ──────────────────────────────────────────────────
+  {
+    id:6, name:"competency_frameworks", module:"catalog", color:"#6366F1", dimColor:"rgba(99,102,241,.12)",
+    meaning:"Khung năng lực chuẩn — source of truth để AI sinh câu hỏi và tính điểm. Mỗi framework định nghĩa bộ competencies cần đánh giá cho 1 loại role/level cụ thể, kèm trọng số chấm điểm. HR Admin tạo và duyệt; AI dùng để gen câu hỏi STAR phù hợp.",
+    who:["HR Admin","AI Engine"],
+    whoColors:["#3B82F6","#A855F7"],
+    keyColumns:[
+      {name:"competency_list",type:"jsonb",note:"Danh sách năng lực cần đánh giá"},
+      {name:"scoring_weights",type:"jsonb",note:"Trọng số từng competency"},
+      {name:"version",type:"integer",note:"Versioning framework"},
+      {name:"role_type",type:"varchar",note:"Engineering / Sales / HR..."},
+    ],
+    relations:[
+      {arrow:"←",target:"questions",type:"1:N",typeColor:"#6366F1",desc:"Mỗi framework có ngân hàng câu hỏi riêng được AI sinh ra."},
+      {arrow:"←",target:"interview_sessions",type:"1:N",typeColor:"#F43F5E",desc:"Phiên phỏng vấn áp dụng 1 framework cụ thể."},
+    ]
+  },
+  {
+    id:7, name:"questions", module:"catalog", color:"#6366F1", dimColor:"rgba(99,102,241,.12)",
+    meaning:"Ngân hàng câu hỏi phỏng vấn theo cấu trúc STAR (Situation-Task-Action-Result). Câu hỏi do AI sinh từ framework, HR duyệt trước khi dùng. Phân loại theo competency, độ khó, và thành phần STAR để AI biết khi nào cần đào sâu follow-up.",
+    who:["AI Engine","HR Admin"],
+    whoColors:["#A855F7","#3B82F6"],
+    keyColumns:[
+      {name:"question_type",type:"varchar",note:"main / follow_up / clarification"},
+      {name:"star_component",type:"varchar",note:"S / T / A / R"},
+      {name:"difficulty",type:"varchar",note:"easy / medium / hard"},
+      {name:"competency",type:"varchar",note:"Năng lực cần đánh giá"},
+    ],
+    relations:[
+      {arrow:"→",target:"competency_frameworks",type:"N:1",typeColor:"#6366F1",desc:"Mỗi câu hỏi thuộc về 1 framework năng lực."},
+    ]
+  },
+  {
+    id:8, name:"courses", module:"catalog", color:"#6366F1", dimColor:"rgba(99,102,241,.12)",
+    meaning:"Danh mục khóa học — nội bộ và external (Udemy, Coursera...). Mỗi khóa học có <code>competency_tags</code> (JSON) liên kết tới các năng lực cần phát triển. IDP service dùng để match khóa học phù hợp nhất với điểm yếu của từng nhân viên (cosine similarity).",
+    who:["HR Admin","IDP Service"],
+    whoColors:["#3B82F6","#F59E0B"],
+    keyColumns:[
+      {name:"competency_tags",type:"jsonb",note:"Năng lực khoá học này hỗ trợ"},
+      {name:"provider",type:"varchar",note:"internal/udemy/coursera/..."},
+      {name:"duration_hours",type:"integer",note:"Thời lượng học"},
+    ],
+    relations:[
+      {arrow:"←",target:"idp_plans",type:"N:N (via JSON)",typeColor:"#F59E0B",desc:"IDP recommend_courses lưu list course_id + match_score trong JSON."},
+    ]
+  },
+
+  // ── CBI ──────────────────────────────────────────────────────
+  {
+    id:9, name:"assessment_cycles", module:"cbi", color:"#F43F5E", dimColor:"rgba(244,63,94,.12)",
+    meaning:"Kỳ đánh giá (Q1/Q2/Q3/Q4/Annual/Probation). Quản lý timeline bắt đầu-kết thúc, trạng thái vòng đánh giá và config (trọng số điểm, deadline từng bước). Khi HR tạo cycle mới → hệ thống tự tạo assessment_360 cho tất cả nhân viên trong phạm vi.",
+    who:["HR Admin","System Worker"],
+    whoColors:["#3B82F6","#10B981"],
+    keyColumns:[
+      {name:"cycle_type",type:"varchar",note:"quarterly/annual/probation"},
+      {name:"status",type:"varchar",note:"draft/active/closed/archived"},
+      {name:"config",type:"jsonb",note:"Score weights + deadlines"},
+      {name:"period",type:"varchar",note:"2024-Q2 (dùng làm key join)"},
+    ],
+    relations:[
+      {arrow:"←",target:"interview_sessions",type:"1:N",typeColor:"#F43F5E",desc:"Mỗi kỳ có nhiều phiên phỏng vấn của nhiều nhân viên."},
+      {arrow:"←",target:"assessment_360",type:"1:N",typeColor:"#F43F5E",desc:"Mỗi kỳ tạo ra vòng đánh giá 360 cho toàn bộ nhân viên liên quan."},
+    ]
+  },
+  {
+    id:10, name:"interview_sessions", module:"cbi", color:"#F43F5E", dimColor:"rgba(244,63,94,.12)",
+    meaning:"Lưu toàn bộ phiên phỏng vấn AI của 1 nhân viên trong 1 kỳ. Trường <code>answers</code> (JSONB) chứa array Q&A đầy đủ. Sau khi completed: AI tính <code>ai_score</code> và <code>score_breakdown</code> theo từng competency. Session dùng Redis để lưu trạng thái real-time khi đang phỏng vấn.",
+    who:["Nhân viên","AI Engine","CBI Service"],
+    whoColors:["#10B981","#A855F7","#F43F5E"],
+    keyColumns:[
+      {name:"answers",type:"jsonb",note:"Array {question_id, answer_text, score}"},
+      {name:"ai_score",type:"decimal",note:"0-100, điểm tổng AI"},
+      {name:"score_breakdown",type:"jsonb",note:"Điểm từng competency"},
+      {name:"status",type:"varchar",note:"pending/in_progress/completed"},
+    ],
+    relations:[
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Phiên phỏng vấn của 1 nhân viên cụ thể."},
+      {arrow:"→",target:"competency_frameworks",type:"N:1",typeColor:"#6366F1",desc:"Áp dụng framework nào để sinh câu hỏi và chấm điểm."},
+      {arrow:"→",target:"assessment_cycles",type:"N:1",typeColor:"#F43F5E",desc:"Thuộc kỳ đánh giá nào."},
+      {arrow:"←",target:"assessment_360",type:"1:1",typeColor:"#F43F5E",desc:"Kết quả phỏng vấn được đưa vào vòng 360 tương ứng."},
+    ]
+  },
+
+  // ── E360 ──────────────────────────────────────────────────────
+  {
+    id:11, name:"assessment_360", module:"e360", color:"#F43F5E", dimColor:"rgba(244,63,94,.12)",
+    meaning:"Bảng tổng hợp trung tâm của quá trình đánh giá — nơi hội tụ điểm từ 4 nguồn: AI Interview (x%), Manager (y%), Peer/cấp dưới (z%), và bài test chuyên môn. <code>final_score</code> được tính theo trọng số trong <code>score_weights</code>. Đây là đầu vào để sinh IDP.",
+    who:["E360 Service","HR Admin","BGĐ"],
+    whoColors:["#F43F5E","#3B82F6","#6366F1"],
+    keyColumns:[
+      {name:"final_score",type:"decimal",note:"Điểm cuối có trọng số"},
+      {name:"score_weights",type:"jsonb",note:"{ai:x%, mgr:y%, peer:z%}"},
+      {name:"competency_scores",type:"jsonb",note:"Điểm từng năng lực tổng hợp"},
+      {name:"status",type:"varchar",note:"in_progress/completed/approved"},
+    ],
+    relations:[
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Bản ghi đánh giá của 1 nhân viên trong 1 kỳ."},
+      {arrow:"→",target:"interview_sessions",type:"1:1",typeColor:"#F43F5E",desc:"Nhận ai_score từ phiên phỏng vấn AI tương ứng."},
+      {arrow:"←",target:"evaluations",type:"1:N",typeColor:"#F43F5E",desc:"Nhiều người đánh giá (manager, peer, subordinate, self) tạo ra nhiều evaluation."},
+      {arrow:"←",target:"idp_plans",type:"1:1",typeColor:"#F59E0B",desc:"Sau khi approved → AI tự động sinh IDP cho nhân viên này."},
+    ]
+  },
+  {
+    id:12, name:"evaluations", module:"e360", color:"#F43F5E", dimColor:"rgba(244,63,94,.12)",
+    meaning:"Chi tiết đánh giá từng người trong vòng 360. Mỗi row là 1 lượt đánh giá của 1 người (evaluator) cho 1 đối tượng. <code>evaluator_role</code> phân biệt manager/peer/subordinate/self. Có thể ẩn danh (<code>is_anonymous=true</code>) để đảm bảo khách quan.",
+    who:["Manager","Đồng nghiệp","Cấp dưới","Nhân viên (self)"],
+    whoColors:["#6366F1","#10B981","#F43F5E","#F59E0B"],
+    keyColumns:[
+      {name:"evaluator_role",type:"varchar",note:"manager/peer/subordinate/self"},
+      {name:"scores",type:"jsonb",note:"Điểm từng competency"},
+      {name:"overall_score",type:"decimal",note:"Điểm tổng của người này"},
+      {name:"is_anonymous",type:"boolean",note:"Ẩn danh với người được đánh giá"},
+    ],
+    relations:[
+      {arrow:"→",target:"assessment_360",type:"N:1",typeColor:"#F43F5E",desc:"Nhiều lượt đánh giá thuộc về 1 vòng 360."},
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Người thực hiện đánh giá là 1 nhân viên trong hệ thống."},
+    ]
+  },
+
+  // ── PROFILE ──────────────────────────────────────────────────
+  {
+    id:13, name:"employee_profiles", module:"profile", color:"#06B6D4", dimColor:"rgba(6,182,212,.12)",
+    meaning:"Hồ sơ năng lực mở rộng của nhân viên — tách riêng khỏi bảng employees để không làm bảng chính quá nặng. Lưu kỹ năng kỹ thuật, chứng chỉ, lịch sử công tác, học vấn, ngoại ngữ. Dùng để cá nhân hóa IDP và hiển thị talent profile cho HR.",
+    who:["Nhân viên","HR Admin","Talent Service"],
+    whoColors:["#10B981","#3B82F6","#10B981"],
+    keyColumns:[
+      {name:"skills",type:"jsonb",note:"[{name, level, years_exp}]"},
+      {name:"certifications",type:"jsonb",note:"Chứng chỉ đã có"},
+      {name:"work_history",type:"jsonb",note:"Lịch sử vị trí công tác"},
+      {name:"education",type:"jsonb",note:"Trình độ học vấn"},
+    ],
+    relations:[
+      {arrow:"→",target:"employees",type:"1:1",typeColor:"#3B82F6",desc:"1 nhân viên có đúng 1 hồ sơ mở rộng — quan hệ 1-1 bắt buộc."},
+    ]
+  },
+
+  // ── TALENT ───────────────────────────────────────────────────
+  {
+    id:14, name:"talent_pools", module:"talent", color:"#10B981", dimColor:"rgba(16,185,129,.12)",
+    meaning:"Định nghĩa các nhóm tài năng chiến lược: High Potential (tiềm năng cao), Succession (kế nhiệm vị trí key), Critical Skill (kỹ năng khan hiếm). Mỗi pool có tiêu chí vào pool (<code>criteria</code> JSON) và scope — pool toàn công ty hay theo khối/chi nhánh.",
+    who:["BGĐ","HR Admin","Talent Service"],
+    whoColors:["#F43F5E","#3B82F6","#10B981"],
+    keyColumns:[
+      {name:"pool_type",type:"varchar",note:"high_potential/succession/critical"},
+      {name:"scope_type",type:"varchar",note:"company/block/branch"},
+      {name:"criteria",type:"jsonb",note:"Tiêu chí xét vào pool"},
+    ],
+    relations:[
+      {arrow:"←",target:"talent_pool_members",type:"1:N",typeColor:"#10B981",desc:"1 pool có nhiều thành viên được thêm vào theo thời gian."},
+    ]
+  },
+  {
+    id:15, name:"talent_pool_members", module:"talent", color:"#10B981", dimColor:"rgba(16,185,129,.12)",
+    meaning:"Junction table quản lý thành viên trong từng talent pool. Lưu thời điểm thêm vào, lý do, và điểm tại thời điểm được thêm (<code>score_at_entry</code>). Cho phép theo dõi lịch sử pool membership và audit trail đầy đủ.",
+    who:["HR Admin","Talent Service"],
+    whoColors:["#3B82F6","#10B981"],
+    keyColumns:[
+      {name:"score_at_entry",type:"decimal",note:"Điểm khi được thêm vào pool"},
+      {name:"reason",type:"text",note:"Lý do được chọn vào pool"},
+      {name:"added_by",type:"uuid",note:"FK → employees (HR quyết định)"},
+    ],
+    relations:[
+      {arrow:"→",target:"talent_pools",type:"N:1",typeColor:"#10B981",desc:"Mỗi membership thuộc về 1 talent pool."},
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Thành viên là 1 nhân viên trong hệ thống."},
+    ]
+  },
+
+  // ── IDP ──────────────────────────────────────────────────────
+  {
+    id:16, name:"idp_plans", module:"idp", color:"#F59E0B", dimColor:"rgba(245,158,11,.12)",
+    meaning:"Kế hoạch phát triển cá nhân (Individual Development Plan) — được AI tự động sinh dựa trên kết quả assessment_360. Chứa phân tích điểm mạnh/yếu theo competency, danh sách khóa học gợi ý có <code>match_score</code>, mục tiêu OKR theo quý. HR duyệt trước khi active.",
+    who:["AI Engine","HR Admin","Nhân viên","Manager"],
+    whoColors:["#A855F7","#3B82F6","#10B981","#6366F1"],
+    keyColumns:[
+      {name:"strengths",type:"jsonb",note:"AI phân tích điểm mạnh"},
+      {name:"improvements",type:"jsonb",note:"AI phân tích điểm cần cải thiện"},
+      {name:"recommended_courses",type:"jsonb",note:"[{course_id, match_score}]"},
+      {name:"goals",type:"jsonb",note:"OKR mục tiêu hành động"},
+      {name:"ai_summary",type:"text",note:"Lời khuyên lộ trình tổng hợp"},
+    ],
+    relations:[
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Kế hoạch phát triển cho 1 nhân viên cụ thể."},
+      {arrow:"→",target:"assessment_360",type:"N:1",typeColor:"#F43F5E",desc:"Dựa trên kết quả 360 làm cơ sở phân tích."},
+      {arrow:"←",target:"idp_progress",type:"1:N",typeColor:"#F59E0B",desc:"Theo dõi tiến độ thực hiện IDP qua các check-in định kỳ."},
+    ]
+  },
+  {
+    id:17, name:"idp_progress", module:"idp", color:"#F59E0B", dimColor:"rgba(245,158,11,.12)",
+    meaning:"Ghi nhận tiến độ thực hiện kế hoạch phát triển qua các lần check-in định kỳ (weekly/monthly). Mỗi row là 1 lần check-in cho 1 mục tiêu cụ thể, với % hoàn thành và ghi chú. Dùng để vẽ progress chart trên dashboard IDP.",
+    who:["Nhân viên","Manager"],
+    whoColors:["#10B981","#6366F1"],
+    keyColumns:[
+      {name:"goal_id",type:"varchar",note:"ID mục tiêu trong goals JSON"},
+      {name:"progress_pct",type:"integer",note:"0-100% hoàn thành"},
+      {name:"check_in_date",type:"date",note:"Ngày check-in"},
+      {name:"note",type:"text",note:"Ghi chú tiến độ"},
+    ],
+    relations:[
+      {arrow:"→",target:"idp_plans",type:"N:1",typeColor:"#F59E0B",desc:"Nhiều lần check-in thuộc về 1 IDP plan."},
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Nhân viên đang thực hiện kế hoạch."},
+    ]
+  },
+
+  // ── ANALYTICS ────────────────────────────────────────────────
+  {
+    id:18, name:"reports", module:"analytics", color:"#64748B", dimColor:"rgba(100,116,139,.12)",
+    meaning:"Snapshot báo cáo năng lực được pre-compute và cache. <code>scope_type + scope_id</code> xác định phạm vi báo cáo (company/block/branch/dept) — đây là cơ chế RBAC cho báo cáo. <code>data_snapshot</code> lưu toàn bộ data tại thời điểm tạo; <code>cache_key</code> liên kết với Redis để serve nhanh.",
+    who:["BGĐ","BGĐ Khối","Trưởng chi nhánh","HR Admin"],
+    whoColors:["#F43F5E","#6366F1","#3B82F6","#3B82F6"],
+    keyColumns:[
+      {name:"scope_type",type:"varchar",note:"company/block/branch/dept"},
+      {name:"scope_id",type:"uuid",note:"ID đơn vị tương ứng"},
+      {name:"data_snapshot",type:"jsonb",note:"Toàn bộ dữ liệu tại thời điểm tạo"},
+      {name:"cache_key",type:"varchar",note:"Key Redis để serve nhanh"},
+      {name:"expires_at",type:"timestamptz",note:"Hết hạn cache → re-generate"},
+    ],
+    relations:[
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Người tạo báo cáo (hoặc system job)."},
+    ]
+  },
+
+  // ── AIQA ─────────────────────────────────────────────────────
+  {
+    id:19, name:"ai_conversations", module:"aiqa", color:"#A855F7", dimColor:"rgba(168,85,247,.12)",
+    meaning:"Metadata của các cuộc hội thoại AI — nội dung chi tiết (messages array) lưu trong MongoDB vì schema linh hoạt và document size lớn. Bảng PG này chỉ lưu metadata: session_type, trạng thái, số messages, token đã dùng. Dùng để analytics AI usage và billing.",
+    who:["Nhân viên","AI Engine","Analytics"],
+    whoColors:["#10B981","#A855F7","#64748B"],
+    keyColumns:[
+      {name:"session_type",type:"varchar",note:"interview/faq/coaching"},
+      {name:"mongo_doc_id",type:"varchar",note:"Pointer sang MongoDB document"},
+      {name:"token_used",type:"integer",note:"Tổng token để tính chi phí AI"},
+      {name:"message_count",type:"integer",note:"Số tin nhắn trong session"},
+    ],
+    relations:[
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi conversation thuộc về 1 nhân viên."},
+      {arrow:"⟷",target:"MongoDB (external)",type:"ref",typeColor:"#A855F7",desc:"mongo_doc_id trỏ sang collection messages trong MongoDB — nơi lưu nội dung thực."},
+    ]
+  },
+
+  // ── NOTIFICATION ─────────────────────────────────────────────
+  {
+    id:20, name:"notifications", module:"notification", color:"#EC4899", dimColor:"rgba(236,72,153,.12)",
+    meaning:"Inbox thông báo in-app của nhân viên. Mỗi notification có <code>type</code> (assessment/idp/reminder/system), <code>channel</code> (in_app/email/push), và <code>data</code> JSON chứa payload điều hướng (link, entity_id). Notification service consume Kafka events và fan-out ra các channel phù hợp.",
+    who:["Tất cả nhân viên","Notification Service"],
+    whoColors:["#10B981","#EC4899"],
+    keyColumns:[
+      {name:"type",type:"varchar",note:"assessment/idp/reminder/system"},
+      {name:"channel",type:"varchar",note:"in_app/email/push"},
+      {name:"data",type:"jsonb",note:"Payload điều hướng: link, entity_id"},
+      {name:"is_read",type:"boolean",note:"Đã đọc chưa"},
+      {name:"sender_id",type:"uuid",note:"NULL = system-generated"},
+    ],
+    relations:[
+      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi notification gửi tới 1 nhân viên cụ thể (recipient)."},
+    ]
+  },
+];
+
+// ── RENDER ────────────────────────────────────────────────────
+function renderGlossary(filter='all') {
+  const grid = document.getElementById('gloss-grid');
+  grid.innerHTML = '';
+  const filtered = filter==='all' ? GLOSSARY : GLOSSARY.filter(t=>t.module===filter);
+
+  filtered.forEach((t,i) => {
+    const card = document.createElement('div');
+    card.className = 'gcard';
+    card.dataset.module = t.module;
+
+    const relRows = t.relations.map(r => `
+      <div class="rel-row">
+        <span class="rel-arrow" style="color:${r.typeColor}">${r.arrow}</span>
+        <span class="rel-target" style="color:${r.typeColor}">${r.target}</span>
+        <span class="rel-type" style="background:${r.typeColor}18;color:${r.typeColor};border:1px solid ${r.typeColor}30">${r.type}</span>
+        <span class="rel-desc">${r.desc}</span>
+      </div>`).join('');
+
+    const keyColRows = t.keyColumns.map(c => `
+      <div class="key-col">
+        <span class="key-col-name" style="color:${t.color}">${c.name}</span>
+        <span class="key-col-type">${c.type}</span>
+        <span class="key-col-note">${c.note}</span>
+      </div>`).join('');
+
+    const whoHtml = t.who.map((w,wi) => `
+      <span class="who-pill" style="color:${t.whoColors[wi]};border-color:${t.whoColors[wi]}35;background:${t.whoColors[wi]}12">${w}</span>`).join('');
+
+    card.innerHTML = `
+      <div class="gcard-head" onclick="toggleCard(this)">
+        <div class="gcard-num" style="background:${t.dimColor};color:${t.color}">${t.id.toString().padStart(2,'0')}</div>
+        <div>
+          <div class="gcard-name">${t.name}</div>
+        </div>
+        <span class="gcard-badge" style="background:${t.dimColor};color:${t.color}">${t.module.toUpperCase()}</span>
+        <span class="gcard-mod">${t.keyColumns.length} key cols · ${t.relations.length} relations</span>
+        <span class="gcard-chevron">▶</span>
+      </div>
+      <div class="gcard-body">
+        <div class="gcard-section">
+          <div class="gcard-section-label">Ý nghĩa nghiệp vụ</div>
+          <div class="gcard-meaning">${t.meaning}</div>
+        </div>
+        <div class="gcard-section">
+          <div class="gcard-section-label">Ai sử dụng / tương tác</div>
+          <div class="gcard-who">${whoHtml}</div>
+        </div>
+        <div class="gcard-section">
+          <div class="gcard-section-label">Cột quan trọng</div>
+          <div class="key-cols">${keyColRows}</div>
+        </div>
+        <div class="gcard-section">
+          <div class="gcard-section-label">Quan hệ với bảng khác</div>
+          ${relRows}
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function toggleCard(head) {
+  const body = head.nextElementSibling;
+  const chevron = head.querySelector('.gcard-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+function filterGloss(mod) {
+  document.querySelectorAll('.gtab').forEach(t=>{
+    t.classList.toggle('gtab-active', t.dataset.mod===mod);
+  });
+  renderGlossary(mod);
+}
+
+// Auto-expand first card on load
+document.addEventListener('DOMContentLoaded', () => {
+  renderGlossary('all');
+  setTimeout(() => {
+    const firstHead = document.querySelector('.gcard-head');
+    if(firstHead) toggleCard(firstHead);
+  }, 100);
+});
+// Also trigger if DOM already ready
+if(document.readyState !== 'loading') {
+  renderGlossary('all');
+  setTimeout(() => {
+    const firstHead = document.querySelector('.gcard-head');
+    if(firstHead) toggleCard(firstHead);
+  }, 100);
+}
+</script>
+
+</main>
+</div>
+
+<script>
+// Active nav on scroll
+const sections = document.querySelectorAll('section[id], .hero');
+const navItems = document.querySelectorAll('.nav-item');
+const ids = ['hld','system','dataflow','source','erd'];
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const a = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+      if(a) a.classList.add('active');
+    }
+  });
+}, { threshold: 0.25 });
+
+document.querySelectorAll('section[id]').forEach(s => obs.observe(s));
+
+navItems.forEach(n => {
+  n.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(n.getAttribute('href'));
+    if(t) t.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+});
+</script>
+</body>
+</html>
