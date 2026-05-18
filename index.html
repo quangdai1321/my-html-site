@@ -342,6 +342,9 @@ pre{margin:0;}
     <a class="nav-item" href="#erd">
       <span class="nav-num" style="background:rgba(45,217,143,.15);color:var(--green)">5</span>ERD Database 3D
     </a>
+    <a class="nav-item" href="#infra">
+      <span class="nav-num" style="background:rgba(45,217,143,.15);color:var(--green)">7</span>Infrastructure & CI/CD
+    </a>
     <a class="nav-item" href="#glossary">
       <span class="nav-num" style="background:rgba(232,121,249,.15);color:var(--pink)">6</span>Glossary — 20 Bảng
     </a>
@@ -361,13 +364,13 @@ pre{margin:0;}
     <span class="hero-chip" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.06)">Microservice-Ready</span>
   </div>
   <h1 class="hero-title">AI HR Platform<br><span>Architecture Blueprint</span></h1>
-  <p class="hero-sub">Tài liệu thiết kế kỹ thuật toàn diện — từ tổng thể đến chi tiết source code. Golang backend + ReactJS frontend, Cloud-native trên AWS/GCP, scale >5000 users.</p>
+  <p class="hero-sub">Tài liệu thiết kế kỹ thuật toàn diện — từ tổng thể đến chi tiết source code. Golang backend + ReactJS frontend, Cloud-native trên K8s On-Premise (ISC), scale >5000 users.</p>
   <div class="hero-badges">
     <span class="badge" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Golang 1.22+</span>
     <span class="badge" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">ReactJS + TypeScript</span>
     <span class="badge" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.08)">PostgreSQL + MongoDB + Redis</span>
     <span class="badge" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">Kafka + K8s</span>
-    <span class="badge" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.08)">AWS EKS</span>
+    <span class="badge" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.08)">K8s On-Premise</span>
   </div>
 </div>
 
@@ -384,7 +387,7 @@ pre{margin:0;}
   <div class="diagram-wrap">
     <div class="diagram-header">
       <span class="diagram-title">4-Layer Architecture — AI HR Platform</span>
-      <span style="font-size:9px;color:var(--muted)">Golang + ReactJS · AWS Cloud</span>
+      <span style="font-size:9px;color:var(--muted)">Golang + ReactJS · K8s On-Premise · Harbor Registry</span>
     </div>
     <div class="diagram-body">
       <div class="layers">
@@ -424,7 +427,7 @@ pre{margin:0;}
             </div>
             <div class="cell" style="background:var(--cyan-g);border-color:rgba(31,212,200,.3)">
               <div class="cell-name">CDN / WAF</div>
-              <div class="cell-sub">CloudFront · Shield · Static</div>
+              <div class="cell-sub">Nginx Ingress · WAF · Static</div>
             </div>
             <div class="cell" style="background:var(--cyan-g);border-color:rgba(31,212,200,.3)">
               <div class="cell-name">WS Gateway</div>
@@ -519,23 +522,23 @@ pre{margin:0;}
   <div class="cards-grid">
     <div class="card">
       <span class="card-tag" style="background:rgba(79,143,255,.1);color:var(--blue)">Infrastructure</span>
-      <div class="card-title">AWS EKS + K8s</div>
-      <div class="card-body">Auto-scale horizontal. HPA theo CPU/memory. >5000 concurrent users. Multi-AZ deployment.</div>
+      <div class="card-title">K8s On-Premise (ISC)</div>
+      <div class="card-body">Auto-scale horizontal. HPA theo CPU/memory. >5000 concurrent users. Cluster self-managed ISC.</div>
     </div>
     <div class="card">
       <span class="card-tag" style="background:rgba(31,212,200,.1);color:var(--cyan)">Observability</span>
       <div class="card-title">OpenTelemetry Stack</div>
-      <div class="card-body">Tracing: Jaeger. Metrics: Prometheus + Grafana. Logging: Zap → CloudWatch. Alerts: PagerDuty.</div>
+      <div class="card-body">Tracing: Jaeger. Metrics: Prometheus + Grafana. Logging: Zap → Loki / ELK (isc-kibana.fpt.net). OTel → otel-collector.fpt.net.</div>
     </div>
     <div class="card">
       <span class="card-tag" style="background:rgba(157,126,255,.1);color:var(--purple)">Security</span>
       <div class="card-title">Zero-trust Network</div>
-      <div class="card-body">JWT access 15min + refresh 7d. RBAC theo scope. Secrets qua AWS Secrets Manager. mTLS inter-service.</div>
+      <div class="card-body">JWT access 15min + refresh 7d. RBAC theo scope. Secrets qua K8s Secrets + Vault. mTLS inter-service.</div>
     </div>
     <div class="card">
       <span class="card-tag" style="background:rgba(45,217,143,.1);color:var(--green)">CI/CD</span>
-      <div class="card-title">GitHub Actions → ArgoCD</div>
-      <div class="card-body">lint → test → build → push ECR → deploy Helm. Rollback tự động khi health check fail.</div>
+      <div class="card-title">GitLab CI → ArgoCD / kubectl</div>
+      <div class="card-body">lint → test → build → push Harbor (ISC Registry) → deploy Helm. Rollback tự động khi health check fail.</div>
     </div>
   </div>
 </section>
@@ -556,7 +559,7 @@ pre{margin:0;}
       <span style="font-size:9px;color:var(--muted)">REST · gRPC · Kafka Events</span>
     </div>
     <div class="diagram-body">
-      <svg class="arch" viewBox="0 0 760 380" width="100%" style="min-width:600px;">
+      <svg class="arch" viewBox="0 0 780 420" width="100%" style="min-width:640px;">
         <defs>
           <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
             <path d="M2 1L8 5L2 9" fill="none" stroke="#3a3f5c" stroke-width="1.5" stroke-linecap="round"/>
@@ -569,110 +572,131 @@ pre{margin:0;}
           </marker>
         </defs>
 
-        <!-- Client -->
-        <rect x="10" y="10" width="110" height="40" rx="7" fill="rgba(79,143,255,.1)" stroke="rgba(79,143,255,.4)" stroke-width="1"/>
-        <text x="65" y="26" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">React Client</text>
-        <text x="65" y="40" text-anchor="middle" font-size="9" fill="#5a5f7a">Web · Mobile · Admin</text>
+        <!-- ── COLUMN LEFT: Client + Gateway ── -->
+        <rect x="10" y="60" width="118" height="42" rx="7" fill="rgba(79,143,255,.1)" stroke="rgba(79,143,255,.4)" stroke-width="1"/>
+        <text x="69" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">React Client</text>
+        <text x="69" y="91" text-anchor="middle" font-size="9" fill="#5a5f7a">Web · Mobile · Admin</text>
 
-        <!-- Gateway -->
-        <rect x="10" y="80" width="110" height="40" rx="7" fill="rgba(31,212,200,.08)" stroke="rgba(31,212,200,.35)" stroke-width="1"/>
-        <text x="65" y="96" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">API Gateway</text>
-        <text x="65" y="110" text-anchor="middle" font-size="9" fill="#5a5f7a">JWT · Rate · Route</text>
+        <!-- Arrow: Client → Gateway -->
+        <line x1="69" y1="102" x2="69" y2="126" stroke="#4f8fff" stroke-width="1.5" marker-end="url(#arr-blue)"/>
 
-        <!-- Arrows client→gateway -->
-        <line x1="65" y1="50" x2="65" y2="78" stroke="#4f8fff" stroke-width="1" marker-end="url(#arr-blue)"/>
+        <rect x="10" y="128" width="118" height="42" rx="7" fill="rgba(31,212,200,.08)" stroke="rgba(31,212,200,.4)" stroke-width="1"/>
+        <text x="69" y="145" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">API Gateway</text>
+        <text x="69" y="159" text-anchor="middle" font-size="9" fill="#5a5f7a">JWT · Rate · Route</text>
 
-        <!-- Services row 1 -->
-        <rect x="140" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
-        <text x="190" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">IDM</text>
-        <text x="190" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">Auth · RBAC</text>
+        <!-- ── HORIZONTAL BUS from Gateway ── -->
+        <!-- Vertical drop from gateway to a horizontal rail -->
+        <line x1="128" y1="149" x2="148" y2="149" stroke="#1fd4c8" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <!-- Horizontal rail at y=149 -->
+        <line x1="148" y1="149" x2="720" y2="149" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3"/>
 
-        <rect x="256" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
-        <text x="306" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">CBI</text>
-        <text x="306" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">AI Interview</text>
+        <!-- ── SERVICES ROW 1 (y=60–102): IDM CBI E360 IDP Talent ── -->
+        <!-- Vertical drops from rail to each service box top -->
+        <!-- IDM: center x=218 -->
+        <line x1="218" y1="149" x2="218" y2="104" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
+        <!-- CBI: center x=348 -->
+        <line x1="348" y1="149" x2="348" y2="104" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
+        <!-- E360: center x=478 -->
+        <line x1="478" y1="149" x2="478" y2="104" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
+        <!-- IDP: center x=594 -->
+        <line x1="594" y1="149" x2="594" y2="104" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
+        <!-- Talent: center x=712 -->
+        <line x1="712" y1="149" x2="712" y2="104" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
 
-        <rect x="372" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
-        <text x="422" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">E360</text>
-        <text x="422" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">Assessment</text>
+        <!-- Service boxes row 1 -->
+        <rect x="158" y="60" width="120" height="42" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="218" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">IDM</text>
+        <text x="218" y="91" text-anchor="middle" font-size="9" fill="#5a5f7a">Auth · RBAC</text>
 
-        <rect x="488" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
-        <text x="538" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">IDP</text>
-        <text x="538" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">Dev Plan</text>
+        <rect x="288" y="60" width="120" height="42" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="348" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">CBI</text>
+        <text x="348" y="91" text-anchor="middle" font-size="9" fill="#5a5f7a">AI Interview</text>
 
-        <rect x="604" y="60" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
-        <text x="654" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Talent</text>
-        <text x="654" y="90" text-anchor="middle" font-size="9" fill="#5a5f7a">Pool · Succession</text>
+        <rect x="418" y="60" width="120" height="42" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="478" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">E360</text>
+        <text x="478" y="91" text-anchor="middle" font-size="9" fill="#5a5f7a">Assessment</text>
 
-        <!-- Services row 2 -->
-        <rect x="140" y="118" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
-        <text x="190" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Profile</text>
-        <text x="190" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">Skills · History</text>
+        <rect x="534" y="60" width="120" height="42" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="594" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">IDP</text>
+        <text x="594" y="91" text-anchor="middle" font-size="9" fill="#5a5f7a">Dev Plan</text>
 
-        <rect x="256" y="118" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
-        <text x="306" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Catalog</text>
-        <text x="306" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">Framework · Course</text>
+        <rect x="652" y="60" width="120" height="42" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="712" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Talent</text>
+        <text x="712" y="91" text-anchor="middle" font-size="9" fill="#5a5f7a">Pool · Succession</text>
 
-        <rect x="372" y="118" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
-        <text x="422" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Analytics</text>
-        <text x="422" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">Dashboard · KPI</text>
+        <!-- ── SERVICES ROW 2 (y=172–214): Profile Catalog Analytics AI Notification ── -->
+        <!-- Vertical drops from rail to service row 2 -->
+        <line x1="218" y1="149" x2="218" y2="170" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
+        <line x1="348" y1="149" x2="348" y2="170" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
+        <line x1="478" y1="149" x2="478" y2="170" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
+        <line x1="594" y1="149" x2="594" y2="170" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
+        <line x1="712" y1="149" x2="712" y2="170" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#arr-cyan)"/>
 
-        <rect x="488" y="118" width="100" height="38" rx="7" fill="rgba(232,121,249,.08)" stroke="rgba(232,121,249,.4)" stroke-width="1"/>
-        <text x="538" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#e879f9">AI Orchestrator</text>
-        <text x="538" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">LLM · Prompt · gRPC</text>
+        <!-- Service boxes row 2 -->
+        <rect x="158" y="172" width="120" height="42" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="218" y="189" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Profile</text>
+        <text x="218" y="203" text-anchor="middle" font-size="9" fill="#5a5f7a">Skills · History</text>
 
-        <rect x="604" y="118" width="100" height="38" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
-        <text x="654" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Notification</text>
-        <text x="654" y="148" text-anchor="middle" font-size="9" fill="#5a5f7a">Email · Push</text>
+        <rect x="288" y="172" width="120" height="42" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="348" y="189" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Catalog</text>
+        <text x="348" y="203" text-anchor="middle" font-size="9" fill="#5a5f7a">Framework · Course</text>
 
-        <!-- Gateway → services arrows -->
-        <line x1="120" y1="100" x2="138" y2="89" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
-        <line x1="120" y1="100" x2="254" y2="84" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
-        <line x1="120" y1="100" x2="370" y2="79" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
-        <line x1="120" y1="100" x2="486" y2="79" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
-        <line x1="120" y1="100" x2="602" y2="79" stroke="#1fd4c8" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#arr-cyan)"/>
+        <rect x="418" y="172" width="120" height="42" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="478" y="189" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Analytics</text>
+        <text x="478" y="203" text-anchor="middle" font-size="9" fill="#5a5f7a">Dashboard · KPI</text>
 
-        <!-- Kafka event bus -->
-        <rect x="140" y="192" width="564" height="34" rx="7" fill="rgba(245,166,35,.06)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
-        <text x="422" y="205" text-anchor="middle" font-size="10" font-weight="600" fill="#f5a623">Kafka Event Bus</text>
-        <text x="422" y="220" text-anchor="middle" font-size="9" fill="#5a5f7a">interview.completed · assessment.done · idp.updated · report.refresh · notification.send</text>
+        <rect x="534" y="172" width="120" height="42" rx="7" fill="rgba(232,121,249,.08)" stroke="rgba(232,121,249,.4)" stroke-width="1"/>
+        <text x="594" y="189" text-anchor="middle" font-size="10" font-weight="600" fill="#e879f9">AI Orchestrator</text>
+        <text x="594" y="203" text-anchor="middle" font-size="9" fill="#5a5f7a">LLM · Prompt · gRPC</text>
 
-        <!-- Services → Kafka -->
-        <line x1="190" y1="156" x2="190" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
-        <line x1="306" y1="156" x2="306" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
-        <line x1="422" y1="156" x2="422" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
-        <line x1="538" y1="156" x2="538" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
-        <line x1="654" y1="156" x2="654" y2="190" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <rect x="652" y="172" width="120" height="42" rx="7" fill="rgba(157,126,255,.1)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="712" y="189" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Notification</text>
+        <text x="712" y="203" text-anchor="middle" font-size="9" fill="#5a5f7a">Email · Push</text>
 
-        <!-- DB layer -->
-        <rect x="140" y="260" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
-        <text x="205" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">PostgreSQL</text>
-        <text x="205" y="290" text-anchor="middle" font-size="9" fill="#5a5f7a">20 tables · Core</text>
+        <!-- ── KAFKA EVENT BUS ── -->
+        <!-- Vertical drops from all services in row 2 down to Kafka -->
+        <line x1="218" y1="214" x2="218" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="348" y1="214" x2="348" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="478" y1="214" x2="478" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="594" y1="214" x2="594" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="712" y1="214" x2="712" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <!-- Also from row 1 services -->
+        <line x1="218" y1="102" x2="218" y2="60" stroke="#3a3f5c" stroke-width="0" /><!-- invisible anchor -->
 
-        <rect x="286" y="260" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
-        <text x="351" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">MongoDB</text>
-        <text x="351" y="290" text-anchor="middle" font-size="9" fill="#5a5f7a">AI logs · Q&A</text>
+        <!-- Kafka box -->
+        <rect x="158" y="260" width="584" height="38" rx="7" fill="rgba(245,166,35,.06)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="450" y="275" text-anchor="middle" font-size="10" font-weight="600" fill="#f5a623">Kafka Event Bus (ISC isc-queue-*)</text>
+        <text x="450" y="290" text-anchor="middle" font-size="9" fill="#5a5f7a">interview.completed · assessment.done · idp.updated · report.refresh · notification.send</text>
 
-        <rect x="432" y="260" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
-        <text x="497" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Redis</text>
-        <text x="497" y="290" text-anchor="middle" font-size="9" fill="#5a5f7a">Cache · Session</text>
+        <!-- ── DB LAYER ── -->
+        <line x1="260" y1="298" x2="220" y2="328" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="380" y1="298" x2="370" y2="328" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="500" y1="298" x2="510" y2="328" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="620" y1="298" x2="640" y2="328" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
 
-        <rect x="578" y="260" width="126" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
-        <text x="641" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">S3 Storage</text>
-        <text x="641" y="290" text-anchor="middle" font-size="9" fill="#5a5f7a">Files · Reports</text>
+        <rect x="158" y="330" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="223" y="346" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">PostgreSQL</text>
+        <text x="223" y="360" text-anchor="middle" font-size="9" fill="#5a5f7a">20 tables · Core</text>
 
-        <!-- Kafka → DB arrows -->
-        <line x1="300" y1="226" x2="250" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
-        <line x1="422" y1="226" x2="422" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
-        <line x1="500" y1="226" x2="500" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
-        <line x1="600" y1="226" x2="620" y2="258" stroke="#3a3f5c" stroke-width="1" marker-end="url(#arr)"/>
+        <rect x="300" y="330" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="365" y="346" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">MongoDB</text>
+        <text x="365" y="360" text-anchor="middle" font-size="9" fill="#5a5f7a">AI logs · Q&amp;A</text>
 
-        <!-- Legend -->
-        <line x1="140" y1="340" x2="170" y2="340" stroke="#4f8fff" stroke-width="1.5" stroke-dasharray="4 2"/>
-        <text x="175" y="344" font-size="9" fill="#5a5f7a">REST/HTTP</text>
-        <line x1="240" y1="340" x2="270" y2="340" stroke="#1fd4c8" stroke-width="1.5"/>
-        <text x="275" y="344" font-size="9" fill="#5a5f7a">gRPC</text>
-        <line x1="320" y1="340" x2="350" y2="340" stroke="#3a3f5c" stroke-width="1.5"/>
-        <text x="355" y="344" font-size="9" fill="#5a5f7a">Internal / Event</text>
+        <rect x="443" y="330" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="508" y="346" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Redis</text>
+        <text x="508" y="360" text-anchor="middle" font-size="9" fill="#5a5f7a">Cache · Session</text>
+
+        <rect x="586" y="330" width="130" height="38" rx="7" fill="rgba(245,166,35,.08)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="651" y="346" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">S3 Storage</text>
+        <text x="651" y="360" text-anchor="middle" font-size="9" fill="#5a5f7a">Files · Reports</text>
+
+        <!-- ── LEGEND ── -->
+        <line x1="158" y1="405" x2="188" y2="405" stroke="#4f8fff" stroke-width="1.5" stroke-dasharray="4 2"/>
+        <text x="194" y="409" font-size="9" fill="#5a5f7a">REST/HTTP</text>
+        <line x1="290" y1="405" x2="320" y2="405" stroke="#1fd4c8" stroke-width="1.5" stroke-dasharray="4 2"/>
+        <text x="326" y="409" font-size="9" fill="#5a5f7a">gRPC (Gateway → Services)</text>
+        <line x1="490" y1="405" x2="520" y2="405" stroke="#3a3f5c" stroke-width="1.5"/>
+        <text x="526" y="409" font-size="9" fill="#5a5f7a">Internal / Event</text>
       </svg>
     </div>
   </div>
@@ -1062,7 +1086,7 @@ pre{margin:0;}
     </div>
     <div style="display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;">
       <span style="color:var(--green);font-size:13px;flex-shrink:0;margin-top:1px;">✓</span>
-      <div><div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;">GitHub Actions CI</div><div style="font-size:10px;color:var(--muted);">lint → test -race → build → push ECR trên mỗi PR</div></div>
+      <div><div style="font-size:11px;font-weight:600;color:#fff;margin-bottom:2px;">GitHub Actions CI</div><div style="font-size:10px;color:var(--muted);">lint → test -race → build → push Harbor trên mỗi PR</div></div>
     </div>
   </div>
 </section>
@@ -2713,6 +2737,514 @@ if(document.readyState !== 'loading') {
   }, 100);
 }
 </script>
+
+<!-- ═══════ SECTION 7 — INFRASTRUCTURE & CI/CD ═══════ -->
+<section class="section" id="infra">
+  <div class="section-eyebrow">
+    <span class="section-num" style="background:rgba(45,217,143,.15);color:var(--green)">7</span>
+    <span class="section-tag" style="color:var(--green);background:rgba(45,217,143,.1)">Infrastructure & CI/CD</span>
+  </div>
+  <h2 class="section-title">Hạ tầng thực tế — ISC On-Premise</h2>
+  <p class="section-desc">Toàn bộ hạ tầng chạy trên cụm K8s nội bộ ISC/FPT Telecom. GitLab CI tích hợp quy trình ISC. Harbor làm private registry. Kafka ISC cho event bus và logging. Vault cho secrets management. OTel → Kibana cho observability.</p>
+
+  <!-- ── INFRA CARDS ── -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:28px;">
+
+    <div class="card" style="border-color:rgba(31,212,200,.25);">
+      <span class="card-tag" style="background:rgba(31,212,200,.1);color:var(--cyan)">K8s DEV/STAGING</span>
+      <div class="card-title">k8s1-stage.isc.net</div>
+      <div class="card-body" style="font-size:10px;">IP: <code style="color:var(--cyan)">172.20.18.252</code><br>Namespace = tên GROUP GitLab (lowercase)<br>View log: Pods → Logs</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(45,217,143,.25);">
+      <span class="card-tag" style="background:rgba(45,217,143,.1);color:var(--green)">K8s PRODUCTION</span>
+      <div class="card-title">k8s1.isc.net</div>
+      <div class="card-body" style="font-size:10px;">IP: <code style="color:var(--green)">172.20.18.32</code><br>Bypass proxy hoặc map host<br>Token do SYS cấp riêng</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(157,126,255,.25);">
+      <span class="card-tag" style="background:rgba(157,126,255,.1);color:var(--purple)">Container Registry</span>
+      <div class="card-title">Harbor (Private ISC)</div>
+      <div class="card-body" style="font-size:10px;">Registry nội bộ<br>GitLab CI push image sau build<br>K8s pull từ Harbor khi deploy</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(245,166,35,.25);">
+      <span class="card-tag" style="background:rgba(245,166,35,.1);color:var(--amber)">Secrets Management</span>
+      <div class="card-title">HashiCorp Vault</div>
+      <div class="card-body" style="font-size:10px;"><code style="color:var(--amber)">isc-secret.fpt.net</code><br>Login OIDC (IAM)<br>Path: <code>/vault/secrets/configuration.[env].json</code></div>
+    </div>
+
+    <div class="card" style="border-color:rgba(232,121,249,.25);">
+      <span class="card-tag" style="background:rgba(232,121,249,.1);color:var(--pink)">Event Bus & Logging</span>
+      <div class="card-title">Kafka ISC (isc-queue)</div>
+      <div class="card-body" style="font-size:10px;">SASL/SCRAM-SHA-512<br>3 clusters: dev / stag / prod<br>Topic + Consumer group theo chuẩn ISC</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(79,143,255,.25);">
+      <span class="card-tag" style="background:rgba(79,143,255,.1);color:var(--blue)">Observability</span>
+      <div class="card-title">OTel → Kibana ISC</div>
+      <div class="card-body" style="font-size:10px;"><code style="color:var(--blue)">otel-collector.fpt.net</code><br><code style="color:var(--blue)">isc-kibana.fpt.net</code><br>APM: Services · Traces · Deps</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(255,95,126,.25);">
+      <span class="card-tag" style="background:rgba(255,95,126,.1);color:var(--rose)">Redis</span>
+      <div class="card-title">ISP-REDIS Sentinel</div>
+      <div class="card-body" style="font-size:10px;">Read: <code>ISP-REDIS:36379</code><br>Write: <code>ISP-REDIS:36380</code><br>Prefix bắt buộc theo project</div>
+    </div>
+
+    <div class="card" style="border-color:rgba(79,143,255,.25);">
+      <span class="card-tag" style="background:rgba(79,143,255,.1);color:var(--blue)">Source Control</span>
+      <div class="card-title">GitLab ISC + FProject</div>
+      <div class="card-body" style="font-size:10px;">Group = Identifier dự án (UPPER)<br>Branch: dev → staging → master<br>Tích hợp FProject task/bug</div>
+    </div>
+
+  </div>
+
+  <!-- ── DEPLOY ARCHITECTURE ── -->
+  <div class="diagram-wrap" style="margin-bottom:24px;">
+    <div class="diagram-header">
+      <span class="diagram-title">Deploy Architecture — K8s On-Premise ISC</span>
+      <span style="font-size:9px;color:var(--muted)">GitLab CI · Harbor · Vault · K8s · Kafka · OTel</span>
+    </div>
+    <div class="diagram-body" style="overflow-x:auto;">
+      <svg viewBox="0 0 800 340" width="100%" style="min-width:640px;font-family:'JetBrains Mono',monospace;">
+        <defs>
+          <marker id="ma" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#4f8fff" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+          <marker id="mb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#1fd4c8" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+          <marker id="mc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#2dd98f" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+          <marker id="md" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+          <marker id="me" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#e879f9" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+          <marker id="mf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#ff5f7e" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+        </defs>
+
+        <!-- Row 1: CI Pipeline -->
+        <rect x="10" y="18" width="100" height="44" rx="7" fill="rgba(79,143,255,.1)" stroke="rgba(79,143,255,.3)" stroke-width="1"/>
+        <text x="60" y="34" text-anchor="middle" font-size="9" font-weight="600" fill="#fff">Dev Local</text>
+        <text x="60" y="48" text-anchor="middle" font-size="8" fill="#5a5f7a">git push</text>
+        <text x="60" y="58" text-anchor="middle" font-size="8" fill="#5a5f7a">feature branch</text>
+
+        <rect x="128" y="18" width="110" height="44" rx="7" fill="rgba(232,121,249,.08)" stroke="rgba(232,121,249,.3)" stroke-width="1"/>
+        <text x="183" y="34" text-anchor="middle" font-size="9" font-weight="600" fill="#e879f9">GitLab ISC</text>
+        <text x="183" y="48" text-anchor="middle" font-size="8" fill="#5a5f7a">MR review</text>
+        <text x="183" y="58" text-anchor="middle" font-size="8" fill="#5a5f7a">FProject linked</text>
+
+        <rect x="256" y="18" width="130" height="44" rx="7" fill="rgba(31,212,200,.07)" stroke="rgba(31,212,200,.3)" stroke-width="1"/>
+        <text x="321" y="34" text-anchor="middle" font-size="9" font-weight="600" fill="#1fd4c8">GitLab CI Pipeline</text>
+        <text x="321" y="48" text-anchor="middle" font-size="8" fill="#5a5f7a">lint · test -race</text>
+        <text x="321" y="58" text-anchor="middle" font-size="8" fill="#5a5f7a">build → push Harbor</text>
+
+        <rect x="404" y="18" width="100" height="44" rx="7" fill="rgba(157,126,255,.08)" stroke="rgba(157,126,255,.3)" stroke-width="1"/>
+        <text x="454" y="34" text-anchor="middle" font-size="9" font-weight="600" fill="#9d7eff">Harbor</text>
+        <text x="454" y="48" text-anchor="middle" font-size="8" fill="#5a5f7a">ai-hr/api:tag</text>
+        <text x="454" y="58" text-anchor="middle" font-size="8" fill="#5a5f7a">Private Registry</text>
+
+        <rect x="522" y="18" width="100" height="44" rx="7" fill="rgba(245,166,35,.07)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+        <text x="572" y="34" text-anchor="middle" font-size="9" font-weight="600" fill="#f5a623">Vault ISC</text>
+        <text x="572" y="48" text-anchor="middle" font-size="8" fill="#5a5f7a">isc-secret.fpt.net</text>
+        <text x="572" y="58" text-anchor="middle" font-size="8" fill="#5a5f7a">OIDC · KV secrets</text>
+
+        <rect x="640" y="18" width="120" height="44" rx="7" fill="rgba(45,217,143,.07)" stroke="rgba(45,217,143,.3)" stroke-width="1"/>
+        <text x="700" y="34" text-anchor="middle" font-size="9" font-weight="600" fill="#2dd98f">K8s Deploy</text>
+        <text x="700" y="48" text-anchor="middle" font-size="8" fill="#5a5f7a">helm upgrade</text>
+        <text x="700" y="58" text-anchor="middle" font-size="8" fill="#5a5f7a">--install ai-hr</text>
+
+        <!-- Arrows row 1 -->
+        <line x1="110" y1="40" x2="126" y2="40" stroke="#4f8fff" stroke-width="1.5" marker-end="url(#ma)"/>
+        <line x1="238" y1="40" x2="254" y2="40" stroke="#e879f9" stroke-width="1.5" marker-end="url(#me)"/>
+        <line x1="386" y1="40" x2="402" y2="40" stroke="#1fd4c8" stroke-width="1.5" marker-end="url(#mb)"/>
+        <line x1="504" y1="40" x2="520" y2="40" stroke="#9d7eff" stroke-width="1.5" marker-end="url(#ma)"/>
+        <line x1="622" y1="40" x2="638" y2="40" stroke="#f5a623" stroke-width="1.5" marker-end="url(#md)"/>
+
+        <!-- K8s clusters row 2 -->
+        <!-- Stage cluster -->
+        <rect x="10" y="108" width="360" height="100" rx="8" fill="rgba(245,166,35,.03)" stroke="rgba(245,166,35,.2)" stroke-width="1" stroke-dasharray="5 3"/>
+        <text x="190" y="124" text-anchor="middle" font-size="8" font-weight="700" fill="#f5a623" letter-spacing="1">K8S STAGING — k8s1-stage.isc.net · 172.20.18.252</text>
+        <rect x="20" y="132" width="80" height="38" rx="6" fill="rgba(79,143,255,.08)" stroke="rgba(79,143,255,.2)" stroke-width="1"/>
+        <text x="60" y="147" text-anchor="middle" font-size="9" font-weight="600" fill="#fff">api</text>
+        <text x="60" y="160" text-anchor="middle" font-size="8" fill="#5a5f7a">:2 replicas</text>
+        <rect x="110" y="132" width="80" height="38" rx="6" fill="rgba(157,126,255,.08)" stroke="rgba(157,126,255,.2)" stroke-width="1"/>
+        <text x="150" y="147" text-anchor="middle" font-size="9" font-weight="600" fill="#fff">worker</text>
+        <text x="150" y="160" text-anchor="middle" font-size="8" fill="#5a5f7a">:1 replica</text>
+        <rect x="200" y="132" width="80" height="38" rx="6" fill="rgba(31,212,200,.07)" stroke="rgba(31,212,200,.2)" stroke-width="1"/>
+        <text x="240" y="147" text-anchor="middle" font-size="9" font-weight="600" fill="#1fd4c8">ws</text>
+        <text x="240" y="160" text-anchor="middle" font-size="8" fill="#5a5f7a">WebSocket</text>
+        <rect x="290" y="132" width="70" height="38" rx="6" fill="rgba(232,121,249,.07)" stroke="rgba(232,121,249,.2)" stroke-width="1"/>
+        <text x="325" y="147" text-anchor="middle" font-size="9" font-weight="600" fill="#e879f9">ai-orch</text>
+        <text x="325" y="160" text-anchor="middle" font-size="8" fill="#5a5f7a">gRPC</text>
+
+        <!-- Prod cluster -->
+        <rect x="388" y="108" width="372" height="100" rx="8" fill="rgba(45,217,143,.03)" stroke="rgba(45,217,143,.2)" stroke-width="1" stroke-dasharray="5 3"/>
+        <text x="574" y="124" text-anchor="middle" font-size="8" font-weight="700" fill="#2dd98f" letter-spacing="1">K8S PRODUCTION — k8s1.isc.net · 172.20.18.32</text>
+        <rect x="398" y="132" width="80" height="38" rx="6" fill="rgba(79,143,255,.08)" stroke="rgba(79,143,255,.2)" stroke-width="1"/>
+        <text x="438" y="147" text-anchor="middle" font-size="9" font-weight="600" fill="#fff">api</text>
+        <text x="438" y="160" text-anchor="middle" font-size="8" fill="#5a5f7a">:3 HPA</text>
+        <rect x="488" y="132" width="80" height="38" rx="6" fill="rgba(157,126,255,.08)" stroke="rgba(157,126,255,.2)" stroke-width="1"/>
+        <text x="528" y="147" text-anchor="middle" font-size="9" font-weight="600" fill="#fff">worker</text>
+        <text x="528" y="160" text-anchor="middle" font-size="8" fill="#5a5f7a">:2 replicas</text>
+        <rect x="578" y="132" width="80" height="38" rx="6" fill="rgba(31,212,200,.07)" stroke="rgba(31,212,200,.2)" stroke-width="1"/>
+        <text x="618" y="147" text-anchor="middle" font-size="9" font-weight="600" fill="#1fd4c8">ws</text>
+        <text x="618" y="160" text-anchor="middle" font-size="8" fill="#5a5f7a">WebSocket</text>
+        <rect x="668" y="132" width="82" height="38" rx="6" fill="rgba(232,121,249,.07)" stroke="rgba(232,121,249,.2)" stroke-width="1"/>
+        <text x="709" y="147" text-anchor="middle" font-size="9" font-weight="600" fill="#e879f9">ai-orch</text>
+        <text x="709" y="160" text-anchor="middle" font-size="8" fill="#5a5f7a">gRPC:50051</text>
+
+        <!-- Deploy arrows to clusters -->
+        <line x1="700" y1="62" x2="200" y2="106" stroke="#2dd98f" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#mc)"/>
+        <line x1="700" y1="62" x2="574" y2="106" stroke="#2dd98f" stroke-width="1.5" marker-end="url(#mc)"/>
+
+        <!-- Vault → Pods arrow -->
+        <line x1="572" y1="62" x2="350" y2="106" stroke="#f5a623" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#md)"/>
+        <text x="490" y="90" font-size="8" fill="#f5a623">/vault/secrets/config.json</text>
+
+        <!-- Bottom infra row -->
+        <rect x="10" y="256" width="110" height="38" rx="7" fill="rgba(232,121,249,.07)" stroke="rgba(232,121,249,.25)" stroke-width="1"/>
+        <text x="65" y="271" text-anchor="middle" font-size="9" font-weight="600" fill="#e879f9">Kafka ISC</text>
+        <text x="65" y="284" text-anchor="middle" font-size="8" fill="#5a5f7a">isc-queue-*:9092</text>
+
+        <rect x="132" y="256" width="110" height="38" rx="7" fill="rgba(245,166,35,.07)" stroke="rgba(245,166,35,.25)" stroke-width="1"/>
+        <text x="187" y="271" text-anchor="middle" font-size="9" font-weight="600" fill="#f5a623">OTel Collector</text>
+        <text x="187" y="284" text-anchor="middle" font-size="8" fill="#5a5f7a">otel-collector.fpt.net</text>
+
+        <rect x="254" y="256" width="110" height="38" rx="7" fill="rgba(245,166,35,.07)" stroke="rgba(245,166,35,.25)" stroke-width="1"/>
+        <text x="309" y="271" text-anchor="middle" font-size="9" font-weight="600" fill="#f5a623">Kibana / ELK</text>
+        <text x="309" y="284" text-anchor="middle" font-size="8" fill="#5a5f7a">isc-kibana.fpt.net</text>
+
+        <rect x="376" y="256" width="110" height="38" rx="7" fill="rgba(255,95,126,.07)" stroke="rgba(255,95,126,.25)" stroke-width="1"/>
+        <text x="431" y="271" text-anchor="middle" font-size="9" font-weight="600" fill="#ff5f7e">Redis Sentinel</text>
+        <text x="431" y="284" text-anchor="middle" font-size="8" fill="#5a5f7a">ISP-REDIS:36379/80</text>
+
+        <rect x="498" y="256" width="110" height="38" rx="7" fill="rgba(79,143,255,.07)" stroke="rgba(79,143,255,.25)" stroke-width="1"/>
+        <text x="553" y="271" text-anchor="middle" font-size="9" font-weight="600" fill="#4f8fff">PostgreSQL</text>
+        <text x="553" y="284" text-anchor="middle" font-size="8" fill="#5a5f7a">On-premise · 20 tables</text>
+
+        <rect x="620" y="256" width="110" height="38" rx="7" fill="rgba(157,126,255,.07)" stroke="rgba(157,126,255,.25)" stroke-width="1"/>
+        <text x="675" y="271" text-anchor="middle" font-size="9" font-weight="600" fill="#9d7eff">MongoDB</text>
+        <text x="675" y="284" text-anchor="middle" font-size="8" fill="#5a5f7a">AI logs · Q&amp;A docs</text>
+
+        <!-- Pods → infra -->
+        <line x1="190" y1="208" x2="65" y2="254" stroke="#e879f9" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#me)"/>
+        <line x1="190" y1="208" x2="187" y2="254" stroke="#f5a623" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#md)"/>
+        <line x1="60" y1="170" x2="431" y2="254" stroke="#ff5f7e" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#mf)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── CI/CD PIPELINE ── -->
+  <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:14px;">CI/CD Pipeline — GitLab CI theo chuẩn ISC</h3>
+  <div class="code-block" style="margin-bottom:16px;">
+    <div class="code-header"><span class="code-fname">.gitlab-ci.yml</span><span class="code-lang">yaml</span></div>
+    <div class="code-body"><pre><span class="t-yaml">stages:</span> [lint, test, build, push, deploy]
+
+<span class="t-yaml">variables:</span>
+  HARBOR_REGISTRY: harbor.isc.net
+  IMAGE_API:    ai-hr/api
+  IMAGE_WORKER: ai-hr/worker
+  K8S_NS:       ai-hr-platform     <span class="t-cmt"># = tên GROUP GitLab viết thường</span>
+
+<span class="t-yaml">lint:</span>
+  script: [golangci-lint run ./..., cd frontend && eslint src]
+
+<span class="t-yaml">test:</span>
+  script: [go test -race -cover -count=1 ./...]
+
+<span class="t-yaml">build:</span>
+  script:
+    - docker build -f deploy/docker/Dockerfile.api -t $HARBOR_REGISTRY/$IMAGE_API:$CI_COMMIT_SHORT_SHA .
+    - docker push $HARBOR_REGISTRY/$IMAGE_API:$CI_COMMIT_SHORT_SHA
+
+<span class="t-cmt"># ── dev branch → DEVENV (auto) ───────────────────────────</span>
+<span class="t-yaml">deploy:dev:</span>
+  only: [dev]
+  script:
+    - kubectl --context=k8s-stage -n $K8S_NS set image deployment/api
+        api=$HARBOR_REGISTRY/$IMAGE_API:$CI_COMMIT_SHORT_SHA
+    - helm upgrade --install ai-hr ./deploy/helm -n $K8S_NS
+        --set image.tag=$CI_COMMIT_SHORT_SHA --set env=development
+        -f deploy/configs/config.dev.yaml
+
+<span class="t-cmt"># ── staging branch → STAGENV (auto) ─────────────────────</span>
+<span class="t-yaml">deploy:stg:</span>
+  only: [staging]
+  script:
+    - helm upgrade --install ai-hr ./deploy/helm -n $K8S_NS
+        --set image.tag=$CI_COMMIT_SHORT_SHA --set env=staging
+        -f deploy/configs/config.stg.yaml
+
+<span class="t-cmt"># ── master branch → PRODENV (manual — PM bấm xác nhận) ──</span>
+<span class="t-yaml">deploy:prod:</span>
+  only: [master]
+  when: manual
+  script:
+    - kubectl --context=k8s-prod -n $K8S_NS set image deployment/api
+        api=$HARBOR_REGISTRY/$IMAGE_API:$CI_COMMIT_TAG
+    - helm upgrade --install ai-hr ./deploy/helm -n $K8S_NS
+        --set image.tag=$CI_COMMIT_TAG --set env=production
+        -f deploy/configs/config.prod.yaml</pre></div>
+  </div>
+
+  <!-- ── KAFKA ISC ── -->
+  <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:14px;">Kafka ISC — Event Bus + Logging</h3>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+    <div class="code-block" style="margin-bottom:0">
+      <div class="code-header"><span class="code-fname">Kafka Broker ISC — thông tin kết nối</span><span class="code-lang">hosts</span></div>
+      <div class="code-body"><pre><span class="t-cmt"># DEV (map host: 172.27.62.22)</span>
+<span class="t-key">isc-queue-dev01:19092</span>
+<span class="t-key">isc-queue-dev02:29092</span>
+<span class="t-key">isc-queue-dev03:39092</span>
+
+<span class="t-cmt"># STAGING</span>
+<span class="t-key">isc-queue-stag01:19092</span>
+<span class="t-key">isc-queue-stag02:29092</span>
+<span class="t-key">isc-queue-stag03:39092</span>
+
+<span class="t-cmt"># PRODUCTION</span>
+<span class="t-key">isc-queue-01:9092</span>
+<span class="t-cmt">...isc-queue-03:9092</span>
+
+<span class="t-cmt"># Auth: SASL_PLAINTEXT / SCRAM-SHA-512</span>
+<span class="t-cmt"># Username + Password do SYS cấp</span></pre></div>
+    </div>
+    <div class="code-block" style="margin-bottom:0">
+      <div class="code-header"><span class="code-fname">Topic & Consumer Group naming — ISC policy</span><span class="code-lang">convention</span></div>
+      <div class="code-body"><pre><span class="t-cmt"># Event queue topics</span>
+<span class="t-cmt"># [env]-[project]-[service]-[job]-queue</span>
+<span class="t-key">dev-ai-hr-cbi-interview-queue</span>
+<span class="t-key">stag-ai-hr-e360-assessment-queue</span>
+<span class="t-key">ai-hr-idp-generation-queue</span>  <span class="t-cmt"># prod: no env prefix</span>
+
+<span class="t-cmt"># Logging topics (3 per project)</span>
+<span class="t-cmt"># [env]-[project]-info/warn/crit-logs</span>
+<span class="t-key">dev-ai-hr-info-logs</span>
+<span class="t-key">dev-ai-hr-warn-logs</span>
+<span class="t-key">dev-ai-hr-crit-logs</span>
+
+<span class="t-cmt"># Consumer group</span>
+<span class="t-cmt"># [env]-[project]-[svc]-[job]-consumer</span>
+<span class="t-key">dev-ai-hr-e360-assessment-consumer</span></pre></div>
+    </div>
+  </div>
+
+  <div class="code-block" style="margin-bottom:16px;">
+    <div class="code-header"><span class="code-fname">internal/platform/messaging/kafka.go — Golang Kafka ISC</span><span class="code-lang">go</span></div>
+    <div class="code-body"><pre><span class="t-cmt">// Producer config chuẩn ISC — SASL SCRAM-SHA-512</span>
+<span class="t-go">func NewProducer</span>(cfg *config.KafkaConfig) (sarama.SyncProducer, error) {
+    c := sarama.NewConfig()
+    c.Net.SASL.Enable   = true
+    c.Net.SASL.User     = cfg.SaslUsername    <span class="t-cmt">// từ Vault</span>
+    c.Net.SASL.Password = cfg.SaslPassword    <span class="t-cmt">// từ Vault</span>
+    c.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA512
+    c.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient {
+        return &XDGSCRAMClient{HashGeneratorFcn: SHA512}
+    }
+    c.Net.SecurityProtocol = sarama.SecurityProtocolSaslPlaintext
+    c.Producer.RequiredAcks = sarama.WaitForLocal
+    c.Producer.Retry.Max    = 3
+    c.Producer.Return.Successes = true
+    c.ClientID = "ai-hr-platform"  <span class="t-cmt">// thêm để SYS monitoring</span>
+
+    <span class="t-go">return</span> sarama.NewSyncProducer(cfg.Brokers, c)
+}
+
+<span class="t-cmt">// Async logger — KHÔNG await, tách khỏi business logic</span>
+<span class="t-go">func</span> (k *KafkaLogger) LogAsync(level, msg string, fields map[string]any) {
+    topic := k.topicFor(level)  <span class="t-cmt">// info/warn/crit</span>
+    payload, _ := json.Marshal(map[string]any{
+        "service": "ai-hr-platform",
+        "env":     k.env,
+        "level":   level,
+        "type":    fields["type"],  <span class="t-cmt">// "error_log" | "response_log"</span>
+        "message": msg,
+        "fields":  fields,
+        "ts":      time.Now().UnixMilli(),
+    })
+    go k.producer.SendMessage(&sarama.ProducerMessage{  <span class="t-cmt">// fire-and-forget</span>
+        Topic: topic,
+        Value: sarama.ByteEncoder(payload),
+    })
+}</pre></div>
+  </div>
+
+  <!-- ── VAULT SECRETS ── -->
+  <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:14px;">Vault ISC — Secrets Management</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+    <div class="code-block" style="margin-bottom:0">
+      <div class="code-header"><span class="code-fname">Vault path — ISC convention</span><span class="code-lang">vault</span></div>
+      <div class="code-body"><pre><span class="t-cmt"># URL: https://isc-secret.fpt.net</span>
+<span class="t-cmt"># Login: OIDC (IAM system)</span>
+
+<span class="t-cmt"># Define secrets tại:</span>
+kv/isc-project/<span class="t-key">ai-hr-platform</span>/app-secret
+
+<span class="t-cmt"># Pod đọc secrets từ file được mount:</span>
+/vault/secrets/configuration.<span class="t-key">dev</span>.json
+/vault/secrets/configuration.<span class="t-key">staging</span>.json
+/vault/secrets/configuration.<span class="t-key">production</span>.json
+
+<span class="t-cmt"># Format JSON trong file:</span>
+{
+  "Database": {
+    "PostgresDSN": "postgres://...",
+    "MongoDSN":    "mongodb://..."
+  },
+  "Redis":   { "Password": "ISC_Redis!123" },
+  "Kafka":   { "Username": "...", "Password": "..." },
+  "AI":      { "ApiKey": "sk-ant-..." },
+  "JWT":     { "Secret": "...", "RefreshSecret": "..." }
+}</pre></div>
+    </div>
+    <div class="code-block" style="margin-bottom:0">
+      <div class="code-header"><span class="code-fname">pkg/config/config.go — đọc Vault file trong pod</span><span class="code-lang">go</span></div>
+      <div class="code-body"><pre><span class="t-go">func Load</span>(env string) (*Config, error) {
+    v := viper.New()
+
+    <span class="t-cmt">// 1. Base config (non-secret)</span>
+    v.SetConfigFile("deploy/configs/config.base.yaml")
+    v.ReadInConfig()
+
+    <span class="t-cmt">// 2. Env override</span>
+    v.SetConfigFile(fmt.Sprintf(
+        "deploy/configs/config.%s.yaml", env))
+    v.MergeInConfig()
+
+    <span class="t-cmt">// 3. Vault secrets — đọc từ file được mount vào pod</span>
+    vaultFile := fmt.Sprintf(
+        "/vault/secrets/configuration.%s.json", env)
+    <span class="t-go">if</span> _, err := os.Stat(vaultFile); err == nil {
+        v.SetConfigFile(vaultFile)
+        v.SetConfigType("json")
+        v.MergeInConfig()
+    }
+
+    <span class="t-cmt">// 4. ENV variables override tất cả (CI/CD inject)</span>
+    v.AutomaticEnv()
+
+    <span class="t-go">var</span> cfg Config
+    <span class="t-go">return</span> &cfg, v.Unmarshal(&cfg)
+}</pre></div>
+    </div>
+  </div>
+
+  <!-- ── OBSERVABILITY ── -->
+  <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:14px;">Observability — OTel → Kibana ISC</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+    <div class="code-block" style="margin-bottom:0">
+      <div class="code-header"><span class="code-fname">OTel endpoints ISC</span><span class="code-lang">config</span></div>
+      <div class="code-body"><pre><span class="t-yaml">observability:</span>
+  service_name: ai-hr-platform
+  otel:
+    traces:  http://otel-collector.fpt.net/v1/traces
+    metrics: http://otel-collector.fpt.net/v1/metrics
+    logs:    http://otel-collector.fpt.net/v1/logs
+  <span class="t-cmt"># View APM trên Kibana:</span>
+  <span class="t-cmt"># http://isc-kibana.fpt.net</span>
+  <span class="t-cmt"># → Observability → APM → Services</span>
+  <span class="t-cmt"># → Traces → Dependencies</span>
+
+<span class="t-cmt"># Service name convention ISC:</span>
+<span class="t-cmt"># {service-name}-{environment}</span>
+<span class="t-cmt"># VD: ai-hr-cbi-development</span>
+<span class="t-cmt">#     ai-hr-e360-staging</span>
+<span class="t-cmt">#     ai-hr-analytics-production</span></pre></div>
+    </div>
+    <div class="code-block" style="margin-bottom:0">
+      <div class="code-header"><span class="code-fname">Kafka Logging vs OTel Tracing — khi nào dùng cái nào</span><span class="code-lang">guide</span></div>
+      <div class="code-body"><pre><span class="t-cmt"># KAFKA LOGGING — ghi log nghiệp vụ vào Kibana</span>
+<span class="t-go">topic</span> dev-ai-hr-info-logs  <span class="t-cmt">← response log, audit log</span>
+<span class="t-go">topic</span> dev-ai-hr-warn-logs  <span class="t-cmt">← cảnh báo, rate limit</span>
+<span class="t-go">topic</span> dev-ai-hr-crit-logs  <span class="t-cmt">← lỗi nghiêm trọng, panic</span>
+
+<span class="t-cmt"># OTel TRACING — trace request qua nhiều service</span>
+<span class="t-go">otel-collector.fpt.net</span>     <span class="t-cmt">← traces, metrics, spans</span>
+
+<span class="t-cmt"># Liên kết 2 hệ thống qua trace_id + span_id:</span>
+<span class="t-cmt"># Log Kafka phải có trường trace_id và span_id</span>
+<span class="t-cmt"># → Kibana: log entry → Investigate → View in APM</span>
+payload := map[string]any{
+    "trace_id": span.SpanContext().TraceID().String(),
+    "span_id":  span.SpanContext().SpanID().String(),
+    "type":     "response_log",
+    ...
+}</pre></div>
+    </div>
+  </div>
+
+  <!-- ── REDIS ISC ── -->
+  <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:14px;">Redis ISC — Sentinel Master-Slave</h3>
+  <div class="code-block" style="margin-bottom:16px;">
+    <div class="code-header"><span class="code-fname">internal/platform/cache/redis.go — go-redis Sentinel</span><span class="code-lang">go</span></div>
+    <div class="code-body"><pre><span class="t-cmt">// Redis ISC — Master-Slave Sentinel failover</span>
+<span class="t-cmt">// Read: ISP-REDIS:36379 · Write: ISP-REDIS:36380</span>
+<span class="t-cmt">// Master name: redis_master</span>
+<span class="t-cmt">// Password: từ Vault /vault/secrets/configuration.[env].json</span>
+
+<span class="t-go">func NewRedisClient</span>(cfg *config.RedisConfig) *redis.Client {
+    <span class="t-go">return</span> redis.NewFailoverClient(&redis.FailoverOptions{
+        MasterName:    "redis_master",
+        SentinelAddrs: []string{
+            "ISP-REDIS:36379",  <span class="t-cmt">// read proxy</span>
+            "ISP-REDIS:36380",  <span class="t-cmt">// write (master)</span>
+        },
+        Password: cfg.Password,  <span class="t-cmt">// từ Vault</span>
+        DB:       cfg.DB,        <span class="t-cmt">// SYS cấp DB riêng cho project</span>
+        PoolSize: 10,
+    })
+}
+
+<span class="t-cmt">// Bắt buộc prefix mọi key theo chuẩn ISC</span>
+<span class="t-cmt">// VD: "aihr_session:{id}", "aihr_report:{scope}:{period}"</span>
+<span class="t-go">const</span> KeyPrefix = "aihr_"
+
+<span class="t-go">func</span> Key(parts ...string) string {
+    <span class="t-go">return</span> KeyPrefix + strings.Join(parts, ":")
+}</pre></div>
+  </div>
+
+  <!-- ── HELM CHART ── -->
+  <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:14px;">Helm Chart Structure</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-fname">deploy/helm/</span><span class="code-lang">helm</span></div>
+    <div class="code-body"><pre><span class="t-dir">deploy/helm/</span>
+<span class="t-pipe">├── Chart.yaml</span>                     <span class="t-cmt"># name: ai-hr-platform</span>
+<span class="t-pipe">├── values.yaml</span>                    <span class="t-cmt"># defaults</span>
+<span class="t-pipe">├── values-dev.yaml</span>
+<span class="t-pipe">├── values-stg.yaml</span>
+<span class="t-pipe">├── values-prod.yaml</span>
+<span class="t-pipe">└── templates/</span>
+<span class="t-pipe">    ├── </span><span class="t-yaml">deployment-api.yaml</span>        <span class="t-cmt"># + Vault sidecar annotation</span>
+<span class="t-pipe">    ├── </span><span class="t-yaml">deployment-worker.yaml</span>
+<span class="t-pipe">    ├── </span><span class="t-yaml">deployment-ws.yaml</span>
+<span class="t-pipe">    ├── </span><span class="t-yaml">deployment-ai-orchestrator.yaml</span>
+<span class="t-pipe">    ├── </span><span class="t-yaml">service.yaml</span>               <span class="t-cmt"># ClusterIP</span>
+<span class="t-pipe">    ├── </span><span class="t-yaml">ingress.yaml</span>               <span class="t-cmt"># Nginx Ingress</span>
+<span class="t-pipe">    ├── </span><span class="t-yaml">configmap.yaml</span>             <span class="t-cmt"># Non-secret config</span>
+<span class="t-pipe">    └── </span><span class="t-yaml">hpa.yaml</span>                   <span class="t-cmt"># Auto-scale</span>
+
+<span class="t-cmt"># Vault sidecar annotation trong deployment:</span>
+<span class="t-yaml">annotations:</span>
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/role: "ai-hr-platform"
+  vault.hashicorp.com/agent-inject-secret-config: "isc-project/ai-hr-platform/app-secret"
+  vault.hashicorp.com/agent-inject-template-config: |
+    {{- with secret "isc-project/ai-hr-platform/app-secret" -}}
+    {{ .Data.data | toJSON }}
+    {{- end -}}
+  vault.hashicorp.com/agent-inject-file-config: "configuration.{{ .Values.env }}.json"</pre></div>
+  </div>
+
+</section>
 
 </main>
 </div>
