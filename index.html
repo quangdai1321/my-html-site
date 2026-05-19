@@ -364,10 +364,10 @@ pre{margin:0;}
     <span class="hero-chip" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.06)">Microservice-Ready</span>
   </div>
   <h1 class="hero-title">AI HR Platform<br><span>Architecture Blueprint</span></h1>
-  <p class="hero-sub">Tài liệu thiết kế kỹ thuật toàn diện — từ tổng thể đến chi tiết source code. Golang backend + ReactJS frontend, Cloud-native trên K8s On-Premise (ISC), scale >5000 users.</p>
+  <p class="hero-sub">Tài liệu thiết kế kỹ thuật toàn diện — từ tổng thể đến chi tiết source code. Golang backend + Next.js 16 frontend, Cloud-native trên K8s On-Premise (ISC), scale >5000 users.</p>
   <div class="hero-badges">
     <span class="badge" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Golang 1.22+</span>
-    <span class="badge" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">ReactJS + TypeScript</span>
+    <span class="badge" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">Next.js 16 LTS</span>
     <span class="badge" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.08)">PostgreSQL + MongoDB + Redis</span>
     <span class="badge" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">Kafka + K8s</span>
     <span class="badge" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.08)">K8s On-Premise</span>
@@ -387,7 +387,7 @@ pre{margin:0;}
   <div class="diagram-wrap">
     <div class="diagram-header">
       <span class="diagram-title">4-Layer Architecture — AI HR Platform</span>
-      <span style="font-size:9px;color:var(--muted)">Golang + ReactJS · K8s On-Premise · Harbor Registry</span>
+      <span style="font-size:9px;color:var(--muted)">Golang + Next.js 16 · K8s On-Premise · Harbor Registry</span>
     </div>
     <div class="diagram-body">
       <div class="layers">
@@ -397,12 +397,12 @@ pre{margin:0;}
           <div class="layer-label">CLIENT</div>
           <div class="layer-cells">
             <div class="cell" style="background:var(--blue-g);border-color:rgba(79,143,255,.3)">
-              <div class="cell-name">React Web App</div>
+              <div class="cell-name">Next.js 16 App</div>
               <div class="cell-sub">Dashboard · Forms · Reports</div>
             </div>
             <div class="cell" style="background:var(--blue-g);border-color:rgba(79,143,255,.3)">
               <div class="cell-name">Mobile / PWA</div>
-              <div class="cell-sub">React Native · Responsive</div>
+              <div class="cell-sub">Next.js PWA · Responsive</div>
             </div>
             <div class="cell" style="background:var(--blue-g);border-color:rgba(79,143,255,.3)">
               <div class="cell-name">Admin Portal</div>
@@ -574,7 +574,7 @@ pre{margin:0;}
 
         <!-- ── COLUMN LEFT: Client + Gateway ── -->
         <rect x="10" y="60" width="118" height="42" rx="7" fill="rgba(79,143,255,.1)" stroke="rgba(79,143,255,.4)" stroke-width="1"/>
-        <text x="69" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">React Client</text>
+        <text x="69" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Next.js 16 Client</text>
         <text x="69" y="91" text-anchor="middle" font-size="9" fill="#5a5f7a">Web · Mobile · Admin</text>
 
         <!-- Arrow: Client → Gateway -->
@@ -769,7 +769,7 @@ pre{margin:0;}
           <div class="flow-content">
             <div class="flow-title">HR tạo phỏng vấn</div>
             <div class="flow-nodes">
-              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">React Admin Portal</span>
+              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Next.js Admin Portal</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
               <span class="flow-node" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">POST /api/cbi/sessions</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
@@ -789,7 +789,7 @@ pre{margin:0;}
           <div class="flow-content">
             <div class="flow-title">Nhân viên thực hiện phỏng vấn</div>
             <div class="flow-nodes">
-              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">React UI (chat-style)</span>
+              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Next.js UI (chat-style)</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
               <span class="flow-node" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">WebSocket / REST</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
@@ -868,7 +868,7 @@ pre{margin:0;}
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
               <span class="flow-node" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">Redis: pre-built reports</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
-              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">React Dashboard (RBAC)</span>
+              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Next.js Dashboard (RBAC)</span>
             </div>
             <div class="flow-desc">Analytics aggregate theo scope (company/block/branch). Cache vào Redis với TTL 1h. BGĐ xem toàn công ty, Khối xem đơn vị mình, Chi nhánh chỉ xem nhân viên trực thuộc. Talent pool tự động cập nhật.</div>
           </div>
@@ -899,7 +899,7 @@ pre{margin:0;}
     <span class="section-tag" style="color:var(--amber);background:rgba(245,166,35,.1)">Source Structure</span>
   </div>
   <h2 class="section-title">Cấu trúc source code</h2>
-  <p class="section-desc">Backend Golang Modular Monolith + Frontend ReactJS Feature-based. Mỗi internal module chứa đủ 4 layers. pkg/ chỉ chứa shared infra — zero business logic.</p>
+  <p class="section-desc">Backend Golang Modular Monolith + Frontend Next.js 16 App Router. Mỗi internal module chứa đủ 4 layers. pkg/ chỉ chứa shared infra — zero business logic.</p>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
 
@@ -909,8 +909,8 @@ pre{margin:0;}
         <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(31,212,200,.1);border:1px solid rgba(31,212,200,.2);margin-right:8px;">Backend</span>Golang Monolith
       </h3>
       <div class="code-block">
-        <div class="code-header"><span class="code-fname">cms-platform/</span><span class="code-lang">golang</span></div>
-        <div class="code-body"><pre><span class="t-dir">cms-platform/</span>
+        <div class="code-header"><span class="code-fname">fpt-ai-hr-architecture/</span><span class="code-lang">golang</span></div>
+        <div class="code-body"><pre><span class="t-dir">fpt-ai-hr-architecture/</span>
 <span class="t-pipe">├── cmd/</span>                       <span class="t-cmt"># Entry points</span>
 <span class="t-pipe">│   ├── api/</span><span class="t-go">main.go</span>           <span class="t-cmt"># HTTP monolith</span>
 <span class="t-pipe">│   ├── worker/</span><span class="t-go">main.go</span>        <span class="t-cmt"># Background jobs</span>
@@ -926,7 +926,7 @@ pre{margin:0;}
 <span class="t-pipe">│   │   └── </span><span class="t-go">observability/</span>
 <span class="t-pipe">│   │</span>
 <span class="t-pipe">│   ├── </span><span class="t-dir">idm/</span>                   <span class="t-cmt"># Identity + RBAC</span>
-<span class="t-pipe">│   │   ├── </span><span class="t-layer">handler/</span>           <span class="t-cmt"># HTTP · Gin</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-layer">handler/</span>           <span class="t-cmt"># HTTP · Chi</span>
 <span class="t-pipe">│   │   ├── </span><span class="t-layer">service/</span>           <span class="t-cmt"># Business logic</span>
 <span class="t-pipe">│   │   ├── </span><span class="t-layer">repository/</span>        <span class="t-cmt"># sqlc queries</span>
 <span class="t-pipe">│   │   ├── </span><span class="t-layer">domain/</span>            <span class="t-cmt"># Structs + interfaces</span>
@@ -980,37 +980,41 @@ pre{margin:0;}
     <!-- FRONTEND -->
     <div>
       <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap-8px;">
-        <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(79,143,255,.1);border:1px solid rgba(79,143,255,.2);margin-right:8px;">Frontend</span>ReactJS Feature-based
-      </h3>
-      <div class="code-block">
-        <div class="code-header"><span class="code-fname">frontend/</span><span class="code-lang">typescript</span></div>
+        <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(79,143,255,.1);border:1px solid rgba(79,143,255,.2);margin-right:8px;">Frontend</span>Next.js 16<div class="code-block">
+        <div class="code-header"><span class="code-fname">frontend/ — Next.js 16 App Router</span><span class="code-lang">typescript</span></div>
         <div class="code-body"><pre><span class="t-dir">frontend/</span>
 <span class="t-pipe">├── src/</span>
-<span class="t-pipe">│   ├── </span><span class="t-dir">app/</span>                   <span class="t-cmt"># App-level setup</span>
-<span class="t-pipe">│   │   ├── </span><span class="t-ts">router.tsx</span>         <span class="t-cmt"># React Router v6 lazy</span>
-<span class="t-pipe">│   │   ├── </span><span class="t-ts">providers.tsx</span>      <span class="t-cmt"># QueryClient, AuthProvider</span>
-<span class="t-pipe">│   │   └── layout/</span>
-<span class="t-pipe">│   │       ├── </span><span class="t-ts">MainLayout.tsx</span>
-<span class="t-pipe">│   │       └── </span><span class="t-ts">AuthLayout.tsx</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">app/</span>                        <span class="t-cmt"># Next.js App Router — file-based routing</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-ts">layout.tsx</span>              <span class="t-cmt"># Root layout · Providers · fonts</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-ts">page.tsx</span>                <span class="t-cmt"># Home redirect</span>
+<span class="t-pipe">│   │   ├── globals.css             </span><span class="t-cmt"># Tailwind v4 base</span>
+<span class="t-pipe">│   │   ├── (auth)/                 </span><span class="t-cmt"># Route group — không ảnh hưởng URL</span>
+<span class="t-pipe">│   │   │   ├── login/</span><span class="t-ts">page.tsx</span>
+<span class="t-pipe">│   │   │   └── </span><span class="t-ts">layout.tsx</span>
+<span class="t-pipe">│   │   └── (dashboard)/            </span><span class="t-cmt"># Route group — authenticated</span>
+<span class="t-pipe">│   │       ├── </span><span class="t-ts">layout.tsx</span>          <span class="t-cmt"># Sidebar + header wrapper</span>
+<span class="t-pipe">│   │       ├── dashboard/</span><span class="t-ts">page.tsx</span>
+<span class="t-pipe">│   │       ├── cbi/</span><span class="t-ts">page.tsx</span>        <span class="t-cmt"># AI Interview</span>
+<span class="t-pipe">│   │       │   └── [id]/</span><span class="t-ts">page.tsx</span>
+<span class="t-pipe">│   │       ├── e360/</span><span class="t-ts">page.tsx</span>       <span class="t-cmt"># Assessment 360</span>
+<span class="t-pipe">│   │       ├── profile/</span><span class="t-ts">page.tsx</span>
+<span class="t-pipe">│   │       ├── talent/</span><span class="t-ts">page.tsx</span>
+<span class="t-pipe">│   │       ├── idp/</span><span class="t-ts">page.tsx</span>
+<span class="t-pipe">│   │       ├── analytics/</span><span class="t-ts">page.tsx</span>
+<span class="t-pipe">│   │       └── master-data/</span><span class="t-ts">page.tsx</span>
 <span class="t-pipe">│   │</span>
-<span class="t-pipe">│   ├── </span><span class="t-dir">features/</span>              <span class="t-cmt"># 1 folder = 1 bounded ctx</span>
-<span class="t-pipe">│   │   ├── dashboard/</span>
-<span class="t-pipe">│   │   │   ├── api/           </span><span class="t-cmt"># TanStack Query hooks</span>
-<span class="t-pipe">│   │   │   ├── components/    </span><span class="t-cmt"># Feature-local UI</span>
-<span class="t-pipe">│   │   │   ├── pages/         </span><span class="t-cmt"># Route pages</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">features/</span>                   <span class="t-cmt"># Feature-based modules</span>
+<span class="t-pipe">│   │   ├── cbi/</span>
+<span class="t-pipe">│   │   │   ├── api/                </span><span class="t-cmt"># TanStack Query hooks</span>
+<span class="t-pipe">│   │   │   │   └── </span><span class="t-ts">use-interviews.ts</span>
+<span class="t-pipe">│   │   │   ├── components/         </span><span class="t-cmt"># Feature-local UI</span>
 <span class="t-pipe">│   │   │   └── </span><span class="t-ts">types.ts</span>
-<span class="t-pipe">│   │   ├── cbi/               </span><span class="t-cmt"># AI Interview UI</span>
-<span class="t-pipe">│   │   │   ├── api/components/pages/types.ts</span>
-<span class="t-pipe">│   │   ├── e360/              </span><span class="t-cmt"># 360 Assessment forms</span>
-<span class="t-pipe">│   │   ├── profile/</span>
-<span class="t-pipe">│   │   ├── talent/</span>
-<span class="t-pipe">│   │   ├── master-data/</span>
-<span class="t-pipe">│   │   ├── ai-qa/</span>
-<span class="t-pipe">│   │   └── analytics/</span>
+<span class="t-pipe">│   │   ├── e360/ ├── profile/ ├── talent/ ├── idp/ ├── analytics/</span>
+<span class="t-pipe">│   │   └── dashboard/</span>
 <span class="t-pipe">│   │</span>
-<span class="t-pipe">│   └── </span><span class="t-dir">shared/</span>                <span class="t-cmt"># Cross-feature</span>
+<span class="t-pipe">│   └── </span><span class="t-dir">shared/</span>                     <span class="t-cmt"># Cross-feature</span>
 <span class="t-pipe">│       ├── components/</span>
-<span class="t-pipe">│       │   ├── ui/            </span><span class="t-cmt"># Button, Modal, Table</span>
+<span class="t-pipe">│       │   ├── ui/                 </span><span class="t-cmt"># shadcn/ui v2 components</span>
 <span class="t-pipe">│       │   ├── </span><span class="t-ts">ErrorBoundary.tsx</span>
 <span class="t-pipe">│       │   ├── </span><span class="t-ts">QueryError.tsx</span>
 <span class="t-pipe">│       │   └── </span><span class="t-ts">PermissionGate.tsx</span>
@@ -1018,27 +1022,55 @@ pre{margin:0;}
 <span class="t-pipe">│       │   ├── </span><span class="t-ts">useAuth.ts</span>
 <span class="t-pipe">│       │   ├── </span><span class="t-ts">usePermission.ts</span>
 <span class="t-pipe">│       │   └── </span><span class="t-ts">useWebSocket.ts</span>
-<span class="t-pipe">│       ├── lib/</span>
-<span class="t-pipe">│       │   ├── </span><span class="t-ts">api-client.ts</span>      <span class="t-cmt"># axios + interceptors</span>
-<span class="t-pipe">│       │   ├── </span><span class="t-ts">error-handler.ts</span>   <span class="t-cmt"># error code → msg VN</span>
-<span class="t-pipe">│       │   └── </span><span class="t-ts">ws-client.ts</span>
-<span class="t-pipe">│       └── types/</span>
-<span class="t-pipe">│           ├── </span><span class="t-ts">api.ts</span>
-<span class="t-pipe">│           └── </span><span class="t-ts">auth.ts</span>
+<span class="t-pipe">│       └── lib/</span>
+<span class="t-pipe">│           ├── </span><span class="t-ts">api-client.ts</span>       <span class="t-cmt"># axios instance + interceptors</span>
+<span class="t-pipe">│           ├── </span><span class="t-ts">query-client.ts</span>     <span class="t-cmt"># TanStack QueryClient config</span>
+<span class="t-pipe">│           └── </span><span class="t-ts">error-handler.ts</span>    <span class="t-cmt"># error code → message VN</span>
 <span class="t-pipe">│</span>
-<span class="t-pipe">├── </span><span class="t-yaml">.env.development</span>
-<span class="t-pipe">├── </span><span class="t-yaml">.env.staging</span>
-<span class="t-pipe">├── </span><span class="t-yaml">.env.production</span>
-<span class="t-pipe">├── </span><span class="t-yaml">.env.example</span>             <span class="t-cmt"># Commit vào repo</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.local</span>                      <span class="t-cmt"># Local secrets — KHÔNG commit</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.example</span>                    <span class="t-cmt"># Commit vào repo</span>
+<span class="t-pipe">├── </span><span class="t-ts">next.config.ts</span>                  <span class="t-cmt"># reactCompiler: true · Turbopack</span>
+<span class="t-pipe">├── </span><span class="t-yaml">tailwind.config.ts</span>              <span class="t-cmt"># Tailwind v4 (stable Next.js 16)</span>
+<span class="t-pipe">├── tsconfig.json</span>
 <span class="t-pipe">├── </span><span class="t-yaml">eslint.config.ts</span>
-<span class="t-pipe">├── vite.config.ts</span>
 <span class="t-pipe">└── package.json</span></pre></div>
+      </div></span></pre></div>
       </div>
 
       <!-- Microservice split path -->
       <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--amber);margin:16px 0 12px;">Migration → Microservice</h3>
       <div class="code-block">
-        <div class="code-header"><span class="code-fname">Thứ tự tách — khi nào tách</span><span class="code-lang">strategy</span></div>
+        <div class="code-header"><span class="code-fname">Next.js 16 — Init command &amp; key config</span><span class="code-lang">bash</span></div>
+        <div class="code-body"><pre><span class="t-cmt"># Khởi tạo project Next.js 16</span>
+<span class="t-key">npx create-next-app@latest frontend</span>     --typescript --tailwind --eslint     --app --turbopack --yes
+
+<span class="t-cmt"># Cài thêm dependencies</span>
+<span class="t-go">cd frontend</span>
+npm install @tanstack/react-query@5 @tanstack/react-query-devtools@5
+npm install zustand@5 axios@1.7 clsx class-variance-authority lucide-react
+
+<span class="t-cmt"># shadcn/ui v2</span>
+<span class="t-key">npx shadcn@latest init</span>
+
+<span class="t-cmt"># next.config.ts — cấu hình bắt buộc</span>
+<span class="t-yaml">reactCompiler: true</span>    <span class="t-cmt"># stable Next.js 16 — tự memo components</span>
+<span class="t-yaml">turbopack: true</span>        <span class="t-cmt"># default bundler — 5-10x faster build</span>
+<span class="t-yaml">rewrites()</span>             <span class="t-cmt"># proxy /api/v1/* → Go backend</span>
+
+<span class="t-cmt"># .env.local (local — KHÔNG commit)</span>
+<span class="t-ts">NEXT_PUBLIC_API_URL</span>=http://localhost:8080
+<span class="t-ts">NEXT_PUBLIC_WS_URL</span>=ws://localhost:8080
+<span class="t-ts">API_URL</span>=http://localhost:8080   <span class="t-cmt"># server-side only</span>
+
+<span class="t-cmt"># Rule bắt buộc Next.js 16</span>
+<span class="t-key">Server Component</span>  = default → fetch trực tiếp, không useEffect
+<span class="t-key">"use client"</span>      = chỉ thêm khi cần: state, event, browser API
+<span class="t-key">TanStack Query</span>    = server state trong Client Component
+<span class="t-key">Zustand</span>           = client-only state (auth, UI)</pre></div>
+      </div>
+
+      <div class="code-block" style="margin-top:12px;">
+        <div class="code-header"><span class="code-fname">Thứ tự tách Backend → Microservice</span><span class="code-lang">strategy</span></div>
         <div class="code-body"><pre><span class="t-cmt"># Bước 1 — Tách sớm nhất (AI cost cao)</span>
 <span class="t-key">ai-orchestrator</span>  <span class="t-cmt">→ đã có proto sẵn, chỉ deploy riêng</span>
 
@@ -1137,7 +1169,7 @@ pre{margin:0;}
           <span class=&quot;text-[10px] px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 font-medium&quot;>ERD 3D — Full Schema</span>
           <span id=&quot;table-count-badge&quot; class=&quot;text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 font-medium&quot;>20 Tables</span>
         </h1>
-        <p class=&quot;text-[10px] text-slate-400&quot;>PostgreSQL · Modular Monolith · Microservice-Ready · Golang + ReactJS</p>
+        <p class=&quot;text-[10px] text-slate-400&quot;>PostgreSQL · Modular Monolith · Microservice-Ready · Golang + Next.js 16</p>
       </div>
     </div>
     <div class=&quot;flex items-center gap-3&quot;>
