@@ -346,7 +346,7 @@ pre{margin:0;}
       <span class="nav-num" style="background:rgba(45,217,143,.15);color:var(--green)">7</span>Infrastructure & CI/CD
     </a>
     <a class="nav-item" href="#glossary">
-      <span class="nav-num" style="background:rgba(232,121,249,.15);color:var(--pink)">6</span>Glossary — 20 Bảng
+      <span class="nav-num" style="background:rgba(232,121,249,.15);color:var(--pink)">6</span>Glossary — 17 Bảng
     </a>
     <a class="nav-item" href="#source">
       <span class="nav-num" style="background:rgba(245,166,35,.15);color:var(--amber)">4</span>Source Structure
@@ -364,10 +364,10 @@ pre{margin:0;}
     <span class="hero-chip" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.06)">Microservice-Ready</span>
   </div>
   <h1 class="hero-title">AI HR Platform<br><span>Architecture Blueprint</span></h1>
-  <p class="hero-sub">Tài liệu thiết kế kỹ thuật toàn diện — từ tổng thể đến chi tiết source code. Golang backend + Next.js 16 frontend, Cloud-native trên K8s On-Premise (ISC), scale >5000 users.</p>
+  <p class="hero-sub">Tài liệu thiết kế kỹ thuật toàn diện — từ tổng thể đến chi tiết source code. Go 1.24 backend + ReactJS frontend, Cloud-native trên K8s On-Premise (ISC), scale >5.000 nhân viên FPT Telecom.</p>
   <div class="hero-badges">
-    <span class="badge" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Golang 1.22+</span>
-    <span class="badge" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">Next.js 16 LTS</span>
+    <span class="badge" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Go 1.24</span>
+    <span class="badge" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">ReactJS + TypeScript</span>
     <span class="badge" style="color:var(--purple);border-color:rgba(157,126,255,.25);background:rgba(157,126,255,.08)">PostgreSQL + MongoDB + Redis</span>
     <span class="badge" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">Kafka + K8s</span>
     <span class="badge" style="color:var(--green);border-color:rgba(45,217,143,.25);background:rgba(45,217,143,.08)">K8s On-Premise</span>
@@ -387,7 +387,7 @@ pre{margin:0;}
   <div class="diagram-wrap">
     <div class="diagram-header">
       <span class="diagram-title">4-Layer Architecture — AI HR Platform</span>
-      <span style="font-size:9px;color:var(--muted)">Golang + Next.js 16 · K8s On-Premise · Harbor Registry</span>
+      <span style="font-size:9px;color:var(--muted)">Golang + ReactJS · K8s On-Premise · Harbor Registry</span>
     </div>
     <div class="diagram-body">
       <div class="layers">
@@ -397,12 +397,12 @@ pre{margin:0;}
           <div class="layer-label">CLIENT</div>
           <div class="layer-cells">
             <div class="cell" style="background:var(--blue-g);border-color:rgba(79,143,255,.3)">
-              <div class="cell-name">Next.js 16 App</div>
+              <div class="cell-name">React Web App</div>
               <div class="cell-sub">Dashboard · Forms · Reports</div>
             </div>
             <div class="cell" style="background:var(--blue-g);border-color:rgba(79,143,255,.3)">
               <div class="cell-name">Mobile / PWA</div>
-              <div class="cell-sub">Next.js PWA · Responsive</div>
+              <div class="cell-sub">React Native · Responsive</div>
             </div>
             <div class="cell" style="background:var(--blue-g);border-color:rgba(79,143,255,.3)">
               <div class="cell-name">Admin Portal</div>
@@ -497,7 +497,7 @@ pre{margin:0;}
           <div class="layer-cells">
             <div class="cell" style="background:var(--amber-g);border-color:rgba(245,166,35,.3);flex:2">
               <div class="cell-name">PostgreSQL</div>
-              <div class="cell-sub">Core relational data · 20 tables · ACID</div>
+              <div class="cell-sub">Core relational data · 17 bảng · 244 fields</div>
             </div>
             <div class="cell" style="background:var(--amber-g);border-color:rgba(245,166,35,.3)">
               <div class="cell-name">MongoDB</div>
@@ -574,7 +574,7 @@ pre{margin:0;}
 
         <!-- ── COLUMN LEFT: Client + Gateway ── -->
         <rect x="10" y="60" width="118" height="42" rx="7" fill="rgba(79,143,255,.1)" stroke="rgba(79,143,255,.4)" stroke-width="1"/>
-        <text x="69" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">Next.js 16 Client</text>
+        <text x="69" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">React Client</text>
         <text x="69" y="91" text-anchor="middle" font-size="9" fill="#5a5f7a">Web · Mobile · Admin</text>
 
         <!-- Arrow: Client → Gateway -->
@@ -769,7 +769,7 @@ pre{margin:0;}
           <div class="flow-content">
             <div class="flow-title">HR tạo phỏng vấn</div>
             <div class="flow-nodes">
-              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Next.js Admin Portal</span>
+              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">React Admin Portal</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
               <span class="flow-node" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">POST /api/cbi/sessions</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
@@ -789,7 +789,7 @@ pre{margin:0;}
           <div class="flow-content">
             <div class="flow-title">Nhân viên thực hiện phỏng vấn</div>
             <div class="flow-nodes">
-              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Next.js UI (chat-style)</span>
+              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">React UI (chat-style)</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
               <span class="flow-node" style="color:var(--cyan);border-color:rgba(31,212,200,.25);background:rgba(31,212,200,.06)">WebSocket / REST</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
@@ -868,7 +868,7 @@ pre{margin:0;}
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
               <span class="flow-node" style="color:var(--amber);border-color:rgba(245,166,35,.25);background:rgba(245,166,35,.08)">Redis: pre-built reports</span>
               <span style="font-size:10px;color:var(--muted);align-self:center;">→</span>
-              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">Next.js Dashboard (RBAC)</span>
+              <span class="flow-node" style="color:var(--blue);border-color:rgba(79,143,255,.25);background:rgba(79,143,255,.08)">React Dashboard (RBAC)</span>
             </div>
             <div class="flow-desc">Analytics aggregate theo scope (company/block/branch). Cache vào Redis với TTL 1h. BGĐ xem toàn công ty, Khối xem đơn vị mình, Chi nhánh chỉ xem nhân viên trực thuộc. Talent pool tự động cập nhật.</div>
           </div>
@@ -899,7 +899,7 @@ pre{margin:0;}
     <span class="section-tag" style="color:var(--amber);background:rgba(245,166,35,.1)">Source Structure</span>
   </div>
   <h2 class="section-title">Cấu trúc source code</h2>
-  <p class="section-desc">Backend Golang Modular Monolith + Frontend Next.js 16 App Router. Mỗi internal module chứa đủ 4 layers. pkg/ chỉ chứa shared infra — zero business logic.</p>
+  <p class="section-desc">Backend Golang Modular Monolith + Frontend ReactJS Feature-based. Mỗi internal module chứa đủ 4 layers. pkg/ chỉ chứa shared infra — zero business logic.</p>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
 
@@ -909,8 +909,8 @@ pre{margin:0;}
         <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(31,212,200,.1);border:1px solid rgba(31,212,200,.2);margin-right:8px;">Backend</span>Golang Monolith
       </h3>
       <div class="code-block">
-        <div class="code-header"><span class="code-fname">fpt-ai-hr-architecture/</span><span class="code-lang">golang</span></div>
-        <div class="code-body"><pre><span class="t-dir">fpt-ai-hr-architecture/</span>
+        <div class="code-header"><span class="code-fname">cms-platform/</span><span class="code-lang">golang</span></div>
+        <div class="code-body"><pre><span class="t-dir">cms-platform/</span>
 <span class="t-pipe">├── cmd/</span>                       <span class="t-cmt"># Entry points</span>
 <span class="t-pipe">│   ├── api/</span><span class="t-go">main.go</span>           <span class="t-cmt"># HTTP monolith</span>
 <span class="t-pipe">│   ├── worker/</span><span class="t-go">main.go</span>        <span class="t-cmt"># Background jobs</span>
@@ -926,7 +926,7 @@ pre{margin:0;}
 <span class="t-pipe">│   │   └── </span><span class="t-go">observability/</span>
 <span class="t-pipe">│   │</span>
 <span class="t-pipe">│   ├── </span><span class="t-dir">idm/</span>                   <span class="t-cmt"># Identity + RBAC</span>
-<span class="t-pipe">│   │   ├── </span><span class="t-layer">handler/</span>           <span class="t-cmt"># HTTP · Chi</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-layer">handler/</span>           <span class="t-cmt"># HTTP · Gin</span>
 <span class="t-pipe">│   │   ├── </span><span class="t-layer">service/</span>           <span class="t-cmt"># Business logic</span>
 <span class="t-pipe">│   │   ├── </span><span class="t-layer">repository/</span>        <span class="t-cmt"># sqlc queries</span>
 <span class="t-pipe">│   │   ├── </span><span class="t-layer">domain/</span>            <span class="t-cmt"># Structs + interfaces</span>
@@ -980,43 +980,37 @@ pre{margin:0;}
     <!-- FRONTEND -->
     <div>
       <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap-8px;">
-        <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(79,143,255,.1);border:1px solid rgba(79,143,255,.2);margin-right:8px;">Frontend</span>Next.js 16 — App Router
+        <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(79,143,255,.1);border:1px solid rgba(79,143,255,.2);margin-right:8px;">Frontend</span>ReactJS Feature-based
       </h3>
       <div class="code-block">
-        <div class="code-header"><span class="code-fname">frontend/ — Next.js 16 App Router</span><span class="code-lang">typescript</span></div>
+        <div class="code-header"><span class="code-fname">frontend/</span><span class="code-lang">typescript</span></div>
         <div class="code-body"><pre><span class="t-dir">frontend/</span>
 <span class="t-pipe">├── src/</span>
-<span class="t-pipe">│   ├── </span><span class="t-dir">app/</span>                        <span class="t-cmt"># Next.js App Router — file-based routing</span>
-<span class="t-pipe">│   │   ├── </span><span class="t-ts">layout.tsx</span>              <span class="t-cmt"># Root layout · Providers · fonts</span>
-<span class="t-pipe">│   │   ├── </span><span class="t-ts">page.tsx</span>                <span class="t-cmt"># Home redirect</span>
-<span class="t-pipe">│   │   ├── globals.css             </span><span class="t-cmt"># Tailwind v4 base</span>
-<span class="t-pipe">│   │   ├── (auth)/                 </span><span class="t-cmt"># Route group — không ảnh hưởng URL</span>
-<span class="t-pipe">│   │   │   ├── login/</span><span class="t-ts">page.tsx</span>
-<span class="t-pipe">│   │   │   └── </span><span class="t-ts">layout.tsx</span>
-<span class="t-pipe">│   │   └── (dashboard)/            </span><span class="t-cmt"># Route group — authenticated</span>
-<span class="t-pipe">│   │       ├── </span><span class="t-ts">layout.tsx</span>          <span class="t-cmt"># Sidebar + header wrapper</span>
-<span class="t-pipe">│   │       ├── dashboard/</span><span class="t-ts">page.tsx</span>
-<span class="t-pipe">│   │       ├── cbi/</span><span class="t-ts">page.tsx</span>        <span class="t-cmt"># AI Interview</span>
-<span class="t-pipe">│   │       │   └── [id]/</span><span class="t-ts">page.tsx</span>
-<span class="t-pipe">│   │       ├── e360/</span><span class="t-ts">page.tsx</span>       <span class="t-cmt"># Assessment 360</span>
-<span class="t-pipe">│   │       ├── profile/</span><span class="t-ts">page.tsx</span>
-<span class="t-pipe">│   │       ├── talent/</span><span class="t-ts">page.tsx</span>
-<span class="t-pipe">│   │       ├── idp/</span><span class="t-ts">page.tsx</span>
-<span class="t-pipe">│   │       ├── analytics/</span><span class="t-ts">page.tsx</span>
-<span class="t-pipe">│   │       └── master-data/</span><span class="t-ts">page.tsx</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">app/</span>                   <span class="t-cmt"># App-level setup</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-ts">router.tsx</span>         <span class="t-cmt"># React Router v6 lazy</span>
+<span class="t-pipe">│   │   ├── </span><span class="t-ts">providers.tsx</span>      <span class="t-cmt"># QueryClient, AuthProvider</span>
+<span class="t-pipe">│   │   └── layout/</span>
+<span class="t-pipe">│   │       ├── </span><span class="t-ts">MainLayout.tsx</span>
+<span class="t-pipe">│   │       └── </span><span class="t-ts">AuthLayout.tsx</span>
 <span class="t-pipe">│   │</span>
-<span class="t-pipe">│   ├── </span><span class="t-dir">features/</span>                   <span class="t-cmt"># Feature-based modules</span>
-<span class="t-pipe">│   │   ├── cbi/</span>
-<span class="t-pipe">│   │   │   ├── api/                </span><span class="t-cmt"># TanStack Query hooks</span>
-<span class="t-pipe">│   │   │   │   └── </span><span class="t-ts">use-interviews.ts</span>
-<span class="t-pipe">│   │   │   ├── components/         </span><span class="t-cmt"># Feature-local UI</span>
+<span class="t-pipe">│   ├── </span><span class="t-dir">features/</span>              <span class="t-cmt"># 1 folder = 1 bounded ctx</span>
+<span class="t-pipe">│   │   ├── dashboard/</span>
+<span class="t-pipe">│   │   │   ├── api/           </span><span class="t-cmt"># TanStack Query hooks</span>
+<span class="t-pipe">│   │   │   ├── components/    </span><span class="t-cmt"># Feature-local UI</span>
+<span class="t-pipe">│   │   │   ├── pages/         </span><span class="t-cmt"># Route pages</span>
 <span class="t-pipe">│   │   │   └── </span><span class="t-ts">types.ts</span>
-<span class="t-pipe">│   │   ├── e360/ ├── profile/ ├── talent/ ├── idp/ ├── analytics/</span>
-<span class="t-pipe">│   │   └── dashboard/</span>
+<span class="t-pipe">│   │   ├── cbi/               </span><span class="t-cmt"># AI Interview UI</span>
+<span class="t-pipe">│   │   │   ├── api/components/pages/types.ts</span>
+<span class="t-pipe">│   │   ├── e360/              </span><span class="t-cmt"># 360 Assessment forms</span>
+<span class="t-pipe">│   │   ├── profile/</span>
+<span class="t-pipe">│   │   ├── talent/</span>
+<span class="t-pipe">│   │   ├── master-data/</span>
+<span class="t-pipe">│   │   ├── ai-qa/</span>
+<span class="t-pipe">│   │   └── analytics/</span>
 <span class="t-pipe">│   │</span>
-<span class="t-pipe">│   └── </span><span class="t-dir">shared/</span>                     <span class="t-cmt"># Cross-feature</span>
+<span class="t-pipe">│   └── </span><span class="t-dir">shared/</span>                <span class="t-cmt"># Cross-feature</span>
 <span class="t-pipe">│       ├── components/</span>
-<span class="t-pipe">│       │   ├── ui/                 </span><span class="t-cmt"># shadcn/ui v2 components</span>
+<span class="t-pipe">│       │   ├── ui/            </span><span class="t-cmt"># Button, Modal, Table</span>
 <span class="t-pipe">│       │   ├── </span><span class="t-ts">ErrorBoundary.tsx</span>
 <span class="t-pipe">│       │   ├── </span><span class="t-ts">QueryError.tsx</span>
 <span class="t-pipe">│       │   └── </span><span class="t-ts">PermissionGate.tsx</span>
@@ -1024,55 +1018,27 @@ pre{margin:0;}
 <span class="t-pipe">│       │   ├── </span><span class="t-ts">useAuth.ts</span>
 <span class="t-pipe">│       │   ├── </span><span class="t-ts">usePermission.ts</span>
 <span class="t-pipe">│       │   └── </span><span class="t-ts">useWebSocket.ts</span>
-<span class="t-pipe">│       └── lib/</span>
-<span class="t-pipe">│           ├── </span><span class="t-ts">api-client.ts</span>       <span class="t-cmt"># axios instance + interceptors</span>
-<span class="t-pipe">│           ├── </span><span class="t-ts">query-client.ts</span>     <span class="t-cmt"># TanStack QueryClient config</span>
-<span class="t-pipe">│           └── </span><span class="t-ts">error-handler.ts</span>    <span class="t-cmt"># error code → message VN</span>
+<span class="t-pipe">│       ├── lib/</span>
+<span class="t-pipe">│       │   ├── </span><span class="t-ts">api-client.ts</span>      <span class="t-cmt"># axios + interceptors</span>
+<span class="t-pipe">│       │   ├── </span><span class="t-ts">error-handler.ts</span>   <span class="t-cmt"># error code → msg VN</span>
+<span class="t-pipe">│       │   └── </span><span class="t-ts">ws-client.ts</span>
+<span class="t-pipe">│       └── types/</span>
+<span class="t-pipe">│           ├── </span><span class="t-ts">api.ts</span>
+<span class="t-pipe">│           └── </span><span class="t-ts">auth.ts</span>
 <span class="t-pipe">│</span>
-<span class="t-pipe">├── </span><span class="t-yaml">.env.local</span>                      <span class="t-cmt"># Local secrets — KHÔNG commit</span>
-<span class="t-pipe">├── </span><span class="t-yaml">.env.example</span>                    <span class="t-cmt"># Commit vào repo</span>
-<span class="t-pipe">├── </span><span class="t-ts">next.config.ts</span>                  <span class="t-cmt"># reactCompiler: true · Turbopack</span>
-<span class="t-pipe">├── </span><span class="t-yaml">tailwind.config.ts</span>              <span class="t-cmt"># Tailwind v4 (stable Next.js 16)</span>
-<span class="t-pipe">├── tsconfig.json</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.development</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.staging</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.production</span>
+<span class="t-pipe">├── </span><span class="t-yaml">.env.example</span>             <span class="t-cmt"># Commit vào repo</span>
 <span class="t-pipe">├── </span><span class="t-yaml">eslint.config.ts</span>
+<span class="t-pipe">├── vite.config.ts</span>
 <span class="t-pipe">└── package.json</span></pre></div>
-      </div></span></pre></div>
       </div>
 
       <!-- Microservice split path -->
       <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--amber);margin:16px 0 12px;">Migration → Microservice</h3>
       <div class="code-block">
-        <div class="code-header"><span class="code-fname">Next.js 16 — Init command &amp; key config</span><span class="code-lang">bash</span></div>
-        <div class="code-body"><pre><span class="t-cmt"># Khởi tạo project Next.js 16</span>
-<span class="t-key">npx create-next-app@latest frontend</span>     --typescript --tailwind --eslint     --app --turbopack --yes
-
-<span class="t-cmt"># Cài thêm dependencies</span>
-<span class="t-go">cd frontend</span>
-npm install @tanstack/react-query@5 @tanstack/react-query-devtools@5
-npm install zustand@5 axios@1.7 clsx class-variance-authority lucide-react
-
-<span class="t-cmt"># shadcn/ui v2</span>
-<span class="t-key">npx shadcn@latest init</span>
-
-<span class="t-cmt"># next.config.ts — cấu hình bắt buộc</span>
-<span class="t-yaml">reactCompiler: true</span>    <span class="t-cmt"># stable Next.js 16 — tự memo components</span>
-<span class="t-yaml">turbopack: true</span>        <span class="t-cmt"># default bundler — 5-10x faster build</span>
-<span class="t-yaml">rewrites()</span>             <span class="t-cmt"># proxy /api/v1/* → Go backend</span>
-
-<span class="t-cmt"># .env.local (local — KHÔNG commit)</span>
-<span class="t-ts">NEXT_PUBLIC_API_URL</span>=http://localhost:8080
-<span class="t-ts">NEXT_PUBLIC_WS_URL</span>=ws://localhost:8080
-<span class="t-ts">API_URL</span>=http://localhost:8080   <span class="t-cmt"># server-side only</span>
-
-<span class="t-cmt"># Rule bắt buộc Next.js 16</span>
-<span class="t-key">Server Component</span>  = default → fetch trực tiếp, không useEffect
-<span class="t-key">"use client"</span>      = chỉ thêm khi cần: state, event, browser API
-<span class="t-key">TanStack Query</span>    = server state trong Client Component
-<span class="t-key">Zustand</span>           = client-only state (auth, UI)</pre></div>
-      </div>
-
-      <div class="code-block" style="margin-top:12px;">
-        <div class="code-header"><span class="code-fname">Thứ tự tách Backend → Microservice</span><span class="code-lang">strategy</span></div>
+        <div class="code-header"><span class="code-fname">Thứ tự tách — khi nào tách</span><span class="code-lang">strategy</span></div>
         <div class="code-body"><pre><span class="t-cmt"># Bước 1 — Tách sớm nhất (AI cost cao)</span>
 <span class="t-key">ai-orchestrator</span>  <span class="t-cmt">→ đã có proto sẵn, chỉ deploy riêng</span>
 
@@ -1132,8 +1098,8 @@ npm install zustand@5 axios@1.7 clsx class-variance-authority lucide-react
     <span class="section-num" style="background:rgba(45,217,143,.15);color:var(--green)">5</span>
     <span class="section-tag" style="color:var(--green);background:rgba(45,217,143,.1)">ERD Database</span>
   </div>
-  <h2 class="section-title">Sơ đồ ERD 3D — Full Schema</h2>
-  <p class="section-desc" style="margin-bottom:16px;">20 bảng PostgreSQL phủ toàn bộ modules. Click vào bảng để xem columns, DDL SQL và mock data. Hỗ trợ zoom, xoay 3D, lọc theo module.</p>
+  <h2 class="section-title">Sơ đồ ERD 3D — 17 Bảng Thực Tế</h2>
+  <p class="section-desc" style="margin-bottom:16px;">17 bảng PostgreSQL phủ toàn bộ modules. Click vào bảng để xem columns, DDL SQL và mock data. Hỗ trợ zoom, xoay 3D, lọc theo module.</p>
   <div style="width:100%;height:82vh;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--bg2);">
     <iframe 
       id="erd-frame"
@@ -1169,9 +1135,9 @@ npm install zustand@5 axios@1.7 clsx class-variance-authority lucide-react
         <h1 class=&quot;text-sm font-extrabold tracking-tight flex items-center gap-2&quot;>
           AI HR Platform
           <span class=&quot;text-[10px] px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 font-medium&quot;>ERD 3D — Full Schema</span>
-          <span id=&quot;table-count-badge&quot; class=&quot;text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 font-medium&quot;>20 Tables</span>
+          <span id=&quot;table-count-badge&quot; class=&quot;text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 font-medium&quot;>17 Tables</span>
         </h1>
-        <p class=&quot;text-[10px] text-slate-400&quot;>PostgreSQL · Modular Monolith · Microservice-Ready · Golang + Next.js 16</p>
+        <p class=&quot;text-[10px] text-slate-400&quot;>PostgreSQL · Modular Monolith · Microservice-Ready · Golang + ReactJS</p>
       </div>
     </div>
     <div class=&quot;flex items-center gap-3&quot;>
@@ -1287,442 +1253,415 @@ npm install zustand@5 axios@1.7 clsx class-variance-authority lucide-react
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-// FULL DB SCHEMA — 20 Tables covering all modules
+// FULL DB SCHEMA — 17 bảng — schema thực tế Phase 1
 // idm, catalog, assessment, cbi, e360, profile, talent,
 // analytics, assesshub, aiqa, notification, ftc
 // ═══════════════════════════════════════════════════════════════
 const DB_SCHEMA = {
-
-  // ── IDM MODULE ──────────────────────────────────────────────
-  employees: {
-    name: &quot;employees&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
-    desc: &quot;Nhân viên, cây quản lý self-ref, level, branch.&quot;,
-    color: &quot;#3B82F6&quot;,
+  ip_staff_hris: {
+    name: "ip_staff_hris", module: "hris", category: "hris", color: "#64748B",
+    desc: "Bảng nhân viên sync từ HRIS SQL Server. Read-only, cập nhật hàng ngày. Dùng code VARCHAR làm FK ở mọi bảng khác, không dùng id SERIAL.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;employee_code&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
-      { name:&quot;full_name&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;email&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
-      { name:&quot;phone&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;department&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;position&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;level&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;junior/mid/senior/lead&quot; },
-      { name:&quot;manager_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK self-ref employees&quot; },
-      { name:&quot;branch_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK branches&quot; },
-      { name:&quot;hire_date&quot;, type:&quot;date&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;status&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;active/inactive/resigned&quot; },
-      { name:&quot;avatar_url&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
-      { name:&quot;updated_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"SERIAL", constraint:"PK" },
+      { name:"code", type:"VARCHAR(30)", constraint:"NULL" },
+      { name:"email_address", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"full_name", type:"VARCHAR(100)", constraint:"NULL" },
+      { name:"organization_code", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"organization_name", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"organization_code_path", type:"VARCHAR(100)", constraint:"NULL" },
+      { name:"organization_name_path", type:"VARCHAR(300)", constraint:"NULL" },
+      { name:"organization_parent_code", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"organization_parent_name", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"officer_code", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"officer_title", type:"VARCHAR(100)", constraint:"NULL" },
+      { name:"job_title", type:"VARCHAR(100)", constraint:"NULL" },
+      { name:"job_code", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"career_title", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"career_code", type:"VARCHAR(100)", constraint:"NULL" },
+      { name:"gender", type:"SMALLINT", constraint:"NULL" },
+      { name:"is_active", type:"BOOLEAN", constraint:"NULL" },
+      { name:"last_sync_date", type:"TIMESTAMPTZ", constraint:"NULL" }
     ],
-    mock: [{ id:&quot;e1a4b67c-d31e-419b-a012-3456789abcde&quot;, employee_code:&quot;EMP-001&quot;, full_name:&quot;Phạm Minh Hoàng&quot;, email:&quot;hoang.pm@ftel.vn&quot;, level:&quot;senior&quot;, status:&quot;active&quot; }]
+    mock: [{ id: "1", _note: "see demo_insert_data.sql" }]
   },
-
-  branches: {
-    name: &quot;branches&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
-    desc: &quot;Chi nhánh / đơn vị kinh doanh. Dùng cho RBAC phân quyền báo cáo.&quot;,
-    color: &quot;#3B82F6&quot;,
+  ip_organization_hris: {
+    name: "ip_organization_hris", module: "hris", category: "hris", color: "#64748B",
+    desc: "Cây tổ chức sync từ HRIS. Self-ref qua parent_code. Filter data scope phân quyền: BGĐ→toàn cty, L1→Khối, L2→KV/Ban, L3→TT, L4→Phòng.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;code&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
-      { name:&quot;name&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;block_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK blocks&quot; },
-      { name:&quot;region&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;manager_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
-      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"SERIAL", constraint:"PK" },
+      { name:"display_name", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"code", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"parent_code", type:"VARCHAR(50)", constraint:"FK" }  // Self-ref → cấu trúc cây,
+      { name:"code_path", type:"VARCHAR(100)", constraint:"NULL" },
+      { name:"name_path", type:"VARCHAR(300)", constraint:"NULL" },
+      { name:"sub_company_id", type:"INT", constraint:"NULL" },
+      { name:"location_id", type:"INT", constraint:"NULL" },
+      { name:"branch_code_id", type:"INT", constraint:"NULL" },
+      { name:"location_type", type:"INT", constraint:"NULL" }  // 1=HKH · 2=KV · 3=DN · 4=khác,
+      { name:"is_active", type:"BOOLEAN", constraint:"NULL" },
+      { name:"organization_code", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"organization_name", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"organization_parent_code", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"organization_parent_name", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"last_sync_date", type:"TIMESTAMPTZ", constraint:"NULL" }
     ],
-    mock: [{ id:&quot;b1c2d3e4-0000-0000-0000-000000000001&quot;, code:&quot;HCM-01&quot;, name:&quot;Chi nhánh TP.HCM&quot;, region:&quot;South&quot; }]
+    mock: [{ id: "1", _note: "see demo_insert_data.sql" }]
   },
-
-  blocks: {
-    name: &quot;blocks&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
-    desc: &quot;Khối / vùng kinh doanh cấp cao hơn chi nhánh.&quot;,
-    color: &quot;#3B82F6&quot;,
+  competency_groups: {
+    name: "competency_groups", module: "catalog", category: "catalog", color: "#6366F1",
+    desc: "9 nhóm năng lực: Lãnh đạo, Chiến lược, Giao tiếp... target_audience xác định ai được đánh giá nhóm NL này. display_order dùng sidebar filter.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;code&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
-      { name:&quot;name&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;director_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
-      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"SERIAL", constraint:"PK" },
+      { name:"code", type:"VARCHAR(50)", constraint:"NOT NULL" },
+      { name:"name", type:"VARCHAR(200)", constraint:"NOT NULL" },
+      { name:"description", type:"TEXT", constraint:"NULL" },
+      { name:"target_audience", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"is_active", type:"BOOLEAN", constraint:"NOT NULL" },
+      { name:"display_order", type:"INT", constraint:"NOT NULL" },
+      { name:"created_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;blk-0001&quot;, code:&quot;BLOCK-SOUTH&quot;, name:&quot;Khối Miền Nam&quot; }]
+    mock: [{ id: "1", _note: "see demo_insert_data.sql" }]
   },
-
-  roles: {
-    name: &quot;roles&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
-    desc: &quot;RBAC roles: BGĐ, Khối, Chi nhánh, Phòng, Nhân viên.&quot;,
-    color: &quot;#3B82F6&quot;,
+  competency_names: {
+    name: "competency_names", module: "catalog", category: "catalog", color: "#6366F1",
+    desc: "Tên năng lực cụ thể trong nhóm. short_name dùng cho chart/badge. code là key truyền vào AI generate_questions API.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;code&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
-      { name:&quot;name&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;permissions&quot;, type:&quot;jsonb&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;scope_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;global/block/branch/dept&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"SERIAL", constraint:"PK" },
+      { name:"competency_group_id", type:"INT", constraint:"NOT NULL" },
+      { name:"code", type:"VARCHAR(50)", constraint:"NOT NULL" },
+      { name:"name", type:"VARCHAR(200)", constraint:"NOT NULL" },
+      { name:"short_name", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"definition", type:"TEXT", constraint:"NOT NULL" },
+      { name:"segmentation", type:"SMALLINT", constraint:"NOT NULL" },
+      { name:"display_order", type:"INT", constraint:"NOT NULL" },
+      { name:"is_active", type:"BOOLEAN", constraint:"NOT NULL" },
+      { name:"created_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;role-001&quot;, code:&quot;BGD&quot;, name:&quot;Ban Giám Đốc&quot;, scope_type:&quot;global&quot; }]
+    mock: [{ id: "1", _note: "see demo_insert_data.sql" }]
   },
-
-  employee_roles: {
-    name: &quot;employee_roles&quot;, module: &quot;idm&quot;, category: &quot;core&quot;,
-    desc: &quot;Junction table: gán Role cho Employee theo scope cụ thể.&quot;,
-    color: &quot;#3B82F6&quot;,
+  competency_levels: {
+    name: "competency_levels", module: "catalog", category: "catalog", color: "#6366F1",
+    desc: "Cấp độ kỳ vọng L1/L2/L3 cho từng năng lực. UNIQUE(competency_name_id, level). behaviour_indicators JSONB truyền vào AI sinh câu hỏi STAR. Dùng vẽ Chuẩn JD trên Radar Chart.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
-      { name:&quot;role_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK roles NOT NULL&quot; },
-      { name:&quot;scope_id&quot;, type:&quot;uuid&quot;, constraint:&quot;ID của scope (branch/block)&quot; },
-      { name:&quot;granted_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
-      { name:&quot;granted_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
-      { name:&quot;expires_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
+      { name:"id", type:"SERIAL", constraint:"PK" },
+      { name:"competency_name_id", type:"INT", constraint:"NOT NULL" },
+      { name:"level", type:"SMALLINT", constraint:"NOT NULL" }  // CHECK (level IN (1,2,3)),
+      { name:"behaviour_indicators", type:"JSONB", constraint:"NOT NULL" },
+      { name:"description", type:"TEXT", constraint:"NULL" },
+      { name:"created_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ employee_id:&quot;e1a4b67c&quot;, role_id:&quot;role-001&quot;, scope_id:&quot;blk-0001&quot; }]
+    mock: [{ id: "1", _note: "see demo_insert_data.sql" }]
   },
-
-  // ── CATALOG MODULE ───────────────────────────────────────────
-  competency_frameworks: {
-    name: &quot;competency_frameworks&quot;, module: &quot;catalog&quot;, category: &quot;config&quot;,
-    desc: &quot;Khung năng lực theo role/level. Source of truth cho AI gen câu hỏi.&quot;,
-    color: &quot;#6366F1&quot;,
-    columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;name&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;role_type&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;level&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;competency_list&quot;, type:&quot;jsonb&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;scoring_weights&quot;, type:&quot;jsonb&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
-      { name:&quot;version&quot;, type:&quot;integer&quot;, constraint:&quot;DEFAULT 1&quot; },
-      { name:&quot;created_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
-    ],
-    mock: [{ id:&quot;9cf3a58e&quot;, name:&quot;Tech Lead Framework&quot;, role_type:&quot;Engineering&quot;, level:&quot;lead&quot;, is_active:true }]
-  },
-
-  courses: {
-    name: &quot;courses&quot;, module: &quot;catalog&quot;, category: &quot;config&quot;,
-    desc: &quot;Danh mục khóa học nội bộ và online. Dùng cho IDP recommendation.&quot;,
-    color: &quot;#6366F1&quot;,
-    columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;code&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;UNIQUE NOT NULL&quot; },
-      { name:&quot;title&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;description&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;category&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;provider&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;internal/udemy/coursera/...&quot; },
-      { name:&quot;duration_hours&quot;, type:&quot;integer&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;url&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;competency_tags&quot;, type:&quot;jsonb&quot;, constraint:&quot;mảng competency liên quan&quot; },
-      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
-    ],
-    mock: [{ id:&quot;crs-001&quot;, code:&quot;GO-ADV-01&quot;, title:&quot;Advanced Go Patterns&quot;, provider:&quot;internal&quot;, category:&quot;Engineering&quot; }]
-  },
-
   questions: {
-    name: &quot;questions&quot;, module: &quot;catalog&quot;, category: &quot;config&quot;,
-    desc: &quot;Ngân hàng câu hỏi STAR — AI sinh từ framework, HR duyệt.&quot;,
-    color: &quot;#6366F1&quot;,
+    name: "questions", module: "catalog", category: "catalog", color: "#8B5CF6",
+    desc: "Ngân hàng câu hỏi STAR — AI sinh từ competency_levels + behaviour_indicators, HR duyệt. UUID PK. Status: draft→active→archived.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;framework_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK competency_frameworks&quot; },
-      { name:&quot;competency&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;question_text&quot;, type:&quot;text&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;question_type&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;main/follow_up/clarification&quot; },
-      { name:&quot;difficulty&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;easy/medium/hard&quot; },
-      { name:&quot;star_component&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;S/T/A/R&quot; },
-      { name:&quot;order_num&quot;, type:&quot;integer&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"competency_group_id", type:"INT", constraint:"FK" }  // FK → competency_groups.id,
+      { name:"competency_name_id", type:"INT", constraint:"FK" }  // FK → competency_names.id,
+      { name:"level", type:"SMALLINT", constraint:"NOT NULL" }  // CHECK (level IN (1,2,3)),
+      { name:"content", type:"TEXT", constraint:"NOT NULL" },
+      { name:"target_audience", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"behaviour_indicators", type:"JSONB", constraint:"NULL" },
+      { name:"status", type:"VARCHAR(20)", constraint:"NOT NULL" }  // CHECK (status IN ('draft','active','archived')),
+      { name:"is_ai_generated", type:"BOOLEAN", constraint:"NOT NULL" },
+      { name:"ai_note", type:"TEXT", constraint:"NULL" },
+      { name:"created_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"approved_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"approved_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;q-001&quot;, competency:&quot;Team Mentoring&quot;, difficulty:&quot;medium&quot;, star_component:&quot;S&quot; }]
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
   },
-
-  // ── ASSESSMENT / CBI MODULE ──────────────────────────────────
-  assessment_cycles: {
-    name: &quot;assessment_cycles&quot;, module: &quot;assessment&quot;, category: &quot;evaluation&quot;,
-    desc: &quot;Kỳ đánh giá (Q1/Q2/năm). Quản lý timeline, trạng thái vòng đánh giá.&quot;,
-    color: &quot;#F43F5E&quot;,
+  assessment_campaigns: {
+    name: "assessment_campaigns", module: "assessment", category: "assessment", color: "#F43F5E",
+    desc: "Kỳ đánh giá — đơn vị tổ chức trung tâm. Lưu CBI + 360° pipeline stage, email templates JSONB, trọng số điểm, FTC review. CONSTRAINT ai_weight+weight_360=1.00",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;name&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
-      { name:&quot;cycle_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;quarterly/annual/probation&quot; },
-      { name:&quot;start_date&quot;, type:&quot;date&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;end_date&quot;, type:&quot;date&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;status&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;draft/active/closed/archived&quot; },
-      { name:&quot;config&quot;, type:&quot;jsonb&quot;, constraint:&quot;score weights, deadlines&quot; },
-      { name:&quot;created_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"code", type:"VARCHAR(50)", constraint:"NOT NULL" },
+      { name:"name", type:"VARCHAR(300)", constraint:"NOT NULL" },
+      { name:"target_audience", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"assessment_type", type:"VARCHAR(30)", constraint:"NOT NULL" }  // CHECK (assessment_type IN ('ai_interview','360_survey','both,
+      { name:"start_date", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"end_date", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"status", type:"VARCHAR(20)", constraint:"NOT NULL" },
+      { name:"survey_360_url", type:"TEXT", constraint:"NULL" },
+      { name:"email_subject", type:"VARCHAR(500)", constraint:"NULL" },
+      { name:"email_body", type:"TEXT", constraint:"NULL" },
+      { name:"selected_questions", type:"JSONB", constraint:"NULL" },
+      { name:"stage", type:"VARCHAR(30)", constraint:"NOT NULL" },
+      { name:"cbi_enabled", type:"BOOLEAN", constraint:"NOT NULL" },
+      { name:"cbi_status", type:"VARCHAR(20)", constraint:"NOT NULL" }  // CHECK (cbi_status IN ('not_started','running','completed')),
+      { name:"e360_enabled", type:"BOOLEAN", constraint:"NOT NULL" },
+      { name:"e360_status", type:"VARCHAR(20)", constraint:"NOT NULL" }  // CHECK (e360_status IN ('not_started','running','completed')),
+      { name:"ai_weight", type:"NUMERIC(3,2)", constraint:"NOT NULL" },
+      { name:"weight_360", type:"NUMERIC(3,2)", constraint:"NOT NULL" },
+      { name:"ftc_reviewer_code", type:"VARCHAR(30)", constraint:"FK" }  // FK → ip_staff_hris.code,
+      { name:"ftc_reviewed_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"ftc_note", type:"TEXT", constraint:"NULL" },
+      { name:"email_template_common", type:"JSONB", constraint:"NULL" },
+      { name:"email_template_cbi", type:"JSONB", constraint:"NULL" },
+      { name:"email_template_360_mgr", type:"JSONB", constraint:"NULL" },
+      { name:"email_template_360_peer", type:"JSONB", constraint:"NULL" },
+      { name:"smtp_configured", type:"BOOLEAN", constraint:"NOT NULL" },
+      { name:"created_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"published_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"published_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;cyc-001&quot;, name:&quot;Q2 2024 Assessment&quot;, period:&quot;2024-Q2&quot;, status:&quot;active&quot; }]
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
   },
-
+  campaign_participants: {
+    name: "campaign_participants", module: "assessment", category: "assessment", color: "#F43F5E",
+    desc: "Danh sách CBNV tham gia kỳ. role_type: self_cbi/manager_360/peer_360. access_token là unique link phỏng vấn. UNIQUE(campaign_id, employee_code, role_type).",
+    columns: [
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"campaign_id", type:"UUID", constraint:"NOT NULL" },
+      { name:"employee_code", type:"VARCHAR(30)", constraint:"NOT NULL" },
+      { name:"employee_name", type:"VARCHAR(100)", constraint:"NULL" },
+      { name:"email", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"department_code", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"access_token", type:"VARCHAR(500)", constraint:"NULL" },
+      { name:"token_expires_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"status", type:"VARCHAR(20)", constraint:"NOT NULL" }  // CHECK (status IN ('pending','in_progress','completed','skipp,
+      { name:"role_type", type:"VARCHAR(20)", constraint:"NOT NULL" },
+      { name:"notified_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"completed_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"total_questions", type:"SMALLINT", constraint:"NULL" },
+      { name:"completed_questions", type:"SMALLINT", constraint:"NOT NULL" },
+      { name:"duration_seconds", type:"INT", constraint:"NULL" },
+      { name:"manager_code", type:"VARCHAR(30)", constraint:"NULL" },
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
+    ],
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
+  },
   interview_sessions: {
-    name: &quot;interview_sessions&quot;, module: &quot;cbi&quot;, category: &quot;evaluation&quot;,
-    desc: &quot;Phiên phỏng vấn AI — lưu toàn bộ Q&amp;A, điểm AI, feedback.&quot;,
-    color: &quot;#F43F5E&quot;,
+    name: "interview_sessions", module: "cbi", category: "cbi", color: "#EF4444",
+    desc: "Phiên phỏng vấn AI của 1 CBNV. Redis lưu session state TTL 2h. ai_score tổng hợp 0-10. HR review/override với note bắt buộc. Immutable sau approved.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
-      { name:&quot;framework_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK competency_frameworks&quot; },
-      { name:&quot;cycle_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK assessment_cycles&quot; },
-      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
-      { name:&quot;status&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;pending/in_progress/completed&quot; },
-      { name:&quot;answers&quot;, type:&quot;jsonb&quot;, constraint:&quot;Q&amp;A array&quot; },
-      { name:&quot;ai_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;0-100&quot; },
-      { name:&quot;ai_feedback&quot;, type:&quot;text&quot;, constraint:&quot;nhận xét AI&quot; },
-      { name:&quot;score_breakdown&quot;, type:&quot;jsonb&quot;, constraint:&quot;điểm từng competency&quot; },
-      { name:&quot;started_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;completed_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"campaign_id", type:"UUID", constraint:"FK" }  // FK → assessment_campaigns.id,
+      { name:"participant_id", type:"UUID", constraint:"FK" }  // FK → campaign_participants.id,
+      { name:"candidate_code", type:"VARCHAR(30)", constraint:"FK" }  // FK → ip_staff_hris.code,
+      { name:"candidate_name", type:"VARCHAR(100)", constraint:"NULL" }  // Snapshot,
+      { name:"started_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"completed_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"status", type:"VARCHAR(20)", constraint:"NOT NULL" },
+      { name:"total_questions", type:"SMALLINT", constraint:"NOT NULL" },
+      { name:"questions_answered", type:"SMALLINT", constraint:"NOT NULL" },
+      { name:"ai_score", type:"NUMERIC(4,2)", constraint:"NULL" },
+      { name:"ai_feedback_summary", type:"TEXT", constraint:"NULL" },
+      { name:"review_status", type:"VARCHAR(20)", constraint:"NOT NULL" }  // CHECK (review_status IN ('pending','approved','overridden')),
+      { name:"reviewed_by", type:"VARCHAR(200)", constraint:"NULL" }  // Email HR đã review,
+      { name:"reviewed_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"override_score", type:"NUMERIC(4,2)", constraint:"NULL" }  // Điểm HR ghi đè nếu không đồng ý AI,
+      { name:"override_note", type:"TEXT", constraint:"NULL" }  // Lý do HR chỉnh điểm (bắt buộc khi override),
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;int-001&quot;, period:&quot;2024-Q2&quot;, status:&quot;completed&quot;, ai_score:85.5 }]
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
   },
-
-  // ── E360 MODULE ──────────────────────────────────────────────
-  assessment_360: {
-    name: &quot;assessment_360&quot;, module: &quot;e360&quot;, category: &quot;evaluation&quot;,
-    desc: &quot;Vòng đánh giá 360: tổng hợp AI + manager + peer + test → final score.&quot;,
-    color: &quot;#F43F5E&quot;,
+  interview_details: {
+    name: "interview_details", module: "cbi", category: "cbi", color: "#EF4444",
+    desc: "Log chi tiết từng câu hỏi. turns JSONB lưu toàn bộ hội thoại [{role,text,turn_index}]. Theo dõi question_change_count (max 3) và downgrade level.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
-      { name:&quot;cycle_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK assessment_cycles&quot; },
-      { name:&quot;interview_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK interview_sessions&quot; },
-      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
-      { name:&quot;ai_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;trọng số x%&quot; },
-      { name:&quot;manager_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;trọng số y%&quot; },
-      { name:&quot;peer_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;trọng số z%&quot; },
-      { name:&quot;test_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;bài test chuyên môn&quot; },
-      { name:&quot;final_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;tổng hợp có trọng số&quot; },
-      { name:&quot;score_weights&quot;, type:&quot;jsonb&quot;, constraint:&quot;{ai:x, mgr:y, peer:z}&quot; },
-      { name:&quot;competency_scores&quot;, type:&quot;jsonb&quot;, constraint:&quot;điểm từng competency&quot; },
-      { name:&quot;status&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;in_progress/completed/approved&quot; },
-      { name:&quot;completed_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"session_id", type:"UUID", constraint:"FK" }  // FK → interview_sessions.id,
+      { name:"competency_group_id", type:"INT", constraint:"FK" }  // FK → competency_groups.id,
+      { name:"competency_name_id", type:"INT", constraint:"FK" }  // FK → competency_names.id,
+      { name:"level", type:"SMALLINT", constraint:"NOT NULL" },
+      { name:"question_id", type:"UUID", constraint:"FK" }  // FK → questions.id (null nếu câu gen on-the-fly),
+      { name:"question_text", type:"TEXT", constraint:"NOT NULL" },
+      { name:"turns", type:"JSONB", constraint:"NOT NULL" },
+      { name:"question_change_count", type:"SMALLINT", constraint:"NOT NULL" },
+      { name:"downgraded_question_text", type:"TEXT", constraint:"NULL" },
+      { name:"downgraded_level", type:"SMALLINT", constraint:"NULL" },
+      { name:"response_time_seconds", type:"INT", constraint:"NULL" },
+      { name:"display_order", type:"SMALLINT", constraint:"NOT NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;a360-001&quot;, period:&quot;2024-Q2&quot;, final_score:82.4, status:&quot;completed&quot; }]
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
   },
-
-  evaluations: {
-    name: &quot;evaluations&quot;, module: &quot;e360&quot;, category: &quot;evaluation&quot;,
-    desc: &quot;Chi tiết đánh giá từng người trong vòng 360 (manager/peer/sub/self).&quot;,
-    color: &quot;#F43F5E&quot;,
+  interview_ai_scores: {
+    name: "interview_ai_scores", module: "cbi", category: "cbi", color: "#EF4444",
+    desc: "Điểm AI từng năng lực sau phỏng vấn. Insert-only — không update. api_request_snapshot JSONB để audit và re-grade. Thang 0-10.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;assessment_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK assessment_360 NOT NULL&quot; },
-      { name:&quot;evaluator_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
-      { name:&quot;evaluator_role&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;manager/peer/subordinate/self&quot; },
-      { name:&quot;scores&quot;, type:&quot;jsonb&quot;, constraint:&quot;điểm từng competency&quot; },
-      { name:&quot;overall_score&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;strengths&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;improvements&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;is_anonymous&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
-      { name:&quot;submitted_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"session_id", type:"UUID", constraint:"FK" }  // FK → interview_sessions.id,
+      { name:"competency_group_id", type:"INT", constraint:"FK" }  // FK → competency_groups.id,
+      { name:"competency_name_id", type:"INT", constraint:"FK" }  // FK → competency_names.id,
+      { name:"level", type:"SMALLINT", constraint:"NOT NULL" },
+      { name:"score", type:"NUMERIC(4,2)", constraint:"NOT NULL" },
+      { name:"standard_breakdown", type:"TEXT", constraint:"NULL" },
+      { name:"feedback", type:"TEXT", constraint:"NULL" },
+      { name:"api_request_snapshot", type:"JSONB", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;eval-001&quot;, evaluator_role:&quot;peer&quot;, overall_score:88, is_anonymous:true }]
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
   },
-
-  // ── PROFILE MODULE ───────────────────────────────────────────
-  employee_profiles: {
-    name: &quot;employee_profiles&quot;, module: &quot;profile&quot;, category: &quot;profile&quot;,
-    desc: &quot;Hồ sơ mở rộng của nhân viên: kỹ năng, kinh nghiệm, chứng chỉ.&quot;,
-    color: &quot;#06B6D4&quot;,
+  assessment_360_results: {
+    name: "assessment_360_results", module: "e360", category: "e360", color: "#F97316",
+    desc: "Kết quả 360° sync từ GG Form. Insert-only. respondent_type: manager/peer/subordinate. raw_data lưu response gốc trước xử lý.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees UNIQUE NOT NULL&quot; },
-      { name:&quot;bio&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;skills&quot;, type:&quot;jsonb&quot;, constraint:&quot;mảng kỹ năng + level&quot; },
-      { name:&quot;certifications&quot;, type:&quot;jsonb&quot;, constraint:&quot;chứng chỉ đã có&quot; },
-      { name:&quot;work_history&quot;, type:&quot;jsonb&quot;, constraint:&quot;lịch sử công tác&quot; },
-      { name:&quot;education&quot;, type:&quot;jsonb&quot;, constraint:&quot;học vấn&quot; },
-      { name:&quot;languages&quot;, type:&quot;jsonb&quot;, constraint:&quot;ngôn ngữ&quot; },
-      { name:&quot;linkedin_url&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;updated_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"campaign_id", type:"UUID", constraint:"FK" }  // FK → assessment_campaigns.id,
+      { name:"employee_code", type:"VARCHAR(30)", constraint:"FK" }  // FK → ip_staff_hris.code,
+      { name:"competency_group_id", type:"INT", constraint:"FK" }  // FK → competency_groups.id,
+      { name:"competency_name_id", type:"INT", constraint:"FK" }  // FK → competency_names.id,
+      { name:"score", type:"NUMERIC(4,2)", constraint:"NULL" },
+      { name:"respondent_type", type:"VARCHAR(30)", constraint:"NULL" },
+      { name:"raw_data", type:"JSONB", constraint:"NULL" },
+      { name:"synced_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;prof-001&quot;, skills:[{name:&quot;Golang&quot;,level:&quot;advanced&quot;},{name:&quot;PostgreSQL&quot;,level:&quot;intermediate&quot;}] }]
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
   },
-
-  // ── TALENT MODULE ────────────────────────────────────────────
-  talent_pools: {
-    name: &quot;talent_pools&quot;, module: &quot;talent&quot;, category: &quot;talent&quot;,
-    desc: &quot;Danh sách nhân tài theo nhóm: high-potential, succession, critical.&quot;,
-    color: &quot;#10B981&quot;,
+  assessment_final_scores: {
+    name: "assessment_final_scores", module: "e360", category: "e360", color: "#F97316",
+    desc: "Điểm tổng hợp = AI(ai_weight%) + 360°(weight_360%). UNIQUE(campaign_id, employee_code, competency_name_id). HR approve/override với note bắt buộc.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;name&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;pool_type&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;high_potential/succession/critical&quot; },
-      { name:&quot;scope_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;company/block/branch&quot; },
-      { name:&quot;scope_id&quot;, type:&quot;uuid&quot;, constraint:&quot;ID đơn vị tương ứng&quot; },
-      { name:&quot;criteria&quot;, type:&quot;jsonb&quot;, constraint:&quot;tiêu chí xếp vào pool&quot; },
-      { name:&quot;is_active&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT TRUE&quot; },
-      { name:&quot;created_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"campaign_id", type:"UUID", constraint:"FK" }  // FK → assessment_campaigns.id,
+      { name:"session_id", type:"UUID", constraint:"NULL" },
+      { name:"employee_code", type:"VARCHAR(30)", constraint:"FK" }  // FK → ip_staff_hris.code,
+      { name:"competency_group_id", type:"INT", constraint:"FK" }  // FK → competency_groups.id,
+      { name:"competency_name_id", type:"INT", constraint:"FK" }  // FK → competency_names.id,
+      { name:"ai_score", type:"NUMERIC(4,2)", constraint:"NULL" },
+      { name:"score_360", type:"NUMERIC(4,2)", constraint:"NULL" },
+      { name:"ai_weight", type:"NUMERIC(3,2)", constraint:"NOT NULL" },
+      { name:"weight_360", type:"NUMERIC(3,2)", constraint:"NOT NULL" },
+      { name:"final_score", type:"NUMERIC(4,2)", constraint:"NULL" },
+      { name:"is_approved", type:"BOOLEAN", constraint:"NOT NULL" },
+      { name:"approved_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"approved_at", type:"TIMESTAMPTZ", constraint:"NULL" },
+      { name:"override_score", type:"NUMERIC(4,2)", constraint:"NULL" },
+      { name:"override_note", type:"TEXT", constraint:"NULL" },
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;pool-001&quot;, name:&quot;High Potential 2024&quot;, pool_type:&quot;high_potential&quot; }]
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
   },
-
-  talent_pool_members: {
-    name: &quot;talent_pool_members&quot;, module: &quot;talent&quot;, category: &quot;talent&quot;,
-    desc: &quot;Junction: nhân viên thuộc talent pool nào, lý do, ngày vào.&quot;,
-    color: &quot;#10B981&quot;,
+  employee_360_profiles: {
+    name: "employee_360_profiles", module: "profile", category: "profile", color: "#06B6D4",
+    desc: "Hồ sơ NL tổng hợp — UNIQUE(employee_code). JSONB: top_strengths, top_weaknesses, score_history 10 kỳ, gap_analysis. jd_compliance = AVG(MIN(actual/expected,1.5))×100.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;pool_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK talent_pools NOT NULL&quot; },
-      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
-      { name:&quot;added_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
-      { name:&quot;reason&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;score_at_entry&quot;, type:&quot;decimal(5,2)&quot;, constraint:&quot;điểm khi được thêm&quot; },
-      { name:&quot;added_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"employee_code", type:"VARCHAR(30)", constraint:"NOT NULL" },
+      { name:"top_strengths", type:"JSONB", constraint:"NULL" },
+      { name:"top_weaknesses", type:"JSONB", constraint:"NULL" },
+      { name:"score_history", type:"JSONB", constraint:"NULL" },
+      { name:"gap_analysis", type:"JSONB", constraint:"NULL" },
+      { name:"summary_feedback", type:"TEXT", constraint:"NULL" },
+      { name:"ai_insight", type:"TEXT", constraint:"NULL" },
+      { name:"hr_feedback", type:"TEXT", constraint:"NULL" },
+      { name:"stats_summary", type:"JSONB", constraint:"NULL" },
+      { name:"risk_level", type:"VARCHAR(10)", constraint:"NULL" }  // CHECK (risk_level IN ('low','medium','high')),
+      { name:"jd_compliance", type:"NUMERIC(5,2)", constraint:"NULL" },
+      { name:"last_campaign_id", type:"UUID", constraint:"NULL" },
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"last_updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ pool_id:&quot;pool-001&quot;, employee_id:&quot;e1a4b67c&quot;, score_at_entry:88.5 }]
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
   },
-
-  // ── IDP MODULE ───────────────────────────────────────────────
-  idp_plans: {
-    name: &quot;idp_plans&quot;, module: &quot;idp&quot;, category: &quot;development&quot;,
-    desc: &quot;Kế hoạch phát triển cá nhân — AI sinh từ assessment_360.&quot;,
-    color: &quot;#F59E0B&quot;,
+  ai_gateway_tokens: {
+    name: "ai_gateway_tokens", module: "system", category: "system", color: "#A855F7",
+    desc: "Access token FPT BotGateway AI API. UNIQUE(environment: stag/prod). Worker tự refresh khi còn <10 phút. UPSERT — chỉ 2 rows. SERIAL PK.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
-      { name:&quot;assessment_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK assessment_360 NOT NULL&quot; },
-      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
-      { name:&quot;strengths&quot;, type:&quot;jsonb&quot;, constraint:&quot;AI phân tích điểm mạnh&quot; },
-      { name:&quot;improvements&quot;, type:&quot;jsonb&quot;, constraint:&quot;AI phân tích điểm yếu&quot; },
-      { name:&quot;recommended_courses&quot;, type:&quot;jsonb&quot;, constraint:&quot;khoá học + match score&quot; },
-      { name:&quot;goals&quot;, type:&quot;jsonb&quot;, constraint:&quot;OKR mục tiêu hành động&quot; },
-      { name:&quot;ai_summary&quot;, type:&quot;text&quot;, constraint:&quot;lời khuyên lộ trình AI&quot; },
-      { name:&quot;hr_notes&quot;, type:&quot;text&quot;, constraint:&quot;ghi chú HR&quot; },
-      { name:&quot;status&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;draft/active/completed&quot; },
-      { name:&quot;approved_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
-      { name:&quot;approved_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"SERIAL", constraint:"PK" },
+      { name:"environment", type:"VARCHAR(10)", constraint:"NOT NULL" }  // CHECK (environment IN ('stag','prod')),
+      { name:"access_token", type:"TEXT", constraint:"NOT NULL" },
+      { name:"expires_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;idp-001&quot;, status:&quot;active&quot;, recommended_courses:[{id:&quot;crs-001&quot;,match_score:0.92}] }]
+    mock: [{ id: "1", _note: "see demo_insert_data.sql" }]
   },
-
-  idp_progress: {
-    name: &quot;idp_progress&quot;, module: &quot;idp&quot;, category: &quot;development&quot;,
-    desc: &quot;Theo dõi tiến độ thực hiện IDP — check-in định kỳ.&quot;,
-    color: &quot;#F59E0B&quot;,
+  email_logs: {
+    name: "email_logs", module: "system", category: "system", color: "#A855F7",
+    desc: "Audit log email gửi CBNV. merged_vars JSONB snapshot biến đã merge. role_type + template_type xác định loại template. status: sent/failed/bounced/pending.",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;idp_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK idp_plans NOT NULL&quot; },
-      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
-      { name:&quot;check_in_date&quot;, type:&quot;date&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;goal_id&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;ID mục tiêu trong goals JSON&quot; },
-      { name:&quot;progress_pct&quot;, type:&quot;integer&quot;, constraint:&quot;0-100&quot; },
-      { name:&quot;note&quot;, type:&quot;text&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"UUID", constraint:"PK" },
+      { name:"campaign_id", type:"UUID", constraint:"FK" }  // FK → assessment_campaigns.id,
+      { name:"participant_id", type:"UUID", constraint:"NULL" },
+      { name:"recipient_email", type:"VARCHAR(200)", constraint:"NOT NULL" },
+      { name:"subject", type:"VARCHAR(500)", constraint:"NULL" },
+      { name:"role_type", type:"VARCHAR(20)", constraint:"NULL" },
+      { name:"template_type", type:"VARCHAR(20)", constraint:"NULL" },
+      { name:"merged_vars", type:"JSONB", constraint:"NULL" },
+      { name:"status", type:"VARCHAR(20)", constraint:"NOT NULL" }  // CHECK (status IN ('sent','failed','bounced','pending')),
+      { name:"sent_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"error_message", type:"TEXT", constraint:"NULL" }
     ],
-    mock: [{ idp_id:&quot;idp-001&quot;, progress_pct:45, check_in_date:&quot;2024-06-15&quot; }]
+    mock: [{ id: "uuid-xxx-001...", _note: "see demo_insert_data.sql" }]
   },
-
-  // ── ANALYTICS / REPORT MODULE ────────────────────────────────
-  reports: {
-    name: &quot;reports&quot;, module: &quot;analytics&quot;, category: &quot;reporting&quot;,
-    desc: &quot;Snapshot báo cáo năng lực. Phân quyền theo scope BGĐ/Khối/Chi nhánh.&quot;,
-    color: &quot;#64748B&quot;,
+  competency_criteria: {
+    name: "competency_criteria", module: "catalog", category: "catalog", color: "#6366F1",
+    desc: "Tiêu chí đánh giá 360° — KHÁC với competency_names (CBI). VD: Khách hàng là trọng tâm, Kỷ luật 6 Rõ. Map về competency_names qua competency_name_id (nullable).",
     columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;report_type&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;talent_pool/competency/period&quot; },
-      { name:&quot;scope_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;company/block/branch/dept&quot; },
-      { name:&quot;scope_id&quot;, type:&quot;uuid&quot;, constraint:&quot;ID đơn vị tương ứng&quot; },
-      { name:&quot;period&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;VD: 2024-Q2&quot; },
-      { name:&quot;generated_by&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees&quot; },
-      { name:&quot;data_snapshot&quot;, type:&quot;jsonb&quot;, constraint:&quot;toàn bộ dữ liệu tại thời điểm&quot; },
-      { name:&quot;summary_stats&quot;, type:&quot;jsonb&quot;, constraint:&quot;avg/min/max/distribution&quot; },
-      { name:&quot;cache_key&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;UNIQUE NULL — Redis key&quot; },
-      { name:&quot;expires_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;hết hạn cache&quot; },
-      { name:&quot;is_public&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT FALSE&quot; },
-      { name:&quot;generated_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
+      { name:"id", type:"SERIAL", constraint:"PK" },
+      { name:"competency_group_id", type:"INT", constraint:"FK" }  // FK → competency_groups.id,
+      { name:"competency_name_id", type:"INT", constraint:"NULL" },
+      { name:"code", type:"VARCHAR(50)", constraint:"NOT NULL" },
+      { name:"name", type:"VARCHAR(200)", constraint:"NOT NULL" },
+      { name:"short_name", type:"VARCHAR(50)", constraint:"NULL" },
+      { name:"description", type:"TEXT", constraint:"NULL" },
+      { name:"max_score", type:"SMALLINT", constraint:"NOT NULL" },
+      { name:"display_order", type:"INT", constraint:"NOT NULL" },
+      { name:"is_active", type:"BOOLEAN", constraint:"NOT NULL" },
+      { name:"created_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"updated_by", type:"VARCHAR(200)", constraint:"NULL" },
+      { name:"created_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" },
+      { name:"updated_at", type:"TIMESTAMPTZ", constraint:"NOT NULL" }
     ],
-    mock: [{ id:&quot;rpt-001&quot;, report_type:&quot;competency&quot;, scope_type:&quot;branch&quot;, period:&quot;2024-Q2&quot; }]
+    mock: [{ id: "1", _note: "see demo_insert_data.sql" }]
   },
-
-  // ── AIQA MODULE ──────────────────────────────────────────────
-  ai_conversations: {
-    name: &quot;ai_conversations&quot;, module: &quot;aiqa&quot;, category: &quot;ai&quot;,
-    desc: &quot;Lịch sử hội thoại AI Q&amp;A với nhân viên — dùng MongoDB nhưng PG cho metadata.&quot;,
-    color: &quot;#A855F7&quot;,
-    columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;employee_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
-      { name:&quot;session_type&quot;, type:&quot;varchar(30)&quot;, constraint:&quot;interview/faq/coaching&quot; },
-      { name:&quot;mongo_doc_id&quot;, type:&quot;varchar(100)&quot;, constraint:&quot;ID tài liệu MongoDB&quot; },
-      { name:&quot;message_count&quot;, type:&quot;integer&quot;, constraint:&quot;DEFAULT 0&quot; },
-      { name:&quot;token_used&quot;, type:&quot;integer&quot;, constraint:&quot;tổng token tiêu thụ&quot; },
-      { name:&quot;status&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;active/completed/archived&quot; },
-      { name:&quot;started_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
-      { name:&quot;ended_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
-    ],
-    mock: [{ id:&quot;aiq-001&quot;, session_type:&quot;interview&quot;, message_count:24, token_used:3200 }]
-  },
-
-  // ── NOTIFICATION MODULE ──────────────────────────────────────
-  notifications: {
-    name: &quot;notifications&quot;, module: &quot;notification&quot;, category: &quot;system&quot;,
-    desc: &quot;Thông báo in-app, email, push. Phân loại theo event type và trạng thái.&quot;,
-    color: &quot;#EC4899&quot;,
-    columns: [
-      { name:&quot;id&quot;, type:&quot;uuid&quot;, constraint:&quot;PK&quot; },
-      { name:&quot;recipient_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NOT NULL&quot; },
-      { name:&quot;sender_id&quot;, type:&quot;uuid&quot;, constraint:&quot;FK employees NULL (system=null)&quot; },
-      { name:&quot;type&quot;, type:&quot;varchar(50)&quot;, constraint:&quot;assessment/idp/reminder/system&quot; },
-      { name:&quot;title&quot;, type:&quot;varchar(255)&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;body&quot;, type:&quot;text&quot;, constraint:&quot;NOT NULL&quot; },
-      { name:&quot;data&quot;, type:&quot;jsonb&quot;, constraint:&quot;payload đi kèm (link, entity_id)&quot; },
-      { name:&quot;channel&quot;, type:&quot;varchar(20)&quot;, constraint:&quot;in_app/email/push&quot; },
-      { name:&quot;is_read&quot;, type:&quot;boolean&quot;, constraint:&quot;DEFAULT FALSE&quot; },
-      { name:&quot;read_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;NULL&quot; },
-      { name:&quot;created_at&quot;, type:&quot;timestamptz&quot;, constraint:&quot;DEFAULT NOW()&quot; },
-    ],
-    mock: [{ id:&quot;notif-001&quot;, type:&quot;assessment&quot;, title:&quot;Vòng đánh giá Q2 đã bắt đầu&quot;, is_read:false }]
-  },
-
 };
 
-// ── RELATIONSHIPS ────────────────────────────────────────────
 const RELATIONSHIPS = [
-  // IDM
-  { from:&quot;employees&quot;, to:&quot;branches&quot;, label:&quot;thuộc chi nhánh&quot; },
-  { from:&quot;branches&quot;, to:&quot;blocks&quot;, label:&quot;thuộc khối&quot; },
-  { from:&quot;employee_roles&quot;, to:&quot;employees&quot;, label:&quot;gán role&quot; },
-  { from:&quot;employee_roles&quot;, to:&quot;roles&quot;, label:&quot;dùng role&quot; },
-  // Catalog
-  { from:&quot;competency_frameworks&quot;, to:&quot;questions&quot;, label:&quot;chứa câu hỏi (1:N)&quot; },
-  // Assessment
-  { from:&quot;assessment_cycles&quot;, to:&quot;interview_sessions&quot;, label:&quot;thuộc kỳ (1:N)&quot; },
-  { from:&quot;employees&quot;, to:&quot;interview_sessions&quot;, label:&quot;tham gia (1:N)&quot; },
-  { from:&quot;competency_frameworks&quot;, to:&quot;interview_sessions&quot;, label:&quot;áp dụng (1:N)&quot; },
-  // E360
-  { from:&quot;interview_sessions&quot;, to:&quot;assessment_360&quot;, label:&quot;tạo ra (1:1)&quot; },
-  { from:&quot;assessment_cycles&quot;, to:&quot;assessment_360&quot;, label:&quot;thuộc kỳ (1:N)&quot; },
-  { from:&quot;employees&quot;, to:&quot;assessment_360&quot;, label:&quot;được đánh giá (1:N)&quot; },
-  { from:&quot;assessment_360&quot;, to:&quot;evaluations&quot;, label:&quot;gồm nhiều (1:N)&quot; },
-  { from:&quot;employees&quot;, to:&quot;evaluations&quot;, label:&quot;đánh giá (1:N)&quot; },
-  // Profile
-  { from:&quot;employees&quot;, to:&quot;employee_profiles&quot;, label:&quot;có hồ sơ (1:1)&quot; },
-  // Talent
-  { from:&quot;talent_pool_members&quot;, to:&quot;talent_pools&quot;, label:&quot;thuộc pool&quot; },
-  { from:&quot;talent_pool_members&quot;, to:&quot;employees&quot;, label:&quot;là nhân viên&quot; },
-  // IDP
-  { from:&quot;assessment_360&quot;, to:&quot;idp_plans&quot;, label:&quot;sinh ra (1:1)&quot; },
-  { from:&quot;employees&quot;, to:&quot;idp_plans&quot;, label:&quot;có kế hoạch (1:N)&quot; },
-  { from:&quot;idp_plans&quot;, to:&quot;idp_progress&quot;, label:&quot;theo dõi (1:N)&quot; },
-  { from:&quot;courses&quot;, to:&quot;idp_plans&quot;, label:&quot;được gợi ý&quot; },
-  // Analytics
-  { from:&quot;employees&quot;, to:&quot;reports&quot;, label:&quot;tạo báo cáo&quot; },
-  // AIQA
-  { from:&quot;employees&quot;, to:&quot;ai_conversations&quot;, label:&quot;hội thoại AI (1:N)&quot; },
-  // Notification
-  { from:&quot;employees&quot;, to:&quot;notifications&quot;, label:&quot;nhận thông báo (1:N)&quot; },
+  { from:"ip_staff_hris", to:"ip_organization_hris", label:"thuộc tổ chức" },
+  { from:"competency_names", to:"competency_groups", label:"thuộc nhóm NL (N:1)" },
+  { from:"competency_levels", to:"competency_names", label:"cấp độ của NL (N:1)" },
+  { from:"competency_criteria", to:"competency_groups", label:"tiêu chí 360° của nhóm" },
+  { from:"competency_criteria", to:"competency_names", label:"map về NL tương đương (nullable)" },
+  { from:"questions", to:"competency_groups", label:"thuộc nhóm NL" },
+  { from:"questions", to:"competency_names", label:"đánh giá NL cụ thể" },
+  { from:"campaign_participants", to:"assessment_campaigns", label:"tham gia kỳ ĐG (N:1)" },
+  { from:"campaign_participants", to:"ip_staff_hris", label:"là nhân viên (N:1)" },
+  { from:"interview_sessions", to:"assessment_campaigns", label:"thuộc kỳ ĐG" },
+  { from:"interview_sessions", to:"campaign_participants", label:"của participant" },
+  { from:"interview_details", to:"interview_sessions", label:"log hội thoại (N:1)" },
+  { from:"interview_details", to:"questions", label:"dùng câu hỏi (nullable)" },
+  { from:"interview_ai_scores", to:"interview_sessions", label:"điểm AI từng NL (N:1)" },
+  { from:"interview_ai_scores", to:"competency_names", label:"cho NL cụ thể" },
+  { from:"assessment_360_results", to:"assessment_campaigns", label:"thuộc kỳ ĐG" },
+  { from:"assessment_final_scores", to:"assessment_campaigns", label:"tổng hợp điểm kỳ" },
+  { from:"assessment_final_scores", to:"interview_sessions", label:"từ phiên phỏng vấn (nullable)" },
+  { from:"assessment_final_scores", to:"competency_names", label:"điểm từng NL" },
+  { from:"employee_360_profiles", to:"ip_staff_hris", label:"hồ sơ NL (UNIQUE 1:1)" },
+  { from:"employee_360_profiles", to:"assessment_campaigns", label:"kỳ cập nhật gần nhất" },
+  { from:"email_logs", to:"assessment_campaigns", label:"email của kỳ ĐG" },
+  { from:"email_logs", to:"campaign_participants", label:"gửi đến participant" },
 ];
+
+
+
+
 
 // MODULE META
 const MODULE_META = {
@@ -1763,7 +1702,7 @@ window.onload = function() {
   window.addEventListener('resize', onResize);
   document.getElementById('canvas-container').addEventListener('mousedown', onMouseDown);
   document.getElementById('search-input').addEventListener('input', onSearch);
-  document.getElementById('table-count-badge').textContent = Object.keys(DB_SCHEMA).length + &quot; Tables&quot;;
+  document.getElementById('table-count-badge').textContent = &quot;17 Tables&quot;;
 };
 
 function renderSidebar() {
@@ -2242,22 +2181,19 @@ function copyContent(type) {
     <span class="section-num" style="background:rgba(232,121,249,.15);color:var(--pink)">6</span>
     <span class="section-tag" style="color:var(--pink);background:rgba(232,121,249,.1)">Glossary</span>
   </div>
-  <h2 class="section-title">Diễn giải 20 bảng & Quan hệ</h2>
+  <h2 class="section-title">Diễn giải 17 bảng · 244 fields</h2>
   <p class="section-desc">Ý nghĩa nghiệp vụ từng bảng, ai dùng, dữ liệu gì, liên kết với bảng nào. Đọc theo thứ tự module để hiểu toàn bộ luồng dữ liệu.</p>
 
   <!-- MODULE FILTER TABS -->
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px;" id="gloss-tabs">
-    <button onclick="filterGloss('all')" class="gtab gtab-active" data-mod="all">Tất cả</button>
-    <button onclick="filterGloss('idm')" class="gtab" data-mod="idm">IDM</button>
+    <button onclick="filterGloss('all')" class="gtab gtab-active" data-mod="all">Tất cả (17)</button>
+    <button onclick="filterGloss('hris')" class="gtab" data-mod="hris">HRIS Sync</button>
     <button onclick="filterGloss('catalog')" class="gtab" data-mod="catalog">Catalog</button>
+    <button onclick="filterGloss('assessment')" class="gtab" data-mod="assessment">Assessment</button>
     <button onclick="filterGloss('cbi')" class="gtab" data-mod="cbi">CBI</button>
     <button onclick="filterGloss('e360')" class="gtab" data-mod="e360">E360</button>
     <button onclick="filterGloss('profile')" class="gtab" data-mod="profile">Profile</button>
-    <button onclick="filterGloss('talent')" class="gtab" data-mod="talent">Talent</button>
-    <button onclick="filterGloss('idp')" class="gtab" data-mod="idp">IDP</button>
-    <button onclick="filterGloss('analytics')" class="gtab" data-mod="analytics">Analytics</button>
-    <button onclick="filterGloss('aiqa')" class="gtab" data-mod="aiqa">AIQA</button>
-    <button onclick="filterGloss('notification')" class="gtab" data-mod="notification">Notification</button>
+    <button onclick="filterGloss('system')" class="gtab" data-mod="system">System</button>
   </div>
 
   <div id="gloss-grid" style="display:flex;flex-direction:column;gap:10px;"></div>
@@ -2337,345 +2273,125 @@ function copyContent(type) {
 
 <script>
 const GLOSSARY = [
-  // ── IDM ──────────────────────────────────────────────────────
   {
-    id:1, name:"employees", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
-    meaning:"Bảng trung tâm của toàn hệ thống — lưu mọi thông tin nhân sự: họ tên, email, phòng ban, chức vụ, level. Đặc biệt có trường <code>manager_id</code> tự tham chiếu (self-reference) để xây cây quản lý nhiều cấp. Gần như mọi bảng khác đều có FK trỏ về đây.",
-    who:["HR Admin","BGĐ","Manager","Nhân viên"],
-    whoColors:["#3B82F6","#F43F5E","#6366F1","#10B981"],
-    keyColumns:[
-      {name:"id",type:"uuid",note:"Primary Key"},
-      {name:"employee_code",type:"varchar",note:"Mã nhân viên duy nhất"},
-      {name:"manager_id",type:"uuid",note:"FK self-ref → cây quản lý"},
-      {name:"branch_id",type:"uuid",note:"FK → branches"},
-      {name:"level",type:"varchar",note:"junior/mid/senior/lead"},
-    ],
-    relations:[
-      {arrow:"→",target:"branches",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi nhân viên thuộc 1 chi nhánh. Chi nhánh chứa nhiều nhân viên."},
-      {arrow:"→",target:"employees (self)",type:"N:1",typeColor:"#6366F1",desc:"manager_id tự trỏ về bảng này — xây cây tổ chức đa cấp không giới hạn."},
-      {arrow:"←",target:"interview_sessions",type:"1:N",typeColor:"#F43F5E",desc:"Mỗi nhân viên có thể có nhiều phiên phỏng vấn AI qua các kỳ khác nhau."},
-      {arrow:"←",target:"assessment_360",type:"1:N",typeColor:"#F43F5E",desc:"Mỗi nhân viên được đánh giá 360 theo từng kỳ."},
-      {arrow:"←",target:"idp_plans",type:"1:N",typeColor:"#F59E0B",desc:"Mỗi nhân viên có kế hoạch phát triển riêng sau mỗi vòng đánh giá."},
-      {arrow:"←",target:"employee_profiles",type:"1:1",typeColor:"#06B6D4",desc:"Mỗi nhân viên có đúng 1 hồ sơ mở rộng."},
-    ]
+    id:1, name:"ip_staff_hris", module:"hris", color:"#64748B",
+    meaning:`Bảng nhân viên đồng bộ từ HRIS FPT. Read-only — không sửa trực tiếp. Sync job chạy hàng ngày. Mọi bảng khác dùng <code>code VARCHAR</code> làm FK, không dùng <code>id SERIAL</code> để tránh stale reference khi HRIS truncate/re-insert.`,
+    who:["HR System","HRIS Sync Job","RBAC Middleware"],
+    keyColumns:["id SERIAL — PK, không dùng làm FK","code VARCHAR(30) — business key, FK ở mọi bảng","organization_code — dùng filter data scope","is_active — loại nhân viên đã nghỉ"],
+    relations:["→ ip_organization_hris (organization_code)","← campaign_participants (employee_code)","← interview_sessions (candidate_code)","← employee_360_profiles (employee_code)"]
   },
   {
-    id:2, name:"branches", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
-    meaning:"Đơn vị chi nhánh / văn phòng cụ thể trong cấu trúc tổ chức. Dùng để phân quyền báo cáo theo địa lý — Trưởng chi nhánh chỉ xem được dữ liệu nhân viên thuộc chi nhánh mình. Thuộc về 1 Block (khối) cấp cao hơn.",
-    who:["HR Admin","Trưởng chi nhánh"],
-    whoColors:["#3B82F6","#6366F1"],
-    keyColumns:[
-      {name:"code",type:"varchar",note:"Mã chi nhánh (HCM-01...)"},
-      {name:"block_id",type:"uuid",note:"FK → blocks"},
-      {name:"manager_id",type:"uuid",note:"FK → employees (người quản lý)"},
-    ],
-    relations:[
-      {arrow:"→",target:"blocks",type:"N:1",typeColor:"#3B82F6",desc:"Nhiều chi nhánh thuộc 1 khối kinh doanh."},
-      {arrow:"←",target:"employees",type:"1:N",typeColor:"#3B82F6",desc:"Một chi nhánh có nhiều nhân viên."},
-      {arrow:"←",target:"reports",type:"1:N",typeColor:"#64748B",desc:"Báo cáo có thể được tạo theo scope = branch."},
-    ]
+    id:2, name:"ip_organization_hris", module:"hris", color:"#64748B",
+    meaning:`Cây tổ chức sync từ HRIS. Self-ref qua <code>parent_code</code> để xây Org Chart đa cấp. Dùng để filter data scope phân quyền: BGĐ thấy toàn bộ → L1 thấy Khối → L2 thấy KV/Ban → L3 thấy TT → L4 thấy Phòng.`,
+    who:["HR System","Dashboard RBAC","L1-L4 Manager"],
+    keyColumns:["code VARCHAR — business key","parent_code — self-ref cây tổ chức","location_type INT — 1=HKH 2=KV 3=DN 4=khác","is_active — ẩn đơn vị giải thể"],
+    relations:["← ip_staff_hris (organization_code)"]
   },
   {
-    id:3, name:"blocks", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
-    meaning:"Khối kinh doanh — cấp tổ chức cao nhất bên dưới BGĐ. Mỗi Khối quản lý nhiều chi nhánh theo vùng địa lý hoặc lĩnh vực. BGĐ Khối xem được tổng hợp toàn bộ chi nhánh trực thuộc.",
-    who:["BGĐ Khối","HR Admin"],
-    whoColors:["#F43F5E","#3B82F6"],
-    keyColumns:[
-      {name:"code",type:"varchar",note:"Mã khối (BLOCK-SOUTH...)"},
-      {name:"director_id",type:"uuid",note:"FK → employees (Giám đốc khối)"},
-    ],
-    relations:[
-      {arrow:"←",target:"branches",type:"1:N",typeColor:"#3B82F6",desc:"1 khối quản lý nhiều chi nhánh."},
-      {arrow:"←",target:"reports",type:"1:N",typeColor:"#64748B",desc:"Báo cáo tổng hợp theo scope = block."},
-    ]
+    id:3, name:"competency_groups", module:"catalog", color:"#6366F1",
+    meaning:`9 nhóm năng lực cấp cao: Lãnh đạo & PT nhóm, Tư duy chiến lược, Giao tiếp & ảnh hưởng... <code>target_audience</code> xác định nhóm người được đánh giá: all/staff/manager/director. <code>display_order</code> dùng cho sidebar filter Ngân hàng đề thi.`,
+    who:["HR Admin","AI Engine (generate_questions)","Sidebar Filter"],
+    keyColumns:["code VARCHAR — 'CG_LEADERSHIP' (key AI API)","target_audience — all/staff/manager/director","display_order INT — thứ tự II,III,IV trên sidebar","is_active — ẩn nhóm NL không dùng nữa"],
+    relations:["← competency_names (1:N)","← competency_criteria (1:N)","← questions (1:N)"]
   },
   {
-    id:4, name:"roles", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
-    meaning:"Định nghĩa các role trong hệ thống RBAC: BGĐ, BGĐ Khối, Trưởng chi nhánh, Trưởng phòng, HR, Nhân viên... Mỗi role có bộ <code>permissions</code> (JSON) và <code>scope_type</code> xác định phạm vi quyền là toàn công ty, khối, hay chi nhánh.",
-    who:["System Admin","HR Admin"],
-    whoColors:["#A855F7","#3B82F6"],
-    keyColumns:[
-      {name:"code",type:"varchar",note:"BGD / BLOCK_DIR / BRANCH_MGR..."},
-      {name:"permissions",type:"jsonb",note:"Bộ quyền chi tiết"},
-      {name:"scope_type",type:"varchar",note:"global/block/branch/dept"},
-    ],
-    relations:[
-      {arrow:"←",target:"employee_roles",type:"1:N",typeColor:"#3B82F6",desc:"1 role được gán cho nhiều nhân viên ở các scope khác nhau."},
-    ]
+    id:4, name:"competency_names", module:"catalog", color:"#6366F1",
+    meaning:`Tên năng lực cụ thể trong nhóm. VD: Lãnh đạo & phát triển nhóm, Tư duy chiến lược. <code>short_name</code> dùng trên Radar Chart axes và GAP Analysis labels. <code>code</code> là key truyền vào AI generate_questions API. <code>segmentation</code>: 1=Cốt lõi, 2=Chuyên môn KT, 3=Quản lý.`,
+    who:["HR Admin","AI Engine","Radar Chart"],
+    keyColumns:["code — 'CN_LEADERSHIP' (AI API key)","short_name VARCHAR(50) — 'Lãnh đạo' (chart label)","definition TEXT — chuẩn FPT","segmentation — 1=Cốt lõi 2=CM KT 3=QL"],
+    relations:["→ competency_groups (N:1)","← competency_levels (1:N)","← questions (1:N)","← interview_ai_scores (1:N)","← assessment_final_scores (1:N)"]
   },
   {
-    id:5, name:"employee_roles", module:"idm", color:"#3B82F6", dimColor:"rgba(59,130,246,.12)",
-    meaning:"Bảng junction gán role cho nhân viên kèm scope cụ thể. Ví dụ: Nguyễn Văn A có role BRANCH_MGR cho chi nhánh HCM-01. Đây là nơi quyết định ai được xem gì trong dashboard báo cáo.",
-    who:["HR Admin","System Admin"],
-    whoColors:["#3B82F6","#A855F7"],
-    keyColumns:[
-      {name:"employee_id",type:"uuid",note:"FK → employees"},
-      {name:"role_id",type:"uuid",note:"FK → roles"},
-      {name:"scope_id",type:"uuid",note:"ID branch/block cụ thể"},
-      {name:"expires_at",type:"timestamptz",note:"Hết hạn vai trò tạm thời"},
-    ],
-    relations:[
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi assignment thuộc về 1 nhân viên."},
-      {arrow:"→",target:"roles",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi assignment dùng 1 role cụ thể."},
-    ]
-  },
-
-  // ── CATALOG ──────────────────────────────────────────────────
-  {
-    id:6, name:"competency_frameworks", module:"catalog", color:"#6366F1", dimColor:"rgba(99,102,241,.12)",
-    meaning:"Khung năng lực chuẩn — source of truth để AI sinh câu hỏi và tính điểm. Mỗi framework định nghĩa bộ competencies cần đánh giá cho 1 loại role/level cụ thể, kèm trọng số chấm điểm. HR Admin tạo và duyệt; AI dùng để gen câu hỏi STAR phù hợp.",
-    who:["HR Admin","AI Engine"],
-    whoColors:["#3B82F6","#A855F7"],
-    keyColumns:[
-      {name:"competency_list",type:"jsonb",note:"Danh sách năng lực cần đánh giá"},
-      {name:"scoring_weights",type:"jsonb",note:"Trọng số từng competency"},
-      {name:"version",type:"integer",note:"Versioning framework"},
-      {name:"role_type",type:"varchar",note:"Engineering / Sales / HR..."},
-    ],
-    relations:[
-      {arrow:"←",target:"questions",type:"1:N",typeColor:"#6366F1",desc:"Mỗi framework có ngân hàng câu hỏi riêng được AI sinh ra."},
-      {arrow:"←",target:"interview_sessions",type:"1:N",typeColor:"#F43F5E",desc:"Phiên phỏng vấn áp dụng 1 framework cụ thể."},
-    ]
+    id:5, name:"competency_levels", module:"catalog", color:"#6366F1",
+    meaning:`Cấp độ kỳ vọng L1/L2/L3 cho từng năng lực. UNIQUE(competency_name_id, level). <code>behaviour_indicators JSONB</code> truyền vào AI để sinh câu hỏi STAR đúng cấp độ hành vi. Dùng để vẽ đường Chuẩn JD (màu cam) trên Radar Chart và tính jd_compliance.`,
+    who:["HR Admin","AI gen questions","Radar Chart JD line"],
+    keyColumns:["level SMALLINT — 1=Cơ bản 2=Trung bình 3=Nâng cao","behaviour_indicators JSONB — [{text:'...'}]","UNIQUE(competency_name_id, level)","description TEXT — mô tả cấp độ"],
+    relations:["→ competency_names (N:1)"]
   },
   {
-    id:7, name:"questions", module:"catalog", color:"#6366F1", dimColor:"rgba(99,102,241,.12)",
-    meaning:"Ngân hàng câu hỏi phỏng vấn theo cấu trúc STAR (Situation-Task-Action-Result). Câu hỏi do AI sinh từ framework, HR duyệt trước khi dùng. Phân loại theo competency, độ khó, và thành phần STAR để AI biết khi nào cần đào sâu follow-up.",
-    who:["AI Engine","HR Admin"],
-    whoColors:["#A855F7","#3B82F6"],
-    keyColumns:[
-      {name:"question_type",type:"varchar",note:"main / follow_up / clarification"},
-      {name:"star_component",type:"varchar",note:"S / T / A / R"},
-      {name:"difficulty",type:"varchar",note:"easy / medium / hard"},
-      {name:"competency",type:"varchar",note:"Năng lực cần đánh giá"},
-    ],
-    relations:[
-      {arrow:"→",target:"competency_frameworks",type:"N:1",typeColor:"#6366F1",desc:"Mỗi câu hỏi thuộc về 1 framework năng lực."},
-    ]
+    id:6, name:"competency_criteria", module:"catalog", color:"#6366F1",
+    meaning:`Tiêu chí đánh giá 360° — KHÁC hoàn toàn với competency_names (dùng cho CBI AI). VD: 'Khách hàng là trọng tâm', 'Kỷ luật thực thi 6 Rõ và Tuân thủ', 'Phát huy văn hóa Tôn-Đối-Đồng'. Map về competency_names qua competency_name_id (nullable nếu tiêu chí độc lập).`,
+    who:["HR Admin","GG Form 360° Survey"],
+    keyColumns:["code — 'CC_CUSTOMER_FOCUS' (GG Form config)","short_name VARCHAR(50) — 'Khách hàng' (chart)","competency_name_id — nullable FK map về CBI NL","max_score SMALLINT — mặc định 10"],
+    relations:["→ competency_groups (N:1)","→ competency_names (nullable N:1)"]
   },
   {
-    id:8, name:"courses", module:"catalog", color:"#6366F1", dimColor:"rgba(99,102,241,.12)",
-    meaning:"Danh mục khóa học — nội bộ và external (Udemy, Coursera...). Mỗi khóa học có <code>competency_tags</code> (JSON) liên kết tới các năng lực cần phát triển. IDP service dùng để match khóa học phù hợp nhất với điểm yếu của từng nhân viên (cosine similarity).",
-    who:["HR Admin","IDP Service"],
-    whoColors:["#3B82F6","#F59E0B"],
-    keyColumns:[
-      {name:"competency_tags",type:"jsonb",note:"Năng lực khoá học này hỗ trợ"},
-      {name:"provider",type:"varchar",note:"internal/udemy/coursera/..."},
-      {name:"duration_hours",type:"integer",note:"Thời lượng học"},
-    ],
-    relations:[
-      {arrow:"←",target:"idp_plans",type:"N:N (via JSON)",typeColor:"#F59E0B",desc:"IDP recommend_courses lưu list course_id + match_score trong JSON."},
-    ]
-  },
-
-  // ── CBI ──────────────────────────────────────────────────────
-  {
-    id:9, name:"assessment_cycles", module:"cbi", color:"#F43F5E", dimColor:"rgba(244,63,94,.12)",
-    meaning:"Kỳ đánh giá (Q1/Q2/Q3/Q4/Annual/Probation). Quản lý timeline bắt đầu-kết thúc, trạng thái vòng đánh giá và config (trọng số điểm, deadline từng bước). Khi HR tạo cycle mới → hệ thống tự tạo assessment_360 cho tất cả nhân viên trong phạm vi.",
-    who:["HR Admin","System Worker"],
-    whoColors:["#3B82F6","#10B981"],
-    keyColumns:[
-      {name:"cycle_type",type:"varchar",note:"quarterly/annual/probation"},
-      {name:"status",type:"varchar",note:"draft/active/closed/archived"},
-      {name:"config",type:"jsonb",note:"Score weights + deadlines"},
-      {name:"period",type:"varchar",note:"2024-Q2 (dùng làm key join)"},
-    ],
-    relations:[
-      {arrow:"←",target:"interview_sessions",type:"1:N",typeColor:"#F43F5E",desc:"Mỗi kỳ có nhiều phiên phỏng vấn của nhiều nhân viên."},
-      {arrow:"←",target:"assessment_360",type:"1:N",typeColor:"#F43F5E",desc:"Mỗi kỳ tạo ra vòng đánh giá 360 cho toàn bộ nhân viên liên quan."},
-    ]
+    id:7, name:"questions", module:"catalog", color:"#8B5CF6",
+    meaning:`Ngân hàng câu hỏi STAR — AI sinh từ competency_levels + behaviour_indicators, HR duyệt. UUID PK (expose qua API). Status workflow: draft → active → archived. target_audience filter câu hỏi phù hợp đối tượng. Câu hỏi có is_ai_generated flag để phân biệt AI sinh vs HR nhập tay.`,
+    who:["AI Engine","HR Admin","CBI Interview"],
+    keyColumns:["id UUID — expose qua API","status — draft/active/archived","level SMALLINT — 1/2/3","behaviour_indicators JSONB — snapshot khi gen","is_ai_generated BOOLEAN","approved_by — email HR duyệt"],
+    relations:["→ competency_groups (N:1)","→ competency_names (N:1)","← interview_details (nullable FK)"]
   },
   {
-    id:10, name:"interview_sessions", module:"cbi", color:"#F43F5E", dimColor:"rgba(244,63,94,.12)",
-    meaning:"Lưu toàn bộ phiên phỏng vấn AI của 1 nhân viên trong 1 kỳ. Trường <code>answers</code> (JSONB) chứa array Q&A đầy đủ. Sau khi completed: AI tính <code>ai_score</code> và <code>score_breakdown</code> theo từng competency. Session dùng Redis để lưu trạng thái real-time khi đang phỏng vấn.",
-    who:["Nhân viên","AI Engine","CBI Service"],
-    whoColors:["#10B981","#A855F7","#F43F5E"],
-    keyColumns:[
-      {name:"answers",type:"jsonb",note:"Array {question_id, answer_text, score}"},
-      {name:"ai_score",type:"decimal",note:"0-100, điểm tổng AI"},
-      {name:"score_breakdown",type:"jsonb",note:"Điểm từng competency"},
-      {name:"status",type:"varchar",note:"pending/in_progress/completed"},
-    ],
-    relations:[
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Phiên phỏng vấn của 1 nhân viên cụ thể."},
-      {arrow:"→",target:"competency_frameworks",type:"N:1",typeColor:"#6366F1",desc:"Áp dụng framework nào để sinh câu hỏi và chấm điểm."},
-      {arrow:"→",target:"assessment_cycles",type:"N:1",typeColor:"#F43F5E",desc:"Thuộc kỳ đánh giá nào."},
-      {arrow:"←",target:"assessment_360",type:"1:1",typeColor:"#F43F5E",desc:"Kết quả phỏng vấn được đưa vào vòng 360 tương ứng."},
-    ]
-  },
-
-  // ── E360 ──────────────────────────────────────────────────────
-  {
-    id:11, name:"assessment_360", module:"e360", color:"#F43F5E", dimColor:"rgba(244,63,94,.12)",
-    meaning:"Bảng tổng hợp trung tâm của quá trình đánh giá — nơi hội tụ điểm từ 4 nguồn: AI Interview (x%), Manager (y%), Peer/cấp dưới (z%), và bài test chuyên môn. <code>final_score</code> được tính theo trọng số trong <code>score_weights</code>. Đây là đầu vào để sinh IDP.",
-    who:["E360 Service","HR Admin","BGĐ"],
-    whoColors:["#F43F5E","#3B82F6","#6366F1"],
-    keyColumns:[
-      {name:"final_score",type:"decimal",note:"Điểm cuối có trọng số"},
-      {name:"score_weights",type:"jsonb",note:"{ai:x%, mgr:y%, peer:z%}"},
-      {name:"competency_scores",type:"jsonb",note:"Điểm từng năng lực tổng hợp"},
-      {name:"status",type:"varchar",note:"in_progress/completed/approved"},
-    ],
-    relations:[
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Bản ghi đánh giá của 1 nhân viên trong 1 kỳ."},
-      {arrow:"→",target:"interview_sessions",type:"1:1",typeColor:"#F43F5E",desc:"Nhận ai_score từ phiên phỏng vấn AI tương ứng."},
-      {arrow:"←",target:"evaluations",type:"1:N",typeColor:"#F43F5E",desc:"Nhiều người đánh giá (manager, peer, subordinate, self) tạo ra nhiều evaluation."},
-      {arrow:"←",target:"idp_plans",type:"1:1",typeColor:"#F59E0B",desc:"Sau khi approved → AI tự động sinh IDP cho nhân viên này."},
-    ]
+    id:8, name:"assessment_campaigns", module:"assessment", color:"#F43F5E",
+    meaning:`Kỳ đánh giá — đơn vị tổ chức trung tâm. Lưu cấu hình đầy đủ: CBI + 360° pipeline stage (init→parallel_assessment→ftc_review→profile_saved), email templates JSONB 4 loại (common/cbi/360_mgr/360_peer), trọng số điểm, FTC review, SMTP config. CONSTRAINT ai_weight+weight_360=1.00.`,
+    who:["HR Admin","HCNS","System Worker","FTC Reviewer"],
+    keyColumns:["id UUID — Kafka event payload","stage — init/parallel_assessment/ftc_review/profile_saved","ai_weight + weight_360 — CONSTRAINT sum=1.00","email_template_* JSONB — 4 loại template","smtp_configured BOOLEAN — FALSE=log không gửi","ftc_reviewer_code — FK → ip_staff_hris.code"],
+    relations:["← campaign_participants (1:N)","← interview_sessions (1:N)","← assessment_final_scores (1:N)","← email_logs (1:N)"]
   },
   {
-    id:12, name:"evaluations", module:"e360", color:"#F43F5E", dimColor:"rgba(244,63,94,.12)",
-    meaning:"Chi tiết đánh giá từng người trong vòng 360. Mỗi row là 1 lượt đánh giá của 1 người (evaluator) cho 1 đối tượng. <code>evaluator_role</code> phân biệt manager/peer/subordinate/self. Có thể ẩn danh (<code>is_anonymous=true</code>) để đảm bảo khách quan.",
-    who:["Manager","Đồng nghiệp","Cấp dưới","Nhân viên (self)"],
-    whoColors:["#6366F1","#10B981","#F43F5E","#F59E0B"],
-    keyColumns:[
-      {name:"evaluator_role",type:"varchar",note:"manager/peer/subordinate/self"},
-      {name:"scores",type:"jsonb",note:"Điểm từng competency"},
-      {name:"overall_score",type:"decimal",note:"Điểm tổng của người này"},
-      {name:"is_anonymous",type:"boolean",note:"Ẩn danh với người được đánh giá"},
-    ],
-    relations:[
-      {arrow:"→",target:"assessment_360",type:"N:1",typeColor:"#F43F5E",desc:"Nhiều lượt đánh giá thuộc về 1 vòng 360."},
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Người thực hiện đánh giá là 1 nhân viên trong hệ thống."},
-    ]
-  },
-
-  // ── PROFILE ──────────────────────────────────────────────────
-  {
-    id:13, name:"employee_profiles", module:"profile", color:"#06B6D4", dimColor:"rgba(6,182,212,.12)",
-    meaning:"Hồ sơ năng lực mở rộng của nhân viên — tách riêng khỏi bảng employees để không làm bảng chính quá nặng. Lưu kỹ năng kỹ thuật, chứng chỉ, lịch sử công tác, học vấn, ngoại ngữ. Dùng để cá nhân hóa IDP và hiển thị talent profile cho HR.",
-    who:["Nhân viên","HR Admin","Talent Service"],
-    whoColors:["#10B981","#3B82F6","#10B981"],
-    keyColumns:[
-      {name:"skills",type:"jsonb",note:"[{name, level, years_exp}]"},
-      {name:"certifications",type:"jsonb",note:"Chứng chỉ đã có"},
-      {name:"work_history",type:"jsonb",note:"Lịch sử vị trí công tác"},
-      {name:"education",type:"jsonb",note:"Trình độ học vấn"},
-    ],
-    relations:[
-      {arrow:"→",target:"employees",type:"1:1",typeColor:"#3B82F6",desc:"1 nhân viên có đúng 1 hồ sơ mở rộng — quan hệ 1-1 bắt buộc."},
-    ]
-  },
-
-  // ── TALENT ───────────────────────────────────────────────────
-  {
-    id:14, name:"talent_pools", module:"talent", color:"#10B981", dimColor:"rgba(16,185,129,.12)",
-    meaning:"Định nghĩa các nhóm tài năng chiến lược: High Potential (tiềm năng cao), Succession (kế nhiệm vị trí key), Critical Skill (kỹ năng khan hiếm). Mỗi pool có tiêu chí vào pool (<code>criteria</code> JSON) và scope — pool toàn công ty hay theo khối/chi nhánh.",
-    who:["BGĐ","HR Admin","Talent Service"],
-    whoColors:["#F43F5E","#3B82F6","#10B981"],
-    keyColumns:[
-      {name:"pool_type",type:"varchar",note:"high_potential/succession/critical"},
-      {name:"scope_type",type:"varchar",note:"company/block/branch"},
-      {name:"criteria",type:"jsonb",note:"Tiêu chí xét vào pool"},
-    ],
-    relations:[
-      {arrow:"←",target:"talent_pool_members",type:"1:N",typeColor:"#10B981",desc:"1 pool có nhiều thành viên được thêm vào theo thời gian."},
-    ]
+    id:9, name:"campaign_participants", module:"assessment", color:"#F43F5E",
+    meaning:`Danh sách CBNV tham gia kỳ. <code>role_type</code>: self_cbi/manager_360/peer_360/subordinate_360. <code>access_token</code> là unique link phỏng vấn gửi qua email. UNIQUE(campaign_id, employee_code, role_type) cho phép 1 NV vừa làm self_cbi vừa là manager_360. Tracking tiến độ qua completed_questions/total_questions.`,
+    who:["CBNV","Manager","HR Admin","Notification Service"],
+    keyColumns:["id UUID — access_token link phỏng vấn","role_type — self_cbi/manager_360/peer_360/subordinate_360","access_token UNIQUE — unique link phỏng vấn","UNIQUE(campaign_id, employee_code, role_type)","duration_seconds — thời gian làm bài (giây)"],
+    relations:["→ assessment_campaigns (N:1)","← interview_sessions (1:1)","← email_logs (nullable)"]
   },
   {
-    id:15, name:"talent_pool_members", module:"talent", color:"#10B981", dimColor:"rgba(16,185,129,.12)",
-    meaning:"Junction table quản lý thành viên trong từng talent pool. Lưu thời điểm thêm vào, lý do, và điểm tại thời điểm được thêm (<code>score_at_entry</code>). Cho phép theo dõi lịch sử pool membership và audit trail đầy đủ.",
-    who:["HR Admin","Talent Service"],
-    whoColors:["#3B82F6","#10B981"],
-    keyColumns:[
-      {name:"score_at_entry",type:"decimal",note:"Điểm khi được thêm vào pool"},
-      {name:"reason",type:"text",note:"Lý do được chọn vào pool"},
-      {name:"added_by",type:"uuid",note:"FK → employees (HR quyết định)"},
-    ],
-    relations:[
-      {arrow:"→",target:"talent_pools",type:"N:1",typeColor:"#10B981",desc:"Mỗi membership thuộc về 1 talent pool."},
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Thành viên là 1 nhân viên trong hệ thống."},
-    ]
-  },
-
-  // ── IDP ──────────────────────────────────────────────────────
-  {
-    id:16, name:"idp_plans", module:"idp", color:"#F59E0B", dimColor:"rgba(245,158,11,.12)",
-    meaning:"Kế hoạch phát triển cá nhân (Individual Development Plan) — được AI tự động sinh dựa trên kết quả assessment_360. Chứa phân tích điểm mạnh/yếu theo competency, danh sách khóa học gợi ý có <code>match_score</code>, mục tiêu OKR theo quý. HR duyệt trước khi active.",
-    who:["AI Engine","HR Admin","Nhân viên","Manager"],
-    whoColors:["#A855F7","#3B82F6","#10B981","#6366F1"],
-    keyColumns:[
-      {name:"strengths",type:"jsonb",note:"AI phân tích điểm mạnh"},
-      {name:"improvements",type:"jsonb",note:"AI phân tích điểm cần cải thiện"},
-      {name:"recommended_courses",type:"jsonb",note:"[{course_id, match_score}]"},
-      {name:"goals",type:"jsonb",note:"OKR mục tiêu hành động"},
-      {name:"ai_summary",type:"text",note:"Lời khuyên lộ trình tổng hợp"},
-    ],
-    relations:[
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Kế hoạch phát triển cho 1 nhân viên cụ thể."},
-      {arrow:"→",target:"assessment_360",type:"N:1",typeColor:"#F43F5E",desc:"Dựa trên kết quả 360 làm cơ sở phân tích."},
-      {arrow:"←",target:"idp_progress",type:"1:N",typeColor:"#F59E0B",desc:"Theo dõi tiến độ thực hiện IDP qua các check-in định kỳ."},
-    ]
+    id:10, name:"interview_sessions", module:"cbi", color:"#EF4444",
+    meaning:`Phiên phỏng vấn AI của 1 CBNV trong kỳ. Redis lưu session state TTL 2h khi đang phỏng vấn. Sau completed: ai_score tổng hợp 0-10 + HR review/override với note bắt buộc. review_status: pending→approved/overridden. Immutable sau approved.`,
+    who:["CBNV","AI Engine","HR Admin"],
+    keyColumns:["id UUID — Kafka event: interview.completed","status — pending/in_progress/completed/abandoned/timeout","ai_score NUMERIC(4,2) — thang 0-10","review_status — pending/approved/overridden","override_score — HR ghi đè nếu không đồng ý"],
+    relations:["→ assessment_campaigns (N:1)","→ campaign_participants (N:1)","← interview_details (1:N)","← interview_ai_scores (1:N)","← assessment_final_scores (nullable)"]
   },
   {
-    id:17, name:"idp_progress", module:"idp", color:"#F59E0B", dimColor:"rgba(245,158,11,.12)",
-    meaning:"Ghi nhận tiến độ thực hiện kế hoạch phát triển qua các lần check-in định kỳ (weekly/monthly). Mỗi row là 1 lần check-in cho 1 mục tiêu cụ thể, với % hoàn thành và ghi chú. Dùng để vẽ progress chart trên dashboard IDP.",
-    who:["Nhân viên","Manager"],
-    whoColors:["#10B981","#6366F1"],
-    keyColumns:[
-      {name:"goal_id",type:"varchar",note:"ID mục tiêu trong goals JSON"},
-      {name:"progress_pct",type:"integer",note:"0-100% hoàn thành"},
-      {name:"check_in_date",type:"date",note:"Ngày check-in"},
-      {name:"note",type:"text",note:"Ghi chú tiến độ"},
-    ],
-    relations:[
-      {arrow:"→",target:"idp_plans",type:"N:1",typeColor:"#F59E0B",desc:"Nhiều lần check-in thuộc về 1 IDP plan."},
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Nhân viên đang thực hiện kế hoạch."},
-    ]
+    id:11, name:"interview_details", module:"cbi", color:"#EF4444",
+    meaning:`Log chi tiết từng câu hỏi trong phiên phỏng vấn. <code>turns JSONB</code> lưu toàn bộ hội thoại [{role, text, turn_index}]. Theo dõi question_change_count (max 3 lần đổi câu theo BRD) và downgraded_level khi CBNV không trả lời được câu level cao hơn. Audit trail đầy đủ.`,
+    who:["AI Engine","Audit Trail"],
+    keyColumns:["turns JSONB — [{role,text,turn_index}]","question_change_count SMALLINT — max 3","downgraded_level — level hạ xuống nếu không trả lời","response_time_seconds — thời gian trả lời câu này","display_order — thứ tự câu trong phiên"],
+    relations:["→ interview_sessions (N:1)","→ questions (nullable FK)","→ competency_names (N:1)"]
   },
-
-  // ── ANALYTICS ────────────────────────────────────────────────
   {
-    id:18, name:"reports", module:"analytics", color:"#64748B", dimColor:"rgba(100,116,139,.12)",
-    meaning:"Snapshot báo cáo năng lực được pre-compute và cache. <code>scope_type + scope_id</code> xác định phạm vi báo cáo (company/block/branch/dept) — đây là cơ chế RBAC cho báo cáo. <code>data_snapshot</code> lưu toàn bộ data tại thời điểm tạo; <code>cache_key</code> liên kết với Redis để serve nhanh.",
-    who:["BGĐ","BGĐ Khối","Trưởng chi nhánh","HR Admin"],
-    whoColors:["#F43F5E","#6366F1","#3B82F6","#3B82F6"],
-    keyColumns:[
-      {name:"scope_type",type:"varchar",note:"company/block/branch/dept"},
-      {name:"scope_id",type:"uuid",note:"ID đơn vị tương ứng"},
-      {name:"data_snapshot",type:"jsonb",note:"Toàn bộ dữ liệu tại thời điểm tạo"},
-      {name:"cache_key",type:"varchar",note:"Key Redis để serve nhanh"},
-      {name:"expires_at",type:"timestamptz",note:"Hết hạn cache → re-generate"},
-    ],
-    relations:[
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Người tạo báo cáo (hoặc system job)."},
-    ]
+    id:12, name:"interview_ai_scores", module:"cbi", color:"#EF4444",
+    meaning:`Điểm AI từng năng lực sau phỏng vấn. Insert-only — không update sau khi tạo. <code>api_request_snapshot JSONB</code> lưu toàn bộ request gửi AI để audit và re-grade khi cần. <code>standard_breakdown</code> dạng S:x/T:y/A:z/R:w. Thang 0-10.`,
+    who:["AI Engine","Audit"],
+    keyColumns:["id UUID — insert-only, immutable","score NUMERIC(4,2) — 0-10","standard_breakdown — S:x/T:y/A:z/R:w","api_request_snapshot JSONB — full audit"],
+    relations:["→ interview_sessions (N:1)","→ competency_names (N:1)"]
   },
-
-  // ── AIQA ─────────────────────────────────────────────────────
   {
-    id:19, name:"ai_conversations", module:"aiqa", color:"#A855F7", dimColor:"rgba(168,85,247,.12)",
-    meaning:"Metadata của các cuộc hội thoại AI — nội dung chi tiết (messages array) lưu trong MongoDB vì schema linh hoạt và document size lớn. Bảng PG này chỉ lưu metadata: session_type, trạng thái, số messages, token đã dùng. Dùng để analytics AI usage và billing.",
-    who:["Nhân viên","AI Engine","Analytics"],
-    whoColors:["#10B981","#A855F7","#64748B"],
-    keyColumns:[
-      {name:"session_type",type:"varchar",note:"interview/faq/coaching"},
-      {name:"mongo_doc_id",type:"varchar",note:"Pointer sang MongoDB document"},
-      {name:"token_used",type:"integer",note:"Tổng token để tính chi phí AI"},
-      {name:"message_count",type:"integer",note:"Số tin nhắn trong session"},
-    ],
-    relations:[
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi conversation thuộc về 1 nhân viên."},
-      {arrow:"⟷",target:"MongoDB (external)",type:"ref",typeColor:"#A855F7",desc:"mongo_doc_id trỏ sang collection messages trong MongoDB — nơi lưu nội dung thực."},
-    ]
+    id:13, name:"assessment_360_results", module:"e360", color:"#F97316",
+    meaning:`Kết quả 360° sync từ Google Form. Insert-only. respondent_type: manager/peer/subordinate. raw_data lưu response gốc trước khi xử lý. Dùng cùng interview_ai_scores để Worker tính assessment_final_scores.`,
+    who:["GG Form Sync Worker","E360 Service"],
+    keyColumns:["id UUID — insert-only, immutable","respondent_type — manager/peer/subordinate","score NUMERIC(4,2) — 0-10","raw_data JSONB — response gốc GG Form"],
+    relations:["→ assessment_campaigns (N:1)","→ competency_names (N:1)"]
   },
-
-  // ── NOTIFICATION ─────────────────────────────────────────────
   {
-    id:20, name:"notifications", module:"notification", color:"#EC4899", dimColor:"rgba(236,72,153,.12)",
-    meaning:"Inbox thông báo in-app của nhân viên. Mỗi notification có <code>type</code> (assessment/idp/reminder/system), <code>channel</code> (in_app/email/push), và <code>data</code> JSON chứa payload điều hướng (link, entity_id). Notification service consume Kafka events và fan-out ra các channel phù hợp.",
-    who:["Tất cả nhân viên","Notification Service"],
-    whoColors:["#10B981","#EC4899"],
-    keyColumns:[
-      {name:"type",type:"varchar",note:"assessment/idp/reminder/system"},
-      {name:"channel",type:"varchar",note:"in_app/email/push"},
-      {name:"data",type:"jsonb",note:"Payload điều hướng: link, entity_id"},
-      {name:"is_read",type:"boolean",note:"Đã đọc chưa"},
-      {name:"sender_id",type:"uuid",note:"NULL = system-generated"},
-    ],
-    relations:[
-      {arrow:"→",target:"employees",type:"N:1",typeColor:"#3B82F6",desc:"Mỗi notification gửi tới 1 nhân viên cụ thể (recipient)."},
-    ]
+    id:14, name:"assessment_final_scores", module:"e360", color:"#F97316",
+    meaning:`Điểm tổng hợp cuối = AI(ai_weight%) + 360°(weight_360%). UNIQUE(campaign_id, employee_code, competency_name_id). HR approve/override với override_note bắt buộc. Snapshot trọng số tại thời điểm tính — không bị ảnh hưởng nếu admin đổi sau. Kafka event: assessment.done.`,
+    who:["Worker","HR Admin","BGĐ Dashboard"],
+    keyColumns:["id UUID — Kafka: assessment.done","final_score = ai_score*ai_weight + score_360*weight_360","is_approved BOOLEAN","UNIQUE(campaign_id, employee_code, competency_name_id)","override_note TEXT — bắt buộc khi override"],
+    relations:["→ assessment_campaigns (N:1)","→ interview_sessions (nullable)","→ competency_names (N:1)"]
   },
+  {
+    id:15, name:"employee_360_profiles", module:"profile", color:"#06B6D4",
+    meaning:`Hồ sơ NL tổng hợp mỗi CBNV. UNIQUE(employee_code) — 1 profile/1 NV, UPSERT sau mỗi kỳ được duyệt. Pre-computed JSONB: top_strengths, top_weaknesses, score_history 10 kỳ, gap_analysis. ai_insight (AI gen) + hr_feedback (HR nhập). jd_compliance = AVG(MIN(actual/expected,1.5))×100. Nguồn chính cho dashboard cá nhân và IDP.`,
+    who:["Worker","CBNV Dashboard","Manager","BGĐ"],
+    keyColumns:["id UUID — expose qua dashboard API","UNIQUE(employee_code)","gap_analysis JSONB — [{short_name,actual,expected,gap,pct,status}]","score_history JSONB — 10 kỳ [{campaign_name,date,score,delta}]","risk_level — low/medium/high","jd_compliance NUMERIC(5,2)"],
+    relations:["→ ip_staff_hris (UNIQUE employee_code)","→ assessment_campaigns (last_campaign_id)"]
+  },
+  {
+    id:16, name:"ai_gateway_tokens", module:"system", color:"#A855F7",
+    meaning:`Access token FPT BotGateway AI API. UNIQUE(environment: stag/prod) — luôn chỉ có 2 rows. Worker job tự UPSERT refresh khi còn < 10 phút hết hạn. SERIAL PK vì không expose ra ngoài, không cần UUID. Dùng bởi AI Orchestrator khi gọi generate_question và evaluate_answer.`,
+    who:["Worker","AI Orchestrator"],
+    keyColumns:["id SERIAL — không expose ra ngoài","UNIQUE(environment) — stag/prod","access_token TEXT","expires_at TIMESTAMPTZ — auto-refresh khi <10 phút"],
+    relations:[]
+  },
+  {
+    id:17, name:"email_logs", module:"system", color:"#A855F7",
+    meaning:`Audit log toàn bộ email gửi CBNV trong kỳ đánh giá. <code>merged_vars JSONB</code> snapshot biến đã merge khi gửi thật — dùng để debug. <code>role_type + template_type</code> xác định template đã dùng. status: sent/failed/bounced/pending (pending khi smtp_configured=FALSE).`,
+    who:["Notification Service","HR Admin Debug"],
+    keyColumns:["id UUID — audit log","merged_vars JSONB — snapshot {{ho_ten}}, {{link_bai}}...","role_type — self_cbi/manager_360/peer_360","template_type — common/cbi/360_mgr/360_peer","status — sent/failed/bounced/pending"],
+    relations:["→ assessment_campaigns (N:1)","→ campaign_participants (nullable)"]
+  }
 ];
 
 // ── RENDER ────────────────────────────────────────────────────
@@ -2683,57 +2399,31 @@ function renderGlossary(filter='all') {
   const grid = document.getElementById('gloss-grid');
   grid.innerHTML = '';
   const filtered = filter==='all' ? GLOSSARY : GLOSSARY.filter(t=>t.module===filter);
-
-  filtered.forEach((t,i) => {
+  filtered.forEach(t => {
     const card = document.createElement('div');
-    card.className = 'gcard';
-    card.dataset.module = t.module;
-
-    const relRows = t.relations.map(r => `
-      <div class="rel-row">
-        <span class="rel-arrow" style="color:${r.typeColor}">${r.arrow}</span>
-        <span class="rel-target" style="color:${r.typeColor}">${r.target}</span>
-        <span class="rel-type" style="background:${r.typeColor}18;color:${r.typeColor};border:1px solid ${r.typeColor}30">${r.type}</span>
-        <span class="rel-desc">${r.desc}</span>
-      </div>`).join('');
-
-    const keyColRows = t.keyColumns.map(c => `
-      <div class="key-col">
-        <span class="key-col-name" style="color:${t.color}">${c.name}</span>
-        <span class="key-col-type">${c.type}</span>
-        <span class="key-col-note">${c.note}</span>
-      </div>`).join('');
-
-    const whoHtml = t.who.map((w,wi) => `
-      <span class="who-pill" style="color:${t.whoColors[wi]};border-color:${t.whoColors[wi]}35;background:${t.whoColors[wi]}12">${w}</span>`).join('');
-
+    card.className = 'gcard'; card.dataset.module = t.module;
+    const relRows = t.relations.map(r => {
+      const arrow = r[0]; const rest = r.slice(1).trim();
+      return `<div class="rel-row"><span class="rel-arrow" style="color:${t.color}">${arrow}</span><span class="rel-desc" style="margin-left:6px">${rest}</span></div>`;
+    }).join('');
+    const keyColRows = t.keyColumns.map(c => {
+      const pts = c.split(' — ');
+      return `<div class="key-col"><span class="key-col-name" style="color:${t.color}">${pts[0]}</span><span class="key-col-note">${pts[1]||''}</span></div>`;
+    }).join('');
+    const whoHtml = t.who.map(w => `<span class="who-pill" style="color:${t.color};border-color:${t.color}35;background:${t.color}12">${w}</span>`).join('');
     card.innerHTML = `
       <div class="gcard-head" onclick="toggleCard(this)">
-        <div class="gcard-num" style="background:${t.dimColor};color:${t.color}">${t.id.toString().padStart(2,'0')}</div>
-        <div>
-          <div class="gcard-name">${t.name}</div>
-        </div>
-        <span class="gcard-badge" style="background:${t.dimColor};color:${t.color}">${t.module.toUpperCase()}</span>
-        <span class="gcard-mod">${t.keyColumns.length} key cols · ${t.relations.length} relations</span>
+        <div class="gcard-num" style="background:${t.color}18;color:${t.color}">${String(t.id).padStart(2,'0')}</div>
+        <div><div class="gcard-name">${t.name}</div></div>
+        <span class="gcard-badge" style="background:${t.color}18;color:${t.color}">${t.module.toUpperCase()}</span>
+        <span class="gcard-mod">${t.keyColumns.length} cols · ${t.relations.length} rels</span>
         <span class="gcard-chevron">▶</span>
       </div>
       <div class="gcard-body">
-        <div class="gcard-section">
-          <div class="gcard-section-label">Ý nghĩa nghiệp vụ</div>
-          <div class="gcard-meaning">${t.meaning}</div>
-        </div>
-        <div class="gcard-section">
-          <div class="gcard-section-label">Ai sử dụng / tương tác</div>
-          <div class="gcard-who">${whoHtml}</div>
-        </div>
-        <div class="gcard-section">
-          <div class="gcard-section-label">Cột quan trọng</div>
-          <div class="key-cols">${keyColRows}</div>
-        </div>
-        <div class="gcard-section">
-          <div class="gcard-section-label">Quan hệ với bảng khác</div>
-          ${relRows}
-        </div>
+        <div class="gcard-section"><div class="gcard-section-label">Ý nghĩa nghiệp vụ</div><div class="gcard-meaning">${t.meaning}</div></div>
+        <div class="gcard-section"><div class="gcard-section-label">Ai sử dụng</div><div class="gcard-who">${whoHtml}</div></div>
+        <div class="gcard-section"><div class="gcard-section-label">Cột quan trọng</div><div class="key-cols">${keyColRows}</div></div>
+        <div class="gcard-section"><div class="gcard-section-label">Quan hệ</div>${relRows||'<div style="color:#5a5f7a;font-size:11px">Lookup table</div>'}</div>
       </div>`;
     grid.appendChild(card);
   });
